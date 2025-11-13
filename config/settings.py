@@ -159,6 +159,11 @@ class Settings:
     ALLOW_RESET: bool              # 是否允许“清零”相关操作
     SUPER_ADMINS: List[int]        # 超管白名单（并入 is_admin 判定）
 
+    MINIAPP_JWT_SECRET: str
+    MINIAPP_JWT_ISSUER: str
+    MINIAPP_JWT_EXPIRE_SECONDS: int
+    TELEGRAM_CLIENT_ID: str
+
     # --------- 工厂：从 env 读取 ----------
     @classmethod
     def from_env(cls) -> "Settings":
@@ -225,6 +230,11 @@ class Settings:
         ALLOW_RESET = _get_bool("ALLOW_RESET", False)
         SUPER_ADMINS = _split_ids(os.getenv("SUPER_ADMINS", ""))
 
+        MINIAPP_JWT_SECRET = (os.getenv("MINIAPP_JWT_SECRET", "change_me") or "change_me").strip()
+        MINIAPP_JWT_ISSUER = (os.getenv("MINIAPP_JWT_ISSUER", "miniapp") or "miniapp").strip()
+        MINIAPP_JWT_EXPIRE_SECONDS = _get_int("MINIAPP_JWT_EXPIRE_SECONDS", 7200)
+        TELEGRAM_CLIENT_ID = (os.getenv("TELEGRAM_CLIENT_ID", "") or "").strip()
+
         return cls(
             BOT_TOKEN=BOT_TOKEN,
             DATABASE_URL=DATABASE_URL,
@@ -256,6 +266,10 @@ class Settings:
             OPENROUTER_MODEL=OPENROUTER_MODEL,
             ALLOW_RESET=ALLOW_RESET,
             SUPER_ADMINS=SUPER_ADMINS,
+            MINIAPP_JWT_SECRET=MINIAPP_JWT_SECRET,
+            MINIAPP_JWT_ISSUER=MINIAPP_JWT_ISSUER,
+            MINIAPP_JWT_EXPIRE_SECONDS=MINIAPP_JWT_EXPIRE_SECONDS,
+            TELEGRAM_CLIENT_ID=TELEGRAM_CLIENT_ID,
         )
 
 

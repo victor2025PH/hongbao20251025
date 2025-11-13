@@ -335,6 +335,42 @@ class PublicGroupActivityConversionLog(Base):
             self.context_raw = json.dumps(value, ensure_ascii=False)
 
 
+class PublicGroupActivityAIHistory(Base):
+    __tablename__ = "public_group_activity_ai_history"
+    __table_args__ = (
+        Index("ix_public_group_activity_ai_created", "created_at"),
+    )
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    operator_tg_id = Column(BigInteger, nullable=True)
+    prompt = Column(Text, nullable=False)
+    response = Column(Text, nullable=True)
+    error = Column(String(128), nullable=True)
+    payload_raw = Column("payload", Text, nullable=True)
+    applied_activity_id = Column(Integer, ForeignKey("public_group_activities.id", ondelete="SET NULL"), nullable=True)
+    applied_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    @property
+    def payload(self) -> Dict[str, object]:
+        if not self.payload_raw:
+            return {}
+        try:
+            data = json.loads(self.payload_raw)
+            if isinstance(data, dict):
+                return data
+        except Exception:
+            pass
+        return {}
+
+    @payload.setter
+    def payload(self, value: Optional[Dict[str, object]]) -> None:
+        if not value:
+            self.payload_raw = None
+        else:
+            self.payload_raw = json.dumps(value, ensure_ascii=False)
+
+
 class PublicGroupReportStatus(str, enum.Enum):
     PENDING = "pending"
     IN_PROGRESS = "in_progress"

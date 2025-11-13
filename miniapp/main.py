@@ -3,16 +3,15 @@
 MiniApp REST API for public dating groups.
 
 This FastAPI application is designed for Telegram MiniApps / web frontends that
-need to browse, create, join and manage public groups. Authentication is kept
-lightweight on purpose: callers must provide ``X-TG-USER-ID`` header which is
-the Telegram user id extracted from `initData`. Production deployment应在
-反向代理层做合法性校验（例如 verify initData 或加签）。
+need to browse, create, join and manage public groups. Authentication now uses
+Bearer token (JWT) issued by `/api/auth/login`; legacy `X-TG-USER-ID` header will
+继续保留一段时间供回溯兼容。
 """
 
 from __future__ import annotations
 
 import logging
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response, status
 from fastapi.responses import JSONResponse
@@ -57,8 +56,11 @@ from services.public_group_report import create_report_case  # noqa: E402
 from services.public_group_tracking import (  # noqa: E402
     ALLOWED_EVENT_TYPES,
     fetch_conversion_summary,
+    fetch_user_history,
     record_event,
 )
+from miniapp.auth import router as auth_router  # noqa: E402
+from miniapp.middleware import JWTAuthMiddleware  # noqa: E402
 
 log = logging.getLogger("miniapp.api")
 
@@ -68,6 +70,9 @@ app = FastAPI(
     docs_url=None,
     redoc_url=None,
 )
+
+app.add_middleware(JWTAuthMiddleware)
+app.include_router(auth_router, prefix="/api/auth")
 
 
 # ---------------------------------------------------------------------------
@@ -222,6 +227,13 @@ class BookmarkStatusResponse(BaseModel):
     bookmarked: bool
 
 
+class PublicGroupHistoryItem(BaseModel):
+    group: PublicGroupSummary
+    last_event_type: str
+    last_event_at: Optional[str] = None
+    last_context: Dict[str, object] = Field(default_factory=dict)
+
+
 class WebhookPayload(BaseModel):
     url: str = Field(..., max_length=500)
     secret: Optional[str] = Field(default=None, max_length=128)
@@ -245,7 +257,22 @@ def ensure_public_groups_enabled() -> None:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="public_groups_disabled")
 
 
+def _context_from_payload(payload: Dict[str, Any]) -> UserContext:
+    tg_id_raw = payload.get("tg_id")
+    if tg_id_raw is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid_token_payload")
+    try:
+        tg_id_int = int(tg_id_raw)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid_token_payload")
+    admin_flag = bool(payload.get("is_admin")) or is_admin(tg_id_int)
+    return UserContext(tg_id=tg_id_int, is_admin=admin_flag)
+
+
 def get_current_user(request: Request) -> UserContext:
+    token_payload = request.scope.get("user")
+    if isinstance(token_payload, dict):
+        return _context_from_payload(token_payload)
     raw_id = request.headers.get("x-tg-user-id") or request.headers.get("x-telegram-user-id")
     if not raw_id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="missing_user_header")
@@ -257,6 +284,12 @@ def get_current_user(request: Request) -> UserContext:
 
 
 def get_optional_user(request: Request) -> Optional[UserContext]:
+    token_payload = request.scope.get("user")
+    if isinstance(token_payload, dict):
+        try:
+            return _context_from_payload(token_payload)
+        except HTTPException:
+            raise
     raw_id = request.headers.get("x-tg-user-id") or request.headers.get("x-telegram-user-id")
     if not raw_id:
         return None
@@ -366,6 +399,35 @@ def api_list_public_group_bookmarks(
     ensure_public_groups_enabled()
     groups = list_bookmarked_groups(db, user_tg_id=user.tg_id)
     return [_to_summary(group, is_bookmarked=True) for group in groups]
+
+
+@app.get(
+    "/v1/groups/public/history",
+    response_model=List[PublicGroupHistoryItem],
+)
+def api_list_public_group_history(
+    limit: int = Query(20, ge=1, le=100),
+    user: UserContext = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> List[PublicGroupHistoryItem]:
+    ensure_public_groups_enabled()
+    history_records = fetch_user_history(db, user_tg_id=user.tg_id, limit=limit)
+    bookmark_ids: set[int] = set(get_user_bookmark_ids(db, user_tg_id=user.tg_id))
+    results: List[PublicGroupHistoryItem] = []
+    for record in history_records:
+        event = record["event"]
+        group = record["group"]
+        summary = _to_summary(group, is_bookmarked=(group.id in bookmark_ids))
+        last_at = event.created_at.isoformat() + "Z" if event.created_at else None
+        results.append(
+            PublicGroupHistoryItem(
+                group=summary,
+                last_event_type=event.event_type,
+                last_event_at=last_at,
+                last_context=event.context,
+            )
+        )
+    return results
 
 
 @app.get(
@@ -619,7 +681,10 @@ def api_unbookmark_public_group(
     return BookmarkStatusResponse(bookmarked=False)
 
 
-@app.post("/v1/groups/public/{group_id}/pin", response_model=PublicGroupSummary)
+@app.post(
+    "/v1/groups/public/{group_id}/pin",
+    response_model=PublicGroupSummary,
+)
 def api_pin_public_group(
     group_id: int,
     duration_hours: Optional[int] = Query(None, ge=1, le=72),

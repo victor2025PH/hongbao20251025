@@ -1,0 +1,16 @@
+# 前端 Docker 忽略文件
+
+node_modules
+.next
+.nuxt
+dist
+build
+.git
+.gitignore
+*.log
+.DS_Store
+.env
+.env.*
+*.md
+README.md
+

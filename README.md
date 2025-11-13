@@ -38,7 +38,7 @@
 | `models/*.py` | 用户、红包、账本、封面、公开群等 ORM 模型 | 公开群模型位于 `models/public_group.py`，关联成员与奖励表 |
 | `routers/*.py` | Aiogram 路由：红包、充值、邀请、公开群、后台命令等 | `_register_routers` 自动 include；公开群命令在 `routers/public_group.py` |
 | `services/*.py` | 业务服务层（充值、红包、邀请、导出、公开群、AI 等） | 公开群服务位于 `services/public_group_service.py`，提供创建/加入/置顶/列表 |
-| `miniapp/main.py` | FastAPI MiniApp API，公开群 REST 接口 | `uvicorn miniapp.main:app --reload`；通过 Header `X-TG-USER-ID` 识别调用者 |
+| `miniapp/main.py` | FastAPI MiniApp API，公开群 REST 接口 | `uvicorn miniapp.main:app --reload`；默认使用 `Authorization: Bearer <token>`（兼容历史 `X-TG-USER-ID` Header） |
 | `web_admin/main.py` | FastAPI 管理后台应用，含 `/healthz` `/readyz` `/metrics` | 以 `uvicorn web_admin.main:app` 启动；支持监控与审计 |
 | `web_admin/services/audit_service.py` | 敏感操作审计，去重记录与查询 | `record_audit()` 在后台操作中调用，可扩展通知 |
 | `scripts/check_env.py` | 检查 `.env.example` 与 `Settings` 要求的一致性 | 本地或 CI 执行 `python scripts/check_env.py` |
@@ -101,6 +101,11 @@
 | `AI_PROVIDER` / `OPENAI_MODEL` 等 | `openai` / `gpt-4o-mini` | AI 辅助功能配置（可选） |
 | `HB_COVER_CHANNEL_ID` | `-1001234567890` | 红包封面素材频道 ID |
 | `GOOGLE_SERVICE_ACCOUNT_PATH` | `secrets/service_account.json` | Google service account 凭证路径（未设置时依序尝试 `secrets/service_account.json` → `service_account.json`） |
+| `MINIAPP_JWT_SECRET` | `change_me_to_secure_value` | MiniApp JWT 签名秘钥，用于 `/api/auth/login` 簽發 Token |
+| `MINIAPP_JWT_ISSUER` | `miniapp` | JWT `iss` 字段，校验 Token 来源 |
+| `MINIAPP_JWT_EXPIRE_SECONDS` | `7200` | JWT 过期时间（秒） |
+| `MINIAPP_PASSWORD_USERS` | `tester:sha256:<hex>,demo:plaintext` | （可选）密码登录账号列表，支持明文/sha256/bcrypt |
+| `TELEGRAM_CLIENT_ID` | 空 | Telegram MiniApp 登录所需的 client id（若使用官方 login API） |
 
 更多键请参考 `.env.example`；新增键时需同步更新该文件与本节说明。
 
@@ -119,11 +124,13 @@
    ```bash
    python -c "from models.db import init_db; init_db()"
    ```
-3. **启动 Bot / Web Admin**
+3. **启动 Bot / Web Admin / MiniApp**
    ```bash
    python app.py
    uvicorn web_admin.main:app --host 0.0.0.0 --port 8000
+   uvicorn miniapp.main:app --host 0.0.0.0 --port 8080
    ```
+   > 若需启用 MiniApp Token 登录，请参考下方《MiniApp Token 认证设计》并在 `.env` 配置相关秘钥。
 4. **快速健康检查**
    ```bash
    curl http://127.0.0.1:8000/healthz
@@ -231,7 +238,7 @@
 ---
 
 ## 🧾 接口与数据模型（公开群相关摘要）
-- **主要 REST 接口**（已在 `miniapp/main.py` 实现，调用需携带 `X-TG-USER-ID` Header）：
+- **主要 REST 接口**（已在 `miniapp/main.py` 实现，调用需携带 `Authorization: Bearer <token>`；旧版 `X-TG-USER-ID` Header 仍兼容保留）：
   - `GET /v1/groups/public`：群列表（支持分页 `limit`、名称搜索 `q`、多标签筛选 `tags`、排序 `sort=default|new|members|reward`；管理员可启用 `include_review` 查看待复核群）。
   - `GET /v1/groups/public/{id}`：群详情。
   - `GET /v1/groups/public/bookmarks`：当前用户收藏的公开群列表（按收藏时间倒序）。
@@ -252,6 +259,7 @@
   - `GET /v1/groups/public/stats/summary`：管理员查询曝光→点击→入群漏斗统计与热门群榜单。
 - `GET /admin/public-groups/dashboard`：Web Admin 成效仪表板（需登录），可视化查看曝光/点击/入群趋势、新建群数量、热门标签与热门群排行。
 - `GET /admin/public-groups/activities`：自动化活动配置页面，新建 / 暂停入群加码、MiniApp 曝光等活动，可自订活动卡片标题、副标题、CTA 按钮、角标与展示优先级，让 MiniApp/Bot 前台提示更聚焦；页面右上角提供批量工具列与 CSV 导出。
+- **AI 活動草稿**：配置 `OPENAI_API_KEY` 后，点击「AI 生成活動」会开启助手弹窗，可填写活动需求、立即预览草稿，并从历史清单一键套用既有草稿。生成内容包含名称、文案、限制、倒数及前台卡片字段，所有草稿都会记录在 `public_group_activity_ai_history`。
 - `GET /admin/public-groups/activities/report`：活动绩效报表（支持日期筛选、异常过滤与 CSV 导出），统计每日发放次数、星数、转化人数、Webhook 成功率与 Slack 失败次数。
 - `GET/POST /admin/public-groups/activities`：Web Admin 自动化活动配置（创建 / 暂停入群奖励、额外曝光位与加码规则）。
 - `POST /admin/public-groups/bulk/status`：批量审核/暂停/下架公开群。
@@ -290,6 +298,8 @@
 - 敏感操作务必伴随审计记录，便于追溯。
 - 文档更新需与代码同步，特别是环境变量、目录结构与接口说明。
 - 公开群运营材料详见 `docs/public_group_ops.md`，涵盖审核流程、奖励策略与客服 FAQ。
+- 品牌与多语一致性规范参考 `docs/branding_guidelines.md`。
+- 翻译流程与排程请见 `docs/i18n_translation_plan.md`。
 - MiniApp 若要追踪转化，请在曝光/点击时调用 `POST /v1/groups/public/{id}/events`，再由后台使用 `GET /v1/groups/public/stats/summary` 获取漏斗数据。
 - Web Admin 「公开交友群」页面已新增「成效仪表板」入口，方便运营即时掌握曝光、点击、入群与热门标签／热门群排名。
 - 自动化活动模块现已支持配置「额外奖励星数」「MiniApp 置顶曝光位」等活动，可于 Web Admin → 公开交友群 → 自动化活动 页面管理。
@@ -298,3 +308,149 @@
 - Telegram Bot `/groups` 指令已接轨新的活动详页资料：会显示剩余额度、资格状态、CTA 链接，若用户已参与或名额用尽会主动提示。
 
 本 README 将持续迭代，作为红包系统与公开交友群功能的统一开发入口。如需查阅历史版本，可参考 `READMEV2.md`（已整合入本文）。
+
+## 🔐 MiniApp Token 认证设计
+> 目标：在 MiniApp 中统一采用 Bearer Token 鉴权，提供 `/api/auth/login`、JWT 签发与校验、中间件拦截及 Telegram MiniApp 对接。
+
+### 流程概览
+1. 客户端调用 `POST /api/auth/login`（支持 Telegram code 或传统账号密码）。
+2. 服务端校验凭证，成功后签发 JWT `access_token`。
+3. 客户端在后续请求的 `Authorization: Bearer <token>` 中携带。
+4. 中间件解析 token，验证有效性、权限与黑名单；非法请求返回 401/403。
+
+### API 规范
+**Telegram code 登录**
+```json
+{
+  "provider": "telegram",
+  "telegram_code": "abcdef123456"
+}
+```
+**用户名密码登录**
+```json
+{
+  "provider": "password",
+  "username": "miniapp_user",
+  "password": "secret"
+}
+```
+**成功响应**
+```json
+{
+  "access_token": "<jwt>",
+  "token_type": "bearer",
+  "expires_in": 7200,
+  "user": {
+    "id": 123,
+    "username": "miniapp_user",
+    "roles": ["miniapp_user"]
+  }
+}
+```
+可选扩展端点：
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| POST | `/api/auth/logout` | 将 `jti` 加入黑名单，立即失效 |
+| POST | `/api/auth/refresh` | 使用 refresh token 获取新的 access token |
+| GET | `/api/auth/me` | 返回当前登录用户信息 |
+
+### JWT 设计
+| Claim | 说明 |
+| --- | --- |
+| `iss` | 签发者 |
+| `sub` | 用户 ID |
+| `iat` | 签发时间 |
+| `exp` | 过期时间（默认 7200 秒） |
+| `jti` | Token UUID，用于黑名单追踪 |
+| `scope` | 权限范围（例 `miniapp:public_groups`） |
+| `tg` | Telegram 信息（如 `chat_id`） |
+- 签名算法：HS256，秘钥 `MINIAPP_JWT_SECRET`。
+- 可选刷新机制：通过 Refresh Token + Redis/数据库管理。
+
+### 鉴权 Middleware
+```python
+class JWTAuthMiddleware:
+    async def __call__(self, scope, receive, send):
+        request = Request(scope, receive=receive)
+        if request.url.path.startswith("/api/auth/"):
+            await self.app(scope, receive, send)
+            return
+        scheme, token = get_authorization_scheme_param(
+            request.headers.get("Authorization")
+        )
+        if scheme.lower() != "bearer" or not token:
+            raise HTTPException(status_code=401, detail="Invalid token header")
+        payload = decode_jwt(token)
+        if is_blacklisted(payload["jti"]):
+            raise HTTPException(status_code=401, detail="Token revoked")
+        scope["user"] = payload
+        await self.app(scope, receive, send)
+```
+
+### Telegram 对接
+```python
+def verify_telegram_code(code):
+    resp = requests.post(
+        "https://api.telegram.org/bot{token}/login",
+        data={"code": code, "client_id": settings.TG_CLIENT_ID},
+        timeout=5
+    )
+    resp.raise_for_status()
+    return resp.json()
+```
+MiniApp 获取 login code → 调用登录 API → 服务端验证通过后签发 token。
+
+### 测试与安全
+- 单元/整合测试：成功登录、失败登录、token 过期、黑名单拦截。
+- 安全防护：HTTPS、速率限制、防 token 伪造、防重放攻击。
+- 监控：记录登录失败，必要时触发告警；定期轮换 JWT 秘钥。
+
+### 实施说明
+- 新增文件：`miniapp/auth.py`（登录实现）、`miniapp/security.py`（JWT 工具）、`miniapp/middleware.py`（鉴权中间件）。
+- 修改 `miniapp/main.py` 注册路由、中间件。
+- 环境变量：`MINIAPP_JWT_SECRET`、`MINIAPP_JWT_ISSUER`、`TELEGRAM_BOT_TOKEN`、`TELEGRAM_CLIENT_ID`。
+- 完成后，即可统一使用 Bearer Token 访问现有 MiniApp 端点。
+
+## 🧩 MiniApp 前端整合方案
+
+> MiniApp 前端與本倉庫的 FastAPI 後端 API 分離維護，需另行建立前端專案以接入 `/api/auth/login` 等服務。
+
+### 建議架構
+- 建立獨立目錄 `miniapp-frontend/`，採用 React + TypeScript + Vite（或同等 SPA 框架）。
+- 使用 `@twa-dev/sdk` 讀取 Telegram WebApp context，串接 `POST /api/auth/login` 取得 JWT。
+- 推薦依賴：`@tanstack/react-query` 管理 API 請求、`axios` 建立帶 Bearer 的請求實例、Tailwind/Ant Design 提供 UI。
+
+### 專案骨架
+```
+miniapp-frontend/
+├── src/
+│   ├── api/         # axios 實例與 API 呼叫
+│   ├── components/  # 共用 UI 元件
+│   ├── hooks/       # React Query、自訂 hooks
+│   ├── pages/       # 群列表、活動面板、書籤等頁面
+│   ├── providers/   # QueryClientProvider、Telegram SDK 初始化
+│   ├── utils/       # Token 儲存、格式轉換
+│   └── main.tsx     # 入口
+├── public/
+├── package.json
+├── tsconfig.json
+└── vite.config.ts
+```
+
+### Token 與登入流程
+- WebApp 啟動時從 `Telegram.WebApp.initDataUnsafe` 取得使用者資料或 login code。
+- 調用 `/api/auth/login`（Telegram code 或密碼模式）簽發 `access_token`，儲存於記憶體或 sessionStorage。
+- axios 攔截器統一帶上 `Authorization: Bearer <token>` 呼叫後端（保留重試與錯誤處理策略）。
+
+### 主要頁面功能
+- **公開群列表**：展示群卡片、搜尋/篩選/排序、加入按鈕（串 `/v1/groups/public`、`/join` 等）。
+- **AI 活動面板**：顯示活動卡片、倒數、加碼提示，提供參與操作。
+- **書籤/歷史**：讀取 `/v1/groups/public/bookmarks` 顯示收藏群，支援取消收藏。
+- **錯誤與狀態提示**：統一處理 401/403（跳回登入流程）及 API 錯誤訊息。
+
+### 開發與部署
+- `npm install` → `npm run dev` 本地開發，可搭配 Ngrok 暴露後端給手機測試。
+- `npm run build` 產出 `/dist`，可上傳至 Telegram Mini Apps Hosting 或自行部署，再設定 WebApp URL。
+- CI/CD 可獨立於此後端倉庫執行（Lint、Build、Deploy）。
+
+> **後續步驟**：取得前端設計稿與既有資源→初始化前端專案→串接 `miniapp/` API→驗證登入、群列表、活動等流程。

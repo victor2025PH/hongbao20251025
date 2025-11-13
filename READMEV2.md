@@ -397,3 +397,285 @@ LEADERBOARD_TOP_N: 100
 ---
 
 本版本文档与既有生态无缝衔接，明确了**星星获取与消耗闭环、公开交友群创建与公示、加入即领奖励、风控与并发安全、接口与数据结构**，并引入**提示词优化器**和**品牌规范**以保障一致性与可持续迭代。开发可据此直接进入任务拆解与实现。
+
+---
+
+## 18. 项目总览架构图说明
+
+### 18.1 系统组件
+
+本系统是一个基于 Telegram 生态的红包系统，包含以下主要组件：
+
+1. **Telegram Bot** (`app.py`): 
+   - 使用 aiogram 框架
+   - 处理用户命令和消息
+   - 发送红包、处理充值、管理群组等
+
+2. **Web Admin** (`web_admin/main.py`, 端口 8000):
+   - FastAPI 应用
+   - 提供 HTML 管理界面和 REST API
+   - 处理红包任务、充值订单、用户管理、公开群组审核等
+
+3. **MiniApp API** (`miniapp/main.py`, 端口 8080):
+   - FastAPI 应用
+   - 提供 Telegram MiniApp 后端 API
+   - 处理公开群组创建、加入、活动管理等
+   - 使用 JWT 认证
+
+4. **前端控制台** (`frontend-next/`, 端口 3001):
+   - Next.js 应用
+   - 提供现代化的管理控制台界面
+   - 展示 Dashboard、任务列表、群组管理、统计图表等
+
+5. **数据库** (SQLite/PostgreSQL/MySQL):
+   - 存储用户、红包、订单、群组等数据
+   - 通过 SQLAlchemy ORM 访问
+
+6. **外部服务**:
+   - **Telegram Bot API**: Bot 发送消息、创建群组等
+   - **NowPayments**: 处理加密货币充值
+   - **OpenAI/OpenRouter**: AI 功能（活动生成等）
+   - **Google Sheets**: 用户数据同步（可选）
+
+---
+
+### 18.2 调用关系
+
+#### Telegram Bot → Web Admin
+
+**协议**: HTTP (内部调用)  
+**场景**: 
+- Bot 需要查询用户余额、创建红包任务时，调用 Web Admin API
+- Bot 处理 IPN 回调时，调用 Web Admin 的 IPN 处理接口
+
+**示例**:
+```
+Bot → POST http://localhost:8000/admin/api/v1/envelopes
+Bot → POST http://localhost:8000/admin/ipn
+```
+
+---
+
+#### MiniApp API → 数据库
+
+**协议**: SQLAlchemy ORM (直接数据库访问)  
+**场景**:
+- 查询公开群组列表
+- 创建公开群组
+- 处理用户加入群组
+- 发放进入奖励
+
+**数据流**:
+```
+MiniApp API → SQLAlchemy → Database
+```
+
+---
+
+#### 前端控制台 → Web Admin API
+
+**协议**: HTTP REST API  
+**场景**:
+- Dashboard 数据: `GET /admin/api/v1/dashboard`
+- 任务列表: `GET /admin/api/v1/tasks`
+- 群组列表: `GET /admin/api/v1/group-list`
+- 统计数据: `GET /admin/api/v1/stats`
+- 审计日志: `GET /admin/api/v1/audit`
+- 系统设置: `GET /admin/api/v1/settings`, `PUT /admin/api/v1/settings`
+
+**数据流**:
+```
+前端控制台 (Next.js) → HTTP → Web Admin (FastAPI) → Database
+```
+
+---
+
+#### 前端控制台 → MiniApp API
+
+**协议**: HTTP REST API  
+**场景**:
+- 群组详情: `GET /v1/groups/public/{id}`
+- 群组活动: `GET /v1/groups/public/activities`
+
+**数据流**:
+```
+前端控制台 (Next.js) → HTTP → MiniApp API (FastAPI) → Database
+```
+
+---
+
+#### Web Admin → 外部服务
+
+**协议**: HTTP REST API  
+**场景**:
+
+1. **NowPayments**:
+   - 创建支付订单: `POST https://api.nowpayments.io/v1/payment`
+   - 查询订单状态: `GET https://api.nowpayments.io/v1/payment/{payment_id}`
+   - 接收 IPN 回调: `POST /admin/ipn` (NowPayments → Web Admin)
+
+2. **OpenAI/OpenRouter**:
+   - 生成活动文案: `POST https://api.openai.com/v1/chat/completions`
+   - 或: `POST https://openrouter.ai/api/v1/chat/completions`
+
+3. **Telegram Bot API**:
+   - 发送消息: `POST https://api.telegram.org/bot{token}/sendMessage`
+   - 创建群组: `POST https://api.telegram.org/bot{token}/createChat`
+   - 处理加入请求: `POST https://api.telegram.org/bot{token}/approveChatJoinRequest`
+
+**数据流**:
+```
+Web Admin → HTTP → NowPayments/OpenAI/Telegram API
+```
+
+---
+
+#### Telegram Bot → Telegram Bot API
+
+**协议**: HTTP REST API (通过 aiogram)  
+**场景**:
+- 发送红包消息
+- 处理用户命令
+- 管理群组
+- 处理加入请求
+
+**数据流**:
+```
+Telegram Bot (aiogram) → HTTP → Telegram Bot API
+```
+
+---
+
+### 18.3 数据流示例
+
+#### 红包发送流程
+
+```
+1. 用户发送命令 → Telegram Bot
+2. Telegram Bot → Web Admin API (创建红包任务)
+3. Web Admin → Database (保存任务)
+4. Web Admin → Telegram Bot API (发送红包消息)
+5. 用户领取红包 → Telegram Bot
+6. Telegram Bot → Web Admin API (更新任务状态)
+7. Web Admin → Database (更新余额、记录流水)
+```
+
+---
+
+#### 充值流程
+
+```
+1. 用户在前端创建充值订单 → 前端控制台
+2. 前端控制台 → Web Admin API (创建订单)
+3. Web Admin → Database (保存订单)
+4. Web Admin → NowPayments API (创建支付)
+5. NowPayments → Web Admin (IPN 回调)
+6. Web Admin → Database (更新订单状态、用户余额)
+7. Web Admin → Telegram Bot API (通知用户)
+```
+
+---
+
+#### 公开群组创建流程
+
+```
+1. 用户在 MiniApp 创建群组 → MiniApp API
+2. MiniApp API → Database (检查余额、创建群组记录)
+3. MiniApp API → Web Admin API (创建 Telegram 群组任务)
+4. Web Admin → Telegram Bot API (创建群组)
+5. Telegram Bot → Web Admin API (回填群组 ID)
+6. Web Admin → Database (更新群组信息)
+7. MiniApp API → Database (群组状态更新为 active)
+```
+
+---
+
+### 18.4 认证与授权
+
+#### Web Admin 认证
+
+**方式**: Session Cookie  
+**流程**:
+1. 用户访问 `/admin/login`
+2. 输入用户名和密码
+3. Web Admin 验证后设置 Session Cookie
+4. 后续请求携带 Cookie，Web Admin 验证 Session
+
+**保护范围**: 所有 `/admin/*` 路径（除 `/admin/login` 和 `/admin/api/v1/dashboard/public`）
+
+---
+
+#### MiniApp API 认证
+
+**方式**: JWT Token  
+**流程**:
+1. 用户通过 Telegram `initData` 登录
+2. MiniApp API 验证 `initData` 并生成 JWT Token
+3. 后续请求在 `Authorization: Bearer <token>` 头中携带 Token
+4. MiniApp API 验证 Token 并提取用户信息
+
+**保护范围**: 所有 `/v1/*` 路径（除 `/healthz` 和部分公开接口）
+
+---
+
+### 18.5 端口与服务映射
+
+| 服务 | 端口 | 协议 | 说明 |
+|------|------|------|------|
+| Web Admin | 8000 | HTTP | FastAPI Web 管理后台 |
+| MiniApp API | 8080 | HTTP | FastAPI MiniApp 后端 |
+| 前端控制台 | 3001 | HTTP | Next.js 前端应用 |
+| 数据库 | 5432 (PostgreSQL) / 3306 (MySQL) | SQL | 数据库服务 |
+
+---
+
+### 18.6 部署架构建议
+
+#### 开发环境
+
+```
+┌─────────────┐
+│  Developer  │
+└──────┬──────┘
+       │
+       ├─→ http://localhost:3001 (前端控制台)
+       ├─→ http://localhost:8000 (Web Admin)
+       ├─→ http://localhost:8080 (MiniApp API)
+       └─→ sqlite:///./data.sqlite (本地数据库)
+```
+
+---
+
+#### 生产环境
+
+```
+                    ┌──────────────┐
+                    │   Nginx      │
+                    │  (反向代理)   │
+                    └──────┬───────┘
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+   ┌────▼────┐       ┌─────▼─────┐      ┌─────▼─────┐
+   │  Web    │       │  MiniApp  │      │  Frontend │
+   │  Admin  │       │    API    │      │  (Next.js)│
+   │  :8000  │       │   :8080   │      │   :3001   │
+   └────┬────┘       └─────┬─────┘      └───────────┘
+        │                  │
+        └──────────┬───────┘
+                   │
+            ┌──────▼──────┐
+            │  Database   │
+            │ (PostgreSQL)│
+            └─────────────┘
+```
+
+**说明**:
+- Nginx 作为反向代理，处理 HTTPS、负载均衡、静态文件
+- Web Admin 和 MiniApp API 可以部署在同一服务器或不同服务器
+- 前端可以部署为静态文件（通过 `npm run build`）或使用 Next.js 服务器模式
+- 数据库建议使用 PostgreSQL（生产环境）
+
+---
+
+*架构说明最后更新: 2025-01-XX*

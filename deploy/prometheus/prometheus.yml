@@ -1,0 +1,43 @@
+# Prometheus 配置
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'redpacket-production'
+    environment: 'production'
+
+# Alertmanager 配置（可选）
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets: ['alertmanager:9093']
+
+# 规则文件（可选）
+# rule_files:
+#   - 'alerts.yml'
+
+# 抓取配置
+scrape_configs:
+  # Web Admin 指标
+  - job_name: 'web-admin'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['web_admin:8000']
+        labels:
+          service: 'web-admin'
+          port: '8000'
+
+  # MiniApp API 指标（如果有 /metrics 端点）
+  - job_name: 'miniapp-api'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['miniapp_api:8080']
+        labels:
+          service: 'miniapp-api'
+          port: '8080'
+
+  # Prometheus 自身
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+

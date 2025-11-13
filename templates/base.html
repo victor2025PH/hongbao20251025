@@ -1,3 +1,4 @@
+{% import "_macros/icons.html" as icons %}
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -33,6 +34,154 @@
     ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
     details > summary { list-style: none; }
     details > summary::-webkit-details-marker { display: none; }
+    .nav-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-weight: 600;
+      color: #0f172a;
+      font-size: 1.05rem;
+    }
+    .nav-brand-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(124, 58, 237, 0.18));
+      color: #2563eb;
+    }
+    .nav-brand-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.875rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 0.85rem;
+      color: #4b5563;
+      text-decoration: none;
+      transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+    .nav-link:hover {
+      background: rgba(37, 99, 235, 0.08);
+      color: #1f2937;
+    }
+    .nav-link--active {
+      color: #1f2937;
+      font-weight: 600;
+      background: rgba(37, 99, 235, 0.14);
+      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.12);
+    }
+    .nav-link--ghost {
+      background: transparent;
+    }
+    .nav-link.nav-link--button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font: inherit;
+    }
+    .nav-link.nav-link--button:hover {
+      background: rgba(15, 23, 42, 0.06);
+      color: #111827;
+    }
+    .nav-link.nav-link--button:focus-visible {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+    .nav-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 0.75rem;
+      background: rgba(148, 163, 184, 0.14);
+      color: inherit;
+    }
+    .nav-link--active .nav-icon {
+      background: rgba(37, 99, 235, 0.22);
+      color: #2563eb;
+    }
+    .nav-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+    .nav-label {
+      line-height: 1.2;
+    }
+    .icon-tile {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: var(--icon-bg, #e0e7ff);
+      color: var(--icon-color, #4338ca);
+    }
+    .icon-tile svg {
+      width: 22px;
+      height: 22px;
+    }
+    .icon-tile.blue { --icon-bg: #dbeafe; --icon-color: #2563eb; }
+    .icon-tile.purple { --icon-bg: #ede9fe; --icon-color: #7c3aed; }
+    .icon-tile.green { --icon-bg: #dcfce7; --icon-color: #15803d; }
+    .icon-tile.yellow { --icon-bg: #fef9c3; --icon-color: #ca8a04; }
+    .icon-tile.red { --icon-bg: #fee2e2; --icon-color: #dc2626; }
+    .icon-tile.gray { --icon-bg: #f3f4f6; --icon-color: #4b5563; }
+    .icon-inline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      background: var(--icon-bg, #e0e7ff);
+      color: var(--icon-color, #4338ca);
+    }
+    .icon-inline svg {
+      width: 16px;
+      height: 16px;
+    }
+    .icon-inline.blue { --icon-bg: #dbeafe; --icon-color: #2563eb; }
+    .icon-inline.purple { --icon-bg: #ede9fe; --icon-color: #7c3aed; }
+    .icon-inline.green { --icon-bg: #dcfce7; --icon-color: #16a34a; }
+    .icon-inline.yellow { --icon-bg: #fef3c7; --icon-color: #d97706; }
+    .icon-inline.red { --icon-bg: #fee2e2; --icon-color: #dc2626; }
+    .icon-inline.gray { --icon-bg: #e5e7eb; --icon-color: #4b5563; }
+    .quick-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.85rem 1.15rem;
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      text-decoration: none;
+      font-size: 0.875rem;
+      color: #4b5563;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    }
+    .quick-link:hover {
+      border-color: #c7d2fe;
+      box-shadow: 0 12px 24px rgba(99, 102, 241, 0.12);
+      color: #1f2937;
+      transform: translateY(-1px);
+    }
+    .quick-label {
+      font-weight: 500;
+      font-size: 0.875rem;
+      display: block;
+      text-align: center;
+      color: #374151;
+    }
   </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
@@ -47,125 +196,70 @@
 
   <!-- 顶部导航 -->
   <header class="bg-white border-b">
-    <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-6">
-        <a href="/admin" class="font-semibold">🎛️ Admin</a>
+    {% set primary_nav = [
+      {'id': 'dashboard', 'href': '/admin', 'label': t('admin.nav.dashboard'), 'icon': 'dashboard', 'perm': 'dashboard'},
+      {'id': 'covers', 'href': '/admin/covers', 'label': 'Covers', 'icon': 'covers', 'perm': 'covers'},
+      {'id': 'export', 'href': '/admin/export', 'label': t('admin.export.title'), 'icon': 'export', 'perm': 'export'},
+      {'id': 'adjust', 'href': '/admin/adjust', 'label': t('admin.nav.adjust'), 'icon': 'adjust', 'perm': 'adjust'},
+      {'id': 'reset', 'href': '/admin/reset', 'label': t('admin.nav.reset'), 'icon': 'reset', 'perm': 'reset'},
+      {'id': 'recharge', 'href': '/admin/recharge', 'label': t('admin.nav.recharge'), 'icon': 'recharge', 'perm': 'recharge'},
+      {'id': 'audit', 'href': '/admin/audit', 'label': t('admin.nav.audit'), 'icon': 'audit', 'perm': 'audit'},
+      {'id': 'approvals', 'href': '/admin/approvals', 'label': t('admin.nav.approvals'), 'icon': 'approvals', 'perm': 'approvals'},
+      {'id': 'queue', 'href': '/admin/queue', 'label': t('admin.nav.queue'), 'icon': 'queue', 'perm': 'queue'},
+      {'id': 'tags', 'href': '/admin/tags', 'label': t('admin.nav.tags'), 'icon': 'tags', 'perm': 'tags'},
+      {'id': 'invites', 'href': '/admin/invites', 'label': t('admin.nav.invites'), 'icon': 'invites', 'perm': 'invites'},
+      {'id': 'users', 'href': '/admin/users', 'label': t('admin.nav.users'), 'icon': 'users', 'perm': 'users'},
+      {'id': 'public_groups', 'href': '/admin/public-groups', 'label': t('admin.nav.public_groups'), 'icon': 'public_groups', 'perm': 'public_groups'},
+      {'id': 'public_group_reports', 'href': '/admin/public-groups/reports', 'label': t('admin.nav.public_group_reports'), 'icon': 'public_group_reports', 'perm': 'public_group_reports'},
+      {'id': 'sheet_users', 'href': '/admin/sheet-users', 'label': '用户资料', 'icon': 'sheet_users', 'perm': 'sheet_users'}
+    ] %}
+    {% set secondary_nav = [
+      {'id': 'settings', 'href': '/admin/settings', 'label': t('admin.settings.title'), 'icon': 'settings', 'perm': 'settings'},
+      {'id': 'a11y', 'href': '/admin/a11y', 'label': 'A11y', 'icon': 'a11y', 'perm': 'a11y'}
+    ] %}
+    {% set __csrf = (csrf_token if csrf_token is defined else (request.session.get('_csrf_token') if request and request.session else '')) %}
 
-        {% if can_view('dashboard') %}
-        <a href="/admin" aria-current="{{ 'page' if nav_active=='dashboard' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='dashboard' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.dashboard') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('covers') %}
-        <a href="/admin/covers" aria-current="{{ 'page' if nav_active=='covers' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='covers' else 'text-gray-600 hover:text-black' }}">
-          Covers
-        </a>
-        {% endif %}
-
-        {% if can_view('export') %}
-        <a href="/admin/export" aria-current="{{ 'page' if nav_active=='export' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='export' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.export.title') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('adjust') %}
-        <a href="/admin/adjust" aria-current="{{ 'page' if nav_active=='adjust' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='adjust' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.adjust') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('reset') %}
-        <a href="/admin/reset" aria-current="{{ 'page' if nav_active=='reset' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='reset' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.reset') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('recharge') %}
-        <a href="/admin/recharge" aria-current="{{ 'page' if nav_active=='recharge' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='recharge' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.recharge') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('audit') %}
-        <a href="/admin/audit" aria-current="{{ 'page' if nav_active=='audit' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='audit' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.audit') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('approvals') %}
-        <a href="/admin/approvals" aria-current="{{ 'page' if nav_active=='approvals' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='approvals' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.approvals') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('queue') %}
-        <a href="/admin/queue" aria-current="{{ 'page' if nav_active=='queue' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='queue' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.queue') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('tags') %}
-        <a href="/admin/tags" aria-current="{{ 'page' if nav_active=='tags' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='tags' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.tags') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('invites') %}
-        <a href="/admin/invites" aria-current="{{ 'page' if nav_active=='invites' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='invites' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.invites') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('users') %}
-        <a href="/admin/users" aria-current="{{ 'page' if nav_active=='users' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='users' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.users') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('public_groups') %}
-        <a href="/admin/public-groups"
-           aria-current="{{ 'page' if nav_active=='public_groups' else 'false' }}"
-           class="text-sm {{ 'text-black font-semibold' if nav_active=='public_groups' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.public_groups') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('public_group_reports') %}
-        <a href="/admin/public-groups/reports"
-           aria-current="{{ 'page' if nav_active=='public_group_reports' else 'false' }}"
-           class="text-sm {{ 'text-black font-semibold' if nav_active=='public_group_reports' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.nav.public_group_reports') }}
-        </a>
-        {% endif %}
-
-        {% if can_view('sheet_users') %}
-        <!-- “用户资料”入口（Google Sheet 后台） -->
-        <a href="/admin/sheet-users"
-           aria-current="{{ 'page' if nav_active=='sheet_users' else 'false' }}"
-           class="text-sm {{ 'text-black font-semibold' if nav_active=='sheet_users' else 'text-gray-600 hover:text-black' }}">
-          用户资料
-        </a>
-        {% endif %}
+    <nav class="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:gap-6 gap-4 w-full">
+        <div class="flex items-center gap-4">
+          <a href="/admin" class="nav-brand">
+            <span class="nav-brand-icon">{{ icons.icon('brand') }}</span>
+            <span>Admin</span>
+          </a>
+        </div>
+        <div class="flex flex-wrap items-center gap-1">
+          {% for item in primary_nav %}
+            {% if can_view(item.perm) %}
+              {% set is_active = (nav_active == item.id) %}
+              <a href="{{ item.href }}"
+                 aria-current="{{ 'page' if is_active else 'false' }}"
+                 class="nav-link {{ 'nav-link--active' if is_active else '' }}">
+                <span class="nav-icon">{{ icons.icon(item.icon) }}</span>
+                <span class="nav-label">{{ item.label }}</span>
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
 
-      <div class="flex items-center gap-3">
-        {% if can_view('settings') %}
-        <a href="/admin/settings" aria-current="{{ 'page' if nav_active=='settings' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='settings' else 'text-gray-600 hover:text-black' }}">
-          {{ t('admin.settings.title') }}
-        </a>
-        {% endif %}
-        {% if can_view('a11y') %}
-        <a href="/admin/a11y" aria-current="{{ 'page' if nav_active=='a11y' else 'false' }}" class="text-sm {{ 'text-black font-semibold' if nav_active=='a11y' else 'text-gray-600 hover:text-black' }}">
-          A11y
-        </a>
-        {% endif %}
-
-        {# 登出表单：支持 CSRF（渐进式）。#}
-        {% set __csrf = (csrf_token if csrf_token is defined else (request.session.get('_csrf_token') if request and request.session else '')) %}
+      <div class="flex items-center gap-1">
+        {% for item in secondary_nav %}
+          {% if can_view(item.perm) %}
+            {% set is_active = (nav_active == item.id) %}
+            <a href="{{ item.href }}"
+               aria-current="{{ 'page' if is_active else 'false' }}"
+               class="nav-link {{ 'nav-link--active' if is_active else '' }}">
+              <span class="nav-icon">{{ icons.icon(item.icon) }}</span>
+              <span class="nav-label">{{ item.label }}</span>
+            </a>
+          {% endif %}
+        {% endfor %}
         <form method="post" action="/admin/logout">
           <input type="hidden" name="csrf_token" value="{{ __csrf }}">
-          <button class="text-sm text-gray-600 hover:text-black">{{ t('admin.nav.signout') }}</button>
+          <button type="submit" class="nav-link nav-link--button nav-link--ghost">
+            <span class="nav-icon">{{ icons.icon('logout') }}</span>
+            <span class="nav-label">{{ t('admin.nav.signout') }}</span>
+          </button>
         </form>
       </div>
     </nav>

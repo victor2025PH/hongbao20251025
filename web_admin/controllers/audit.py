@@ -248,6 +248,62 @@ def audit_list(
         },
     )
 
+
+# -------- REST API: 获取审计日志列表 --------
+@router.get("/api/v1/audit", response_class=JSONResponse)
+def get_audit_logs(
+    db=Depends(db_session),
+    sess=Depends(require_admin),
+    page: int = Query(1, ge=1),
+    per_page: int = Query(DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
+    ltype: Optional[str] = Query(None, description="Ledger type"),
+    types: Optional[List[str]] = Query(None, description="Multiple ledger types"),
+    token: Optional[str] = None,
+    user: Optional[str] = None,
+    operator: Optional[int] = None,
+    min_amount: Optional[float] = None,
+    max_amount: Optional[float] = None,
+    start: Optional[str] = None,
+    end: Optional[str] = None,
+    q: Optional[str] = None,
+):
+    """返回审计日志列表（JSON 格式，供前端调用）"""
+    # 组合类型过滤集合
+    ltypes = types[:] if types else []
+    if ltype:
+        ltypes.append(ltype)
+
+    qset = _apply_filters(
+        _qset_base(db), user, token, ltypes, operator, min_amount, max_amount, start, end, q
+    )
+
+    total = qset.count()
+    rows = qset.offset((page - 1) * per_page).limit(per_page).all()
+    total_pages = max(1, math.ceil(total / per_page))
+
+    view_rows: List[Dict[str, Any]] = []
+    for lg, u in rows:
+        row_dict = _row_to_view(lg, u)
+        # 转换 datetime 为 ISO 字符串
+        if row_dict.get("created_at") and hasattr(row_dict["created_at"], "isoformat"):
+            row_dict["created_at"] = row_dict["created_at"].isoformat()
+        view_rows.append(row_dict)
+
+    # 总金额（受相同筛选）
+    subq = qset.with_entities(L_AMOUNT.label("amt")).subquery()
+    sum_amount = db.query(func.coalesce(func.sum(subq.c.amt), 0)).scalar()
+
+    return JSONResponse({
+        "items": view_rows,
+        "pagination": {
+            "page": page,
+            "per_page": per_page,
+            "total": total,
+            "total_pages": total_pages,
+        },
+        "sum_amount": float(sum_amount or 0),
+    })
+
 # -----------------------
 # 导出：CSV
 # -----------------------

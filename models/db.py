@@ -475,6 +475,26 @@ def init_db() -> None:
         },
     )
 
+    if (os.getenv("FLAG_ENABLE_PUBLIC_GROUPS", "").strip().lower() in {"1", "true", "yes", "on"}):
+        _ensure_column(
+            table="public_group_activity_ai_history",
+            ddl_by_dialect={
+                "sqlite":   "applied_activity_id INTEGER",
+                "postgres": "applied_activity_id INTEGER",
+                "mysql":    "applied_activity_id INT",
+                "default":  "applied_activity_id INTEGER",
+            },
+        )
+        _ensure_column(
+            table="public_group_activity_ai_history",
+            ddl_by_dialect={
+                "sqlite":   "applied_at DATETIME",
+                "postgres": "applied_at TIMESTAMP",
+                "mysql":    "applied_at DATETIME",
+                "default":  "applied_at TIMESTAMP",
+            },
+        )
+
     # ✅ 新增：创建强幂等表（若不存在）
     _ensure_membership_table()
 

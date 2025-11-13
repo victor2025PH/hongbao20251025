@@ -6,7 +6,8 @@
   .th-resizer { position:absolute; right:2px; top:0; bottom:0; width:6px; cursor:col-resize; opacity:.4; }
   .th-resizer:hover { opacity:.8; }
   .thead-sticky { position: sticky; top: 0; z-index: 10; box-shadow: inset 0 -1px 0 #e5e7eb; }
-  .table-grid td, .table-grid th { border-bottom: 1px solid #f1f5f9; }
+  .table-grid td, .table-grid th { border-bottom: 1px solid #f1f5f9; vertical-align: top; line-height: 1.5; }
+  .table-grid tbody td { white-space: normal; }
 </style>
 
 <div class="flex items-center justify-between mb-4">
@@ -26,7 +27,7 @@
   </div>
 {% endif %}
 
-<form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4 bg-white p-4 rounded-xl border">
+<form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4 bg-white p-4 rounded-xl border">
   <label class="text-sm"><span class="block text-gray-500 mb-1">用户ID</span>
     <input name="用户ID" value="{{ filters['用户ID'] }}" class="w-full border rounded px-3 py-2">
   </label>
@@ -36,10 +37,7 @@
   <label class="text-sm"><span class="block text-gray-500 mb-1">聊天ID</span>
     <input name="聊天ID" value="{{ filters['聊天ID'] }}" class="w-full border rounded px-3 py-2">
   </label>
-  <label class="text-sm"><span class="block text-gray-500 mb-1">来源</span>
-    <input name="来源" value="{{ filters['来源'] }}" class="w-full border rounded px-3 py-2">
-  </label>
-  <div class="md:col-span-4 flex gap-2">
+  <div class="md:col-span-3 flex flex-wrap gap-2 items-center">
     <button class="px-3 py-1.5 rounded bg-black text-white text-sm">筛选</button>
     <a href="/admin/sheet-users" class="px-3 py-1.5 rounded border text-sm">重置</a>
 
@@ -154,8 +152,16 @@
     headerNames[idx] = name;
   });
 
+  const defaultHiddenNames = new Set(["记录时间(UTC)", "来源"]);
   let visible = JSON.parse(localStorage.getItem(COL_VIS_KEY) || 'null');
-  if (!visible) { visible = {}; headers.forEach((th, idx)=> visible[idx] = true); }
+  if (!visible) {
+    visible = {};
+    headers.forEach((th, idx)=> {
+      const name = headerNames[idx];
+      visible[idx] = !defaultHiddenNames.has(name);
+    });
+    localStorage.setItem(COL_VIS_KEY, JSON.stringify(visible));
+  }
 
   manager.innerHTML = '';
   headers.forEach((th, idx) => {

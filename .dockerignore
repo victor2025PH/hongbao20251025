@@ -1,0 +1,84 @@
+# Docker 忽略文件
+# 用于优化 Docker 构建上下文
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info
+dist
+build
+.venv
+venv
+env
+ENV
+
+# Node.js
+node_modules
+npm-debug.log
+.next
+.nuxt
+dist
+build
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# 测试
+.pytest_cache
+.mypy_cache
+.coverage
+htmlcov
+*.sqlite
+test_*.sqlite
+
+# 日志
+*.log
+logs
+
+# 临时文件
+*.tmp
+*.bak
+*.swp
+.DS_Store
+
+# 文档
+*.md
+docs
+PROJECT_STRUCTURE.md
+037_*.md
+README*.md
+
+# 部署文件
+deploy
+docker-compose*.yml
+Dockerfile*
+
+# 密钥和敏感文件
+.env
+.env.*
+secrets
+*.pem
+*.key
+
+# 导出文件
+exports
+backups
+
+# 其他
+*.xlsx
+*.csv
+*.diff
+*.patch
+

@@ -1,97 +1,253 @@
 {% extends "base.html" %}
+{% import "_macros/icons.html" as icons %}
 {% block content %}
-<div class="flex justify-between items-center mb-6">
-  <div>
-    <h1 class="text-xl font-semibold">{{ t('admin.public_groups.activities_title') }}</h1>
-    <p class="text-sm text-gray-500">{{ t('admin.public_groups.activities_subtitle') }}</p>
+<div class="bg-gradient-to-r from-purple-50 via-white to-blue-50 border border-purple-100 rounded-2xl p-6 mb-8 shadow-sm">
+  <div class="flex flex-col gap-6 lg:gap-4">
+    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+      <div class="flex items-start gap-4">
+        <span class="icon-tile purple">{{ icons.icon('sparkles') }}</span>
+        <div class="space-y-1">
+          <h1 class="text-2xl font-semibold text-gray-900">{{ t('admin.public_groups.activities_title') }}</h1>
+          <p class="text-sm text-gray-600">{{ t('admin.public_groups.activities_subtitle') }}</p>
+      <div class="flex flex-wrap items-center gap-2 text-[12px] text-gray-500">
+            <span class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 border border-gray-200">
+              <span class="icon-inline purple">{{ icons.icon('sparkles') }}</span>
+              <span>{{ t('admin.public_groups.activities_ai_modal_description') }}</span>
+            </span>
+            <span class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 border border-gray-200">
+              <span class="icon-inline blue">{{ icons.icon('queue') }}</span>
+              <span>{{ t('admin.public_groups.activities_bulk_processing') }}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-3">
+        <button type="button"
+                data-activity-quick="ai"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl border border-purple-100 bg-white hover:border-purple-300 hover:shadow-lg transition text-left">
+          <span class="icon-tile purple shrink-0">{{ icons.icon('sparkles') }}</span>
+          <div class="flex flex-col">
+            <span class="text-sm font-semibold text-gray-800">{{ t('admin.public_groups.activities_quick_ai_title') }}</span>
+            <span class="text-xs text-gray-500 leading-snug">{{ t('admin.public_groups.activities_quick_ai_desc') }}</span>
+          </div>
+        </button>
+        <button type="button"
+                data-activity-quick="history"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl border border-blue-100 bg-white hover:border-blue-300 hover:shadow-lg transition text-left">
+          <span class="icon-tile blue shrink-0">{{ icons.icon('history') }}</span>
+          <div class="flex flex-col">
+            <span class="text-sm font-semibold text-gray-800">{{ t('admin.public_groups.activities_quick_history_title') }}</span>
+            <span class="text-xs text-gray-500 leading-snug">{{ t('admin.public_groups.activities_quick_history_desc') }}</span>
+          </div>
+        </button>
+        <button type="button"
+                data-activity-quick="bulk"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl border border-blue-100 bg-white hover:border-blue-300 hover:shadow-lg transition text-left">
+          <span class="icon-tile blue shrink-0">{{ icons.icon('tools') }}</span>
+          <div class="flex flex-col">
+            <span class="text-sm font-semibold text-gray-800">{{ t('admin.public_groups.activities_quick_bulk_title') }}</span>
+            <span class="text-xs text-gray-500 leading-snug">{{ t('admin.public_groups.activities_quick_bulk_desc') }}</span>
+          </div>
+        </button>
+      </div>
+      <div class="text-xs text-gray-500">
+        <a href="/admin/public-groups/dashboard" class="inline-flex items-center gap-1 hover:text-blue-600">
+          <span class="icon-inline blue">{{ icons.icon('chart') }}</span>
+          <span>{{ t('admin.public_groups.dashboard_title') }}</span>
+        </a>
+      </div>
+    </div>
   </div>
-  <a href="/admin/public-groups/activities/report"
-     class="px-4 py-2 text-sm rounded bg-blue-500 text-white hover:bg-blue-600">
-    {{ t('admin.public_groups.activities_report_link') }}
-  </a>
+</div>
+
+<div id="activity-ai-modal" class="hidden fixed inset-0 z-40">
+  <div id="activity-ai-modal-backdrop" class="absolute inset-0 bg-black/50"></div>
+  <div class="relative mx-auto mt-20 max-w-3xl w-[92%] bg-white rounded-lg shadow-xl overflow-hidden">
+    <div class="flex items-center justify-between px-6 py-4 border-b">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900">{{ t('admin.public_groups.activities_ai_modal_title') }}</h3>
+        <p class="text-sm text-gray-500 mt-1">{{ t('admin.public_groups.activities_ai_modal_description') }}</p>
+      </div>
+      <button id="activity-ai-close" class="text-gray-500 hover:text-gray-700 text-2xl leading-none">&times;</button>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 px-6 py-5">
+      <form id="activity-ai-form" class="space-y-4">
+        <div>
+          <label for="activity-ai-brief" class="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+            {{ t('admin.public_groups.activities_ai_modal_brief_label') }}
+          </label>
+          <textarea id="activity-ai-brief"
+                    class="mt-1 w-full border rounded px-3 py-2 text-sm h-32 focus:ring-2 focus:ring-purple-400 focus:border-purple-400"
+                    placeholder="{{ t('admin.public_groups.activities_ai_prompt') }}"></textarea>
+        </div>
+        <div class="flex items-center gap-3">
+          <button type="submit"
+                  class="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded hover:bg-purple-700 focus:ring-2 focus:ring-purple-400">
+            {{ t('admin.public_groups.activities_ai_modal_submit') }}
+          </button>
+          <button type="button"
+                  id="activity-ai-cancel"
+                  class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">
+            {{ t('admin.public_groups.activities_ai_modal_close') }}
+          </button>
+        </div>
+        <p id="activity-ai-modal-status" class="text-xs text-gray-500"></p>
+      </form>
+      <div class="border rounded-md p-4 bg-gray-50 max-h-72 overflow-y-auto">
+        <h4 class="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
+          {{ t('admin.public_groups.activities_ai_modal_history_title') }}
+        </h4>
+        <div id="activity-ai-history-list" class="space-y-3 text-xs text-gray-600">
+          <p>{{ t('admin.public_groups.activities_ai_modal_history_empty') }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
   <div class="bg-white border rounded-md p-4 shadow-sm">
     <h2 class="text-sm font-semibold mb-3">{{ t('admin.public_groups.activities_create_title') }}</h2>
+    {% set ai_i18n = {
+      "prompt": t('admin.public_groups.activities_ai_prompt'),
+      "pending": t('admin.public_groups.activities_ai_pending'),
+      "success": t('admin.public_groups.activities_ai_success'),
+      "error": t('admin.public_groups.activities_ai_error'),
+      "cancelled": t('admin.public_groups.activities_ai_cancelled'),
+      "history_error": t('admin.public_groups.activities_ai_history_error'),
+      "history_applied": t('admin.public_groups.activities_ai_history_applied'),
+      "history_hint": t('admin.public_groups.activities_ai_history_hint')
+    } %}
+    <div class="flex items-center justify-between gap-3 mb-3">
+      <button type="button"
+              id="activity-ai-generate"
+              data-i18n='{{ ai_i18n | tojson }}'
+              class="flex items-center gap-2 px-3 py-1.5 text-xs rounded border border-purple-500 text-purple-600 hover:bg-purple-50 transition"
+              title="{{ t('admin.public_groups.activities_ai_modal_description') }}">
+        <span class="icon-inline purple">{{ icons.icon('sparkles') }}</span>
+        <span>{{ t('admin.public_groups.activities_ai_generate') }}</span>
+      </button>
+      <p id="activity-ai-status" class="text-[11px] text-gray-500 flex-1 text-right" role="status" aria-live="polite"></p>
+    </div>
     <form method="post" action="/admin/public-groups/activities" class="space-y-3">
       <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
       <div>
         <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_name') }}</label>
-        <input name="name" type="text" required class="w-full border rounded px-2 py-1 text-sm" />
+        <input name="name" type="text" required class="w-full border rounded px-2 py-1 text-sm"
+               placeholder="{{ t('admin.public_groups.activities_form_name_placeholder') }}"
+               aria-describedby="activity-name-help" />
+        <p id="activity-name-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_name_help') }}</p>
       </div>
       <div>
         <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_description') }}</label>
-        <textarea name="description" rows="2" class="w-full border rounded px-2 py-1 text-sm"></textarea>
+        <textarea name="description" rows="2" class="w-full border rounded px-2 py-1 text-sm"
+                  placeholder="{{ t('admin.public_groups.activities_form_description_placeholder') }}"
+                  aria-describedby="activity-description-help"></textarea>
+        <p id="activity-description-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_description_help') }}</p>
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_start_at') }}</label>
-          <input name="start_at" type="datetime-local" class="w-full border rounded px-2 py-1 text-sm" />
+          <input name="start_at" type="datetime-local" class="w-full border rounded px-2 py-1 text-sm"
+                 aria-describedby="activity-start-help" />
+          <p id="activity-start-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_start_help') }}</p>
         </div>
         <div>
           <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_end_at') }}</label>
-          <input name="end_at" type="datetime-local" class="w-full border rounded px-2 py-1 text-sm" />
+          <input name="end_at" type="datetime-local" class="w-full border rounded px-2 py-1 text-sm"
+                 aria-describedby="activity-end-help" />
+          <p id="activity-end-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_end_help') }}</p>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_reward_points') }}</label>
-          <input name="reward_points" type="number" min="0" value="0" required class="w-full border rounded px-2 py-1 text-sm" />
+          <input name="reward_points" type="number" min="0" value="0" required class="w-full border rounded px-2 py-1 text-sm"
+                 placeholder="{{ t('admin.public_groups.activities_form_reward_placeholder') }}"
+                 aria-describedby="activity-reward-help" />
+          <p id="activity-reward-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_reward_help') }}</p>
         </div>
         <div>
           <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_bonus_points') }}</label>
-          <input name="bonus_points" type="number" min="0" value="0" class="w-full border rounded px-2 py-1 text-sm" />
+          <input name="bonus_points" type="number" min="0" value="0" class="w-full border rounded px-2 py-1 text-sm"
+                 placeholder="{{ t('admin.public_groups.activities_form_bonus_placeholder') }}"
+                 aria-describedby="activity-bonus-help" />
+          <p id="activity-bonus-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_bonus_help') }}</p>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_daily_cap') }}</label>
-          <input name="daily_cap" type="number" min="1" class="w-full border rounded px-2 py-1 text-sm" />
+          <input name="daily_cap" type="number" min="1" class="w-full border rounded px-2 py-1 text-sm"
+                 placeholder="{{ t('admin.public_groups.activities_form_daily_placeholder') }}"
+                 aria-describedby="activity-daily-help" />
+          <p id="activity-daily-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_daily_help') }}</p>
         </div>
         <div>
           <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_total_cap') }}</label>
-          <input name="total_cap" type="number" min="1" class="w-full border rounded px-2 py-1 text-sm" />
+          <input name="total_cap" type="number" min="1" class="w-full border rounded px-2 py-1 text-sm"
+                 placeholder="{{ t('admin.public_groups.activities_form_total_placeholder') }}"
+                 aria-describedby="activity-total-help" />
+          <p id="activity-total-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_total_help') }}</p>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_highlight_slots') }}</label>
-          <input name="highlight_slots" type="number" min="0" value="0" class="w-full border rounded px-2 py-1 text-sm" />
+          <input name="highlight_slots" type="number" min="0" value="0" class="w-full border rounded px-2 py-1 text-sm"
+                 placeholder="{{ t('admin.public_groups.activities_form_highlight_placeholder') }}"
+                 aria-describedby="activity-highlight-help" />
+          <p id="activity-highlight-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_highlight_help') }}</p>
         </div>
         <div class="flex items-center gap-2 mt-4 md:mt-6">
           <input name="highlight_enabled" type="checkbox" value="true" id="highlightEnabled" class="border rounded">
           <label for="highlightEnabled" class="text-xs text-gray-600">{{ t('admin.public_groups.activities_highlight_enabled') }}</label>
         </div>
+        <p class="col-span-2 text-[11px] text-gray-400 -mt-2">{{ t('admin.public_groups.activities_form_highlight_toggle_help') }}</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
           <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_front_title') }}</label>
-          <input name="front_title" type="text" class="w-full border rounded px-2 py-1 text-sm" placeholder="{{ t('admin.public_groups.activities_front_title_hint') }}">
+          <input name="front_title" type="text" class="w-full border rounded px-2 py-1 text-sm"
+                 placeholder="{{ t('admin.public_groups.activities_front_title_hint') }}"
+                 aria-describedby="activity-front-title-help">
+          <p id="activity-front-title-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_front_title_help') }}</p>
         </div>
         <div>
           <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_front_badge') }}</label>
-          <input name="front_badge" type="text" class="w-full border rounded px-2 py-1 text-sm" placeholder="🌟 Featured">
+          <input name="front_badge" type="text" class="w-full border rounded px-2 py-1 text-sm"
+                 placeholder="🌟 Featured" aria-describedby="activity-front-badge-help">
+          <p id="activity-front-badge-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_front_badge_help') }}</p>
         </div>
       </div>
       <div>
         <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_front_subtitle') }}</label>
-        <textarea name="front_subtitle" rows="2" class="w-full border rounded px-2 py-1 text-sm" placeholder="{{ t('admin.public_groups.activities_front_subtitle_hint') }}"></textarea>
+        <textarea name="front_subtitle" rows="2" class="w-full border rounded px-2 py-1 text-sm"
+                  placeholder="{{ t('admin.public_groups.activities_front_subtitle_hint') }}"
+                  aria-describedby="activity-front-subtitle-help"></textarea>
+        <p id="activity-front-subtitle-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_front_subtitle_help') }}</p>
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_front_cta_label') }}</label>
-          <input name="front_cta_label" type="text" class="w-full border rounded px-2 py-1 text-sm" placeholder="{{ t('admin.public_groups.activities_front_cta_label_hint') }}">
+          <input name="front_cta_label" type="text" class="w-full border rounded px-2 py-1 text-sm"
+                 placeholder="{{ t('admin.public_groups.activities_front_cta_label_hint') }}"
+                 aria-describedby="activity-front-cta-label-help">
+          <p id="activity-front-cta-label-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_front_cta_label_help') }}</p>
         </div>
         <div>
           <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_front_cta_link') }}</label>
-          <input name="front_cta_link" type="url" class="w-full border rounded px-2 py-1 text-sm" placeholder="https://t.me/+example">
+          <input name="front_cta_link" type="url" class="w-full border rounded px-2 py-1 text-sm"
+                 placeholder="https://t.me/+example" aria-describedby="activity-front-cta-link-help">
+          <p id="activity-front-cta-link-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_front_cta_link_help') }}</p>
         </div>
       </div>
       <div>
         <label class="text-xs text-gray-600 block mb-1">{{ t('admin.public_groups.activities_front_priority') }}</label>
-        <input name="front_priority" type="number" min="0" value="100" class="w-full border rounded px-2 py-1 text-sm" />
+        <input name="front_priority" type="number" min="0" value="100" class="w-full border rounded px-2 py-1 text-sm"
+               aria-describedby="activity-front-priority-help" />
         <p class="text-[10px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_front_priority_hint') }}</p>
+        <p id="activity-front-priority-help" class="text-[11px] text-gray-400 mt-1">{{ t('admin.public_groups.activities_form_front_priority_help') }}</p>
       </div>
       <button type="submit" class="px-3 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
         {{ t('admin.public_groups.activities_create_submit') }}
@@ -113,19 +269,24 @@
     } %}
     <div id="activity-bulk-toolbar"
          class="hidden mb-3 border border-blue-100 bg-blue-50 rounded-md p-4 space-y-3"
-         data-i18n='{{ bulk_i18n | tojson }}'>
+         data-i18n='{{ bulk_i18n | tojson }}'
+         data-hint="{{ t('admin.public_groups.activities_bulk_toolbar_hint') }}">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div class="text-sm font-medium text-blue-800" id="activity-bulk-count">{{ t('admin.public_groups.activities_bulk_selected_label', count=0) }}</div>
         <div class="flex items-center gap-2 flex-wrap">
           <button type="button"
                   data-activity-action="pause"
-                  class="activity-bulk-action px-3 py-1.5 text-xs rounded bg-yellow-500 text-white hover:bg-yellow-600 disabled:opacity-60">
-            {{ t('admin.public_groups.activities_bulk_pause') }}
+                class="activity-bulk-action flex items-center gap-2 px-3 py-1.5 text-xs rounded bg-yellow-500 text-white hover:bg-yellow-600 disabled:opacity-60 transition"
+                  title="{{ t('admin.public_groups.activities_bulk_pause') }}">
+          <span class="icon-inline yellow">{{ icons.icon('pause') }}</span>
+            <span>{{ t('admin.public_groups.activities_bulk_pause') }}</span>
           </button>
           <button type="button"
                   data-activity-action="resume"
-                  class="activity-bulk-action px-3 py-1.5 text-xs rounded bg-green-500 text-white hover:bg-green-600 disabled:opacity-60">
-            {{ t('admin.public_groups.activities_bulk_resume') }}
+                class="activity-bulk-action flex items-center gap-2 px-3 py-1.5 text-xs rounded bg-green-500 text-white hover:bg-green-600 disabled:opacity-60 transition"
+                  title="{{ t('admin.public_groups.activities_bulk_resume') }}">
+          <span class="icon-inline green">{{ icons.icon('play') }}</span>
+            <span>{{ t('admin.public_groups.activities_bulk_resume') }}</span>
           </button>
         </div>
       </div>
@@ -163,23 +324,41 @@
         <div class="flex items-center gap-2 flex-wrap">
           <button type="button"
                   id="activity-bulk-apply"
-                  class="px-3 py-1.5 text-xs rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60">
-            {{ t('admin.public_groups.activities_bulk_apply') }}
+                  class="flex items-center gap-2 px-3 py-1.5 text-xs rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 transition"
+                  title="{{ t('admin.public_groups.activities_bulk_apply') }}">
+            <span class="icon-inline blue">{{ icons.icon('tools') }}</span>
+            <span>{{ t('admin.public_groups.activities_bulk_apply') }}</span>
           </button>
           <button type="button"
                   id="activity-bulk-export"
-                  class="px-3 py-1.5 text-xs rounded border border-blue-400 text-blue-600 hover:bg-blue-50">
-            {{ t('admin.public_groups.activities_bulk_export_selected') }}
+                  class="flex items-center gap-2 px-3 py-1.5 text-xs rounded border border-blue-400 text-blue-600 hover:bg-blue-50 transition"
+                  title="{{ t('admin.public_groups.activities_bulk_export_selected') }}">
+            <span class="icon-inline blue">{{ icons.icon('upload') }}</span>
+            <span>{{ t('admin.public_groups.activities_bulk_export_selected') }}</span>
           </button>
           <a href="/admin/public-groups/activities/export"
-             class="px-3 py-1.5 text-xs rounded border text-gray-600 hover:bg-gray-100">
-            {{ t('admin.public_groups.activities_bulk_export_all') }}
+             class="flex items-center gap-2 px-3 py-1.5 text-xs rounded border text-gray-600 hover:bg-gray-100 transition"
+             title="{{ t('admin.public_groups.activities_bulk_export_all') }}">
+            <span class="icon-inline gray">{{ icons.icon('export') }}</span>
+            <span>{{ t('admin.public_groups.activities_bulk_export_all') }}</span>
           </a>
         </div>
         <p class="text-xs text-gray-500" id="activity-bulk-status"></p>
       </div>
     </div>
 
+    {% set status_labels = {
+      'active': t('admin.public_groups.activities_status_active'),
+      'paused': t('admin.public_groups.activities_status_paused'),
+      'draft': t('admin.public_groups.activities_status_draft'),
+      'archived': t('admin.public_groups.activities_status_archived')
+    } %}
+    {% set status_hints = {
+      'active': t('admin.public_groups.activities_status_active_hint'),
+      'paused': t('admin.public_groups.activities_status_paused_hint'),
+      'draft': t('admin.public_groups.activities_status_draft_hint'),
+      'archived': t('admin.public_groups.activities_status_archived_hint')
+    } %}
     <div class="space-y-3">
       {% for activity in activities %}
       <div class="border rounded px-3 py-2">
@@ -195,20 +374,53 @@
               <p class="text-xs text-gray-500">{{ t('admin.public_groups.activities_type_join_bonus') }}</p>
             </div>
           </div>
-          <span class="text-xs px-2 py-1 rounded {% if activity.status.value == 'active' %}bg-green-100 text-green-700{% elif activity.status.value == 'paused' %}bg-yellow-100 text-yellow-700{% elif activity.status.value == 'draft' %}bg-blue-100 text-blue-700{% else %}bg-gray-200 text-gray-600{% endif %}">
-            {{ activity.status.value }}
-          </span>
+          <div class="text-right">
+            <span class="inline-flex items-center gap-1 text-xs px-2 py-1 rounded {% if activity.status.value == 'active' %}bg-green-100 text-green-700{% elif activity.status.value == 'paused' %}bg-yellow-100 text-yellow-700{% elif activity.status.value == 'draft' %}bg-blue-100 text-blue-700{% else %}bg-gray-200 text-gray-600{% endif %}">
+              <span class="font-medium">{{ status_labels.get(activity.status.value, activity.status.value) }}</span>
+            </span>
+            <span class="block text-[11px] text-gray-500 mt-1">{{ status_hints.get(activity.status.value, '') }}</span>
+          </div>
         </div>
-        <div class="mt-2 text-xs text-gray-600 space-y-1">
-          <p>{{ t('admin.public_groups.activities_reward_points') }}: {{ activity.reward_points }} (+{{ activity.bonus_points }})</p>
-          <p>{{ t('admin.public_groups.activities_time_range') }}: {{ activity.start_at or '-' }} ~ {{ activity.end_at or t('admin.public_groups.activities_no_end') }}</p>
-          <p>{{ t('admin.public_groups.activities_caps') }}: {{ t('admin.public_groups.activities_daily_cap') }} {{ activity.daily_cap or '-' }}, {{ t('admin.public_groups.activities_total_cap') }} {{ activity.total_cap or '-' }}</p>
-          <p>{{ t('admin.public_groups.activities_highlight_info') }}: {{ activity.highlight_slots or 0 }} / {{ 'ON' if activity.is_highlight_enabled else 'OFF' }}</p>
+        <div class="mt-2 text-xs text-gray-600 space-y-2">
+          {% set bonus_value = activity.bonus_points if activity.bonus_points is not none else 0 %}
+          <p>
+            <span class="font-medium text-gray-700">{{ t('admin.public_groups.activities_detail_reward_label') }}</span>
+            <span class="ml-1">{{ t('admin.public_groups.activities_detail_reward_desc', points=activity.reward_points, bonus=bonus_value) }}</span>
+          </p>
+          {% set start_text = activity.start_at or t('admin.public_groups.activities_detail_schedule_now') %}
+          {% set end_text = activity.end_at or t('admin.public_groups.activities_detail_schedule_open') %}
+          <p>
+            <span class="font-medium text-gray-700">{{ t('admin.public_groups.activities_detail_schedule_label') }}</span>
+            <span class="ml-1">{{ start_text }} {{ t('admin.public_groups.activities_detail_schedule_to') }} {{ end_text }}</span>
+          </p>
+          {% set daily_text = activity.daily_cap or t('admin.public_groups.activities_detail_caps_unlimited') %}
+          {% set total_text = activity.total_cap or t('admin.public_groups.activities_detail_caps_unlimited') %}
+          <p>
+            <span class="font-medium text-gray-700">{{ t('admin.public_groups.activities_detail_caps_label') }}</span>
+            <span class="ml-1">{{ t('admin.public_groups.activities_detail_caps_desc', daily=daily_text, total=total_text) }}</span>
+          </p>
+          {% set highlight_status = activity.is_highlight_enabled and t('admin.public_groups.activities_detail_highlight_on') or t('admin.public_groups.activities_detail_highlight_off') %}
+          <p>
+            <span class="font-medium text-gray-700">{{ t('admin.public_groups.activities_detail_highlight_label') }}</span>
+            <span class="ml-1">{{ t('admin.public_groups.activities_detail_highlight_desc', slots=activity.highlight_slots or 0, status=highlight_status) }}</span>
+          </p>
+          {% if activity.tags %}
+          <p>
+            <span class="font-medium text-gray-700">{{ t('admin.public_groups.activities_detail_tags_label') }}</span>
+            <span class="ml-1">{{ t('admin.public_groups.activities_detail_tags_desc', tags=activity.tags|join(', ')) }}</span>
+          </p>
+          {% endif %}
           {% set card = activity.config.get('front_card') if activity.config else None %}
           {% if card %}
-          <p>{{ t('admin.public_groups.activities_front_preview') }}: {{ card.title or activity.name }}{% if card.subtitle %} — {{ card.subtitle }}{% endif %}</p>
-          {% if card.badge %}<p>{{ t('admin.public_groups.activities_front_badge') }}: {{ card.badge }}</p>{% endif %}
-          {% if card.priority is not none %}<p>{{ t('admin.public_groups.activities_front_priority') }}: {{ card.priority }}</p>{% endif %}
+          <p>
+            <span class="font-medium text-gray-700">{{ t('admin.public_groups.activities_detail_card_label') }}</span>
+            <span class="ml-1">{{ t('admin.public_groups.activities_detail_card_desc',
+              title=card.title or activity.name,
+              subtitle=card.subtitle or t('admin.public_groups.activities_detail_card_no_subtitle'),
+              badge=card.badge or t('admin.public_groups.activities_detail_card_no_badge'),
+              priority=(card.priority if card.priority is not none else t('admin.public_groups.activities_detail_card_default_priority'))
+            ) }}</span>
+          </p>
           {% endif %}
         </div>
         <form method="post" action="/admin/public-groups/activities/{{ activity.id }}/toggle" class="mt-3">
@@ -230,6 +442,279 @@
 
 <script>
 (function () {
+  const createForm = document.querySelector('form[action="/admin/public-groups/activities"]');
+  const aiStatus = document.getElementById('activity-ai-status');
+  const aiButton = document.getElementById('activity-ai-generate');
+  const aiModal = document.getElementById('activity-ai-modal');
+  const aiBackdrop = document.getElementById('activity-ai-modal-backdrop');
+  const aiClose = document.getElementById('activity-ai-close');
+  const aiCancel = document.getElementById('activity-ai-cancel');
+  const aiForm = document.getElementById('activity-ai-form');
+  const aiBrief = document.getElementById('activity-ai-brief');
+  const aiModalStatus = document.getElementById('activity-ai-modal-status');
+  const aiHistoryList = document.getElementById('activity-ai-history-list');
+  const aiTexts = aiButton ? JSON.parse(aiButton.dataset.i18n || '{}') : {};
+
+  function setAIStatus(message, tone) {
+    if (!aiStatus) {
+      return;
+    }
+    aiStatus.textContent = message || '';
+    aiStatus.className = 'text-[11px] ' + (tone || 'text-gray-500');
+  }
+
+  function setModalStatus(message, tone) {
+    if (!aiModalStatus) {
+      return;
+    }
+    aiModalStatus.textContent = message || '';
+    aiModalStatus.className = 'text-xs ' + (tone || 'text-gray-500');
+  }
+
+  function highlightField(field) {
+    if (!field) {
+      return;
+    }
+    field.classList.add('ring-2', 'ring-purple-300', 'transition');
+    window.setTimeout(function () {
+      field.classList.remove('ring-2', 'ring-purple-300', 'transition');
+    }, 1400);
+  }
+
+  function toLocalInput(value) {
+    if (!value) {
+      return '';
+    }
+    try {
+      const date = new Date(value);
+      const adjusted = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+      return adjusted.toISOString().slice(0, 16);
+    } catch (err) {
+      return '';
+    }
+  }
+
+  function fillDraft(draft) {
+    if (!createForm || !draft) {
+      return;
+    }
+    const map = {
+      name: 'name',
+      description: 'description',
+      reward_points: 'reward_points',
+      bonus_points: 'bonus_points',
+      daily_cap: 'daily_cap',
+      total_cap: 'total_cap',
+      highlight_slots: 'highlight_slots',
+    };
+    Object.keys(map).forEach(function (key) {
+      const field = createForm.elements[map[key]];
+      if (!field || draft[key] === undefined) {
+        return;
+      }
+      field.value = draft[key] === null ? '' : draft[key];
+      highlightField(field);
+    });
+
+    const startInput = createForm.elements['start_at'];
+    if (startInput && draft.start_at) {
+      startInput.value = toLocalInput(draft.start_at);
+      highlightField(startInput);
+    }
+    const endInput = createForm.elements['end_at'];
+    if (endInput && draft.end_at) {
+      endInput.value = toLocalInput(draft.end_at);
+      highlightField(endInput);
+    }
+    if (typeof draft.highlight_enabled !== 'undefined') {
+      const highlightCheckbox = createForm.querySelector('input[name="highlight_enabled"]');
+      if (highlightCheckbox) {
+        highlightCheckbox.checked = Boolean(draft.highlight_enabled);
+        highlightField(highlightCheckbox);
+      }
+    }
+
+    const front = draft.front_card || {};
+    const frontMap = {
+      title: 'front_title',
+      subtitle: 'front_subtitle',
+      cta_label: 'front_cta_label',
+      cta_link: 'front_cta_link',
+      badge: 'front_badge',
+      priority: 'front_priority',
+    };
+    Object.keys(frontMap).forEach(function (key) {
+      const input = createForm.elements[frontMap[key]];
+      if (!input || front[key] === undefined) {
+        return;
+      }
+      input.value = front[key] || '';
+      highlightField(input);
+    });
+  }
+
+  function renderHistory(items) {
+    if (!aiHistoryList) {
+      return;
+    }
+    aiHistoryList.innerHTML = '';
+    if (!items.length) {
+      aiHistoryList.innerHTML = '<p class="text-xs text-gray-500">{{ t("admin.public_groups.activities_ai_modal_history_empty") }}</p>';
+      return;
+    }
+    items.forEach(function (item) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'border border-purple-100 bg-white rounded px-3 py-2 text-xs text-gray-700 shadow-sm';
+
+      const title = document.createElement('div');
+      title.className = 'font-semibold text-gray-900';
+      title.textContent = item.name || item.brief_excerpt || 'Draft';
+
+      const meta = document.createElement('div');
+      meta.className = 'text-[11px] text-gray-500 mt-1';
+      const rewardText = item.reward_points != null ? (' · ⭐ ' + item.reward_points) : '';
+      meta.textContent = (item.created_at || '') + rewardText;
+
+      const excerpt = document.createElement('div');
+      excerpt.className = 'mt-1 text-gray-600';
+      excerpt.textContent = item.brief_excerpt || '';
+
+      const applyButton = document.createElement('button');
+      applyButton.type = 'button';
+      applyButton.className = 'mt-2 inline-flex items-center px-2 py-1 text-[11px] bg-purple-600 text-white rounded hover:bg-purple-700';
+      applyButton.textContent = '{{ t("admin.public_groups.activities_ai_history_apply") }}';
+      applyButton.addEventListener('click', function () {
+        applyHistoryDraft(item.id);
+      });
+
+      wrapper.appendChild(title);
+      wrapper.appendChild(meta);
+      wrapper.appendChild(excerpt);
+      wrapper.appendChild(applyButton);
+      aiHistoryList.appendChild(wrapper);
+    });
+  }
+
+  function fetchHistory() {
+    if (!aiHistoryList) {
+      return;
+    }
+    aiHistoryList.innerHTML = '<p class="text-xs text-gray-500">Loading...</p>';
+    fetch('/admin/public-groups/activities/ai-history?limit=10', { credentials: 'same-origin' })
+      .then(function (resp) { return resp.json(); })
+      .then(function (data) {
+        renderHistory((data && data.items) || []);
+      })
+      .catch(function (err) {
+        console.error('history load failed', err);
+        aiHistoryList.innerHTML = '<p class="text-xs text-gray-500">' + (aiTexts.history_error || 'Failed to load history.') + '</p>';
+      });
+  }
+
+  function openModal() {
+    if (!aiModal) {
+      return;
+    }
+    aiModal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+    if (aiBrief) {
+      aiBrief.value = '';
+      window.setTimeout(function () { aiBrief.focus(); }, 100);
+    }
+    setModalStatus('', '');
+    fetchHistory();
+  }
+
+  function closeModal() {
+    if (!aiModal) {
+      return;
+    }
+    aiModal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+
+  function applyHistoryDraft(id) {
+    const fetchFn = window.csrfFetch || fetch;
+    fetchFn('/admin/public-groups/activities/ai-history/' + id + '/reapply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    })
+      .then(function (resp) {
+        return resp.json().then(function (data) {
+          if (!resp.ok) {
+            throw new Error(data.detail || 'history apply failed');
+          }
+          return data;
+        });
+      })
+      .then(function (data) {
+        fillDraft(data.draft || {});
+        setAIStatus(aiTexts.history_applied || 'Draft loaded from history.', 'text-green-600');
+        closeModal();
+      })
+      .catch(function (err) {
+        console.error('history apply failed', err);
+        setModalStatus(aiTexts.history_error || 'Failed to load history.', 'text-red-500');
+      });
+  }
+
+  if (aiButton) {
+    aiButton.addEventListener('click', openModal);
+  }
+  if (aiBackdrop) {
+    aiBackdrop.addEventListener('click', closeModal);
+  }
+  if (aiClose) {
+    aiClose.addEventListener('click', closeModal);
+  }
+  if (aiCancel) {
+    aiCancel.addEventListener('click', function () {
+      setAIStatus(aiTexts.cancelled || '', 'text-gray-400');
+      closeModal();
+    });
+  }
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && aiModal && !aiModal.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
+  if (aiForm) {
+    aiForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const brief = aiBrief ? aiBrief.value.trim() : '';
+      if (!brief) {
+        setModalStatus(aiTexts.prompt || 'Please describe your campaign.', 'text-red-500');
+        return;
+      }
+      setModalStatus(aiTexts.pending || 'Generating…', 'text-blue-500');
+      const fetchFn = window.csrfFetch || fetch;
+      fetchFn('/admin/public-groups/activities/ai-draft', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ brief: brief }),
+      })
+        .then(function (resp) {
+          return resp.json().then(function (data) {
+            if (!resp.ok) {
+              throw new Error(data.detail || 'AI failed');
+            }
+            return data;
+          });
+        })
+        .then(function (data) {
+          fillDraft(data.draft || {});
+          setAIStatus(aiTexts.success || 'Draft generated.', 'text-green-600');
+          closeModal();
+        })
+        .catch(function (err) {
+          console.error('ai draft failed', err);
+          setModalStatus((aiTexts.error || 'AI failed') + ' ' + (err.message || ''), 'text-red-500');
+        });
+    });
+  }
+
   const toolbar = document.getElementById('activity-bulk-toolbar');
   if (!toolbar) {
     return;
@@ -397,5 +882,39 @@
       window.location.href = '/admin/public-groups/activities/export?activity_ids=' + query;
     });
   }
+
+  const quickButtons = document.querySelectorAll('[data-activity-quick]');
+  quickButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const action = btn.dataset.activityQuick;
+      if (action === 'ai') {
+        openModal();
+        if (aiBrief) {
+          window.setTimeout(function () { aiBrief.focus(); }, 150);
+        }
+      } else if (action === 'history') {
+        openModal();
+        setModalStatus(aiTexts.history_hint || '', 'text-gray-500');
+      } else if (action === 'bulk') {
+        const toolbar = document.getElementById('activity-bulk-toolbar');
+        if (toolbar) {
+          toolbar.classList.remove('hidden');
+          toolbar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          toolbar.classList.add('ring-2', 'ring-blue-300');
+          const statusNode = document.getElementById('activity-bulk-status');
+          const hint = toolbar.dataset.hint || '';
+          if (statusNode && hint) {
+            statusNode.textContent = hint;
+          }
+          window.setTimeout(function () {
+            toolbar.classList.remove('ring-2', 'ring-blue-300');
+            if (statusNode && hint && statusNode.textContent === hint) {
+              statusNode.textContent = '';
+            }
+          }, 1800);
+        }
+      }
+    });
+  });
 })();
 </script>

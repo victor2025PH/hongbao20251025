@@ -36,11 +36,13 @@ from services.public_group_activity import (
     list_activities as svc_list_activities,
     toggle_activity as svc_toggle_activity,
 )
+from services.ai_activity_generator import generate_activity_draft, list_activity_ai_history, load_history_draft
 from models.public_group import PublicGroup, PublicGroupStatus
 from web_admin.deps import csrf_protect, db_session, db_session_ro, issue_csrf, require_admin, verify_csrf
 from web_admin.services.audit_service import record_audit
 
 router = APIRouter(prefix="/admin/public-groups", tags=["admin-public-groups"])
+api_router = APIRouter(prefix="/admin/api/v1", tags=["admin-api"])
 
 
 class BulkStatusRequest(BaseModel):
@@ -58,6 +60,10 @@ class BulkActivityRequest(BaseModel):
     daily_cap: Optional[int] = None
     total_cap: Optional[int] = None
     highlight_enabled: Optional[bool] = None
+
+
+class AIDraftRequest(BaseModel):
+    brief: str
 
 
 def _fetch_groups_for_review(db: Session) -> List[PublicGroup]:
@@ -310,6 +316,108 @@ def public_group_activities_bulk(
         db.rollback()
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except HTTPException:
+        db.rollback()
+        raise
+
+
+@router.post("/activities/ai-draft", response_class=JSONResponse)
+def public_group_activities_ai_draft(
+    payload: AIDraftRequest,
+    req: Request,
+    db=Depends(db_session),
+    sess=Depends(require_admin),
+):
+    header_token = req.headers.get("x-csrf-token") or req.headers.get("X-CSRF-Token") or ""
+    if not verify_csrf(req, header_token, one_time=False):
+        raise HTTPException(status_code=403, detail="csrf failed")
+
+    operator = 0
+    if isinstance(sess, dict):
+        try:
+            operator = int(sess.get("tg_id") or 0)
+        except (TypeError, ValueError):
+            operator = 0
+    if operator <= 0:
+        raise HTTPException(status_code=403, detail="operator_required")
+
+    try:
+        result = generate_activity_draft(
+            db,
+            operator_tg_id=operator,
+            brief=payload.brief,
+        )
+        db.commit()
+        record_audit(
+            action="public_group.activities.ai_draft",
+            operator=operator,
+            payload={
+                "history_id": result.get("history_id"),
+                "brief_len": len((payload.brief or "").strip()),
+            },
+        )
+        return JSONResponse(result)
+    except ValueError as exc:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=exc.args[0] if exc.args else "openai_error") from exc
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception:
+        db.rollback()
+        raise
+
+
+@router.get("/activities/ai-history", response_class=JSONResponse)
+def public_group_activities_ai_history(
+    limit: int = Query(10, ge=1, le=50),
+    db=Depends(db_session_ro),
+    sess=Depends(require_admin),
+):
+    items = list_activity_ai_history(db, limit=limit)
+    return JSONResponse({"items": items})
+
+
+@router.post("/activities/ai-history/{history_id}/reapply", response_class=JSONResponse)
+def public_group_activities_ai_history_reapply(
+    history_id: int,
+    req: Request,
+    db=Depends(db_session),
+    sess=Depends(require_admin),
+):
+    header_token = req.headers.get("x-csrf-token") or req.headers.get("X-CSRF-Token") or ""
+    if not verify_csrf(req, header_token, one_time=False):
+        raise HTTPException(status_code=403, detail="csrf failed")
+
+    operator = 0
+    if isinstance(sess, dict):
+        try:
+            operator = int(sess.get("tg_id") or 0)
+        except (TypeError, ValueError):
+            operator = 0
+    if operator <= 0:
+        raise HTTPException(status_code=403, detail="operator_required")
+
+    try:
+        result = load_history_draft(db, history_id=history_id)
+        db.commit()
+        record_audit(
+            action="public_group.activities.ai_reapply",
+            operator=operator,
+            payload={
+                "history_id": result.get("history_id"),
+            },
+        )
+        return JSONResponse(result)
+    except ValueError as exc:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception:
         db.rollback()
         raise
     except Exception:
@@ -797,4 +905,84 @@ def public_group_activity_report(
             "alerts_only": alerts_only,
         },
     )
+
+
+# -------- REST API: 群组列表 --------
+@api_router.get("/group-list", response_class=JSONResponse)
+def get_group_list_api(
+    db: Session = Depends(db_session_ro),
+    sess=Depends(require_admin),
+    page: int = Query(1, ge=1),
+    per_page: int = Query(20, ge=1, le=100),
+    q: Optional[str] = Query(None, description="搜索关键词（名称或描述）"),
+    status: Optional[str] = Query(None, description="状态筛选: active, paused, review, removed"),
+    tags: Optional[List[str]] = Query(None, description="标签筛选"),
+):
+    """
+    获取公开群组列表（JSON 格式，供前端调用）
+    """
+    try:
+        # 基础查询
+        query = db.query(PublicGroup)
+        
+        # 状态筛选
+        if status:
+            try:
+                status_enum = PublicGroupStatus(status.upper())
+                query = query.filter(PublicGroup.status == status_enum)
+            except ValueError:
+                pass  # 无效状态值，忽略
+        
+        # 搜索筛选
+        if q:
+            q = q.strip()
+            query = query.filter(
+                PublicGroup.name.ilike(f"%{q}%") | 
+                PublicGroup.description.ilike(f"%{q}%")
+            )
+        
+        # 标签筛选（如果支持数组字段）
+        if tags:
+            for tag in tags:
+                # PostgreSQL 数组字段查询
+                query = query.filter(PublicGroup.tags.contains([tag]))
+        
+        # 排序
+        query = query.order_by(PublicGroup.created_at.desc())
+        
+        # 分页
+        total = query.count()
+        groups = query.offset((page - 1) * per_page).limit(per_page).all()
+        
+        # 转换为字典
+        items = []
+        for group in groups:
+            items.append({
+                "id": group.id,
+                "name": group.name or "",
+                "description": group.description or "",
+                "members_count": getattr(group, "members_count", 0),
+                "tags": group.tags or [],
+                "language": group.lang or "zh",
+                "status": group.status.value if hasattr(group.status, "value") else str(group.status),
+                "invite_link": group.invite_link or "",
+                "entry_reward_enabled": getattr(group, "entry_reward_enabled", False),
+                "entry_reward_points": getattr(group, "entry_reward_points", 0),
+                "is_bookmarked": False,  # TODO: 需要根据用户判断
+                "created_at": group.created_at.isoformat() if group.created_at else None,
+            })
+        
+        total_pages = max(1, (total + per_page - 1) // per_page)
+        
+        return JSONResponse({
+            "items": items,
+            "pagination": {
+                "page": page,
+                "per_page": per_page,
+                "total": total,
+                "total_pages": total_pages,
+            },
+        })
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"查询失败: {str(e)}")
 

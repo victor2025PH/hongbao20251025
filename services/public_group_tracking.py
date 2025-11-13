@@ -4,7 +4,7 @@ import json
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
-from sqlalchemy import case, func, select
+from sqlalchemy import and_, case, func, select
 from sqlalchemy.orm import Session
 
 from models.public_group import PublicGroup, PublicGroupEvent, PublicGroupStatus
@@ -250,5 +250,48 @@ def fetch_dashboard_metrics(
         "top_tags": top_tags,
         "top_groups": top_groups,
     }
+
+
+def fetch_user_history(
+    session: Session,
+    *,
+    user_tg_id: int,
+    limit: int = 20,
+) -> List[Dict[str, object]]:
+    if limit <= 0:
+        return []
+
+    subquery = (
+        select(
+            PublicGroupEvent.group_id.label("group_id"),
+            func.max(PublicGroupEvent.created_at).label("last_at"),
+        )
+        .where(PublicGroupEvent.user_tg_id == int(user_tg_id))
+        .group_by(PublicGroupEvent.group_id)
+        .subquery()
+    )
+
+    stmt = (
+        select(PublicGroupEvent, PublicGroup)
+        .join(
+            subquery,
+            and_(
+                PublicGroupEvent.group_id == subquery.c.group_id,
+                PublicGroupEvent.created_at == subquery.c.last_at,
+            ),
+        )
+        .join(PublicGroup, PublicGroup.id == PublicGroupEvent.group_id)
+        .order_by(PublicGroupEvent.created_at.desc())
+        .limit(max(1, limit))
+    )
+
+    rows = session.execute(stmt).all()
+    history: List[Dict[str, object]] = []
+    for event, group in rows:
+        history.append({
+            "event": event,
+            "group": group,
+        })
+    return history
 
 

@@ -1,0 +1,232 @@
+version: "3.9"
+
+# 生产环境 Docker Compose 配置
+# 使用方式: docker-compose -f docker-compose.production.yml up -d
+
+x-common-env: &common-env
+  env_file:
+    - .env.production
+  environment:
+    DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://redpacket:${POSTGRES_PASSWORD}@db:5432/redpacket}
+    FLAG_ENABLE_PUBLIC_GROUPS: ${FLAG_ENABLE_PUBLIC_GROUPS:-1}
+    DEBUG: ${DEBUG:-false}
+    TZ: ${TZ:-Asia/Manila}
+
+services:
+  # PostgreSQL 数据库
+  db:
+    image: postgres:15-alpine
+    container_name: redpacket_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-redpacket}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-redpacket}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./backups:/backups
+    ports:
+      - "127.0.0.1:5432:5432"  # 仅本地访问
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-redpacket} -d ${POSTGRES_DB:-redpacket}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - redpacket_network
+
+  # Redis（可选，用于缓存和会话存储）
+  redis:
+    image: redis:7-alpine
+    container_name: redpacket_redis
+    restart: always
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "127.0.0.1:6379:6379"  # 仅本地访问
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - redpacket_network
+
+  # Telegram Bot
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: redpacket/backend:latest
+    container_name: redpacket_bot
+    restart: always
+    <<: *common-env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: python app.py
+    volumes:
+      - ./static:/app/static
+      - ./exports:/app/exports
+      - ./secrets:/app/secrets:ro  # 只读挂载密钥
+    networks:
+      - redpacket_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Web Admin (端口 8000)
+  web_admin:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: redpacket/backend:latest
+    container_name: redpacket_web_admin
+    restart: always
+    <<: *common-env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn web_admin.main:app --host 0.0.0.0 --port 8000 --workers 2
+    ports:
+      - "127.0.0.1:8000:8000"  # 仅本地访问，通过 Nginx 反向代理
+    volumes:
+      - ./static:/app/static
+      - ./exports:/app/exports
+      - ./templates:/app/templates:ro
+      - ./secrets:/app/secrets:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - redpacket_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # MiniApp API (端口 8080)
+  miniapp_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: redpacket/backend:latest
+    container_name: redpacket_miniapp_api
+    restart: always
+    <<: *common-env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn miniapp.main:app --host 0.0.0.0 --port 8080 --workers 2
+    ports:
+      - "127.0.0.1:8080:8080"  # 仅本地访问，通过 Nginx 反向代理
+    volumes:
+      - ./secrets:/app/secrets:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - redpacket_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Next.js 前端控制台 (端口 3001)
+  frontend:
+    build:
+      context: ./frontend-next
+      dockerfile: Dockerfile
+    image: redpacket/frontend:latest
+    container_name: redpacket_frontend
+    restart: always
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_ADMIN_API_BASE_URL: ${NEXT_PUBLIC_ADMIN_API_BASE_URL:-http://localhost:8000}
+      NEXT_PUBLIC_MINIAPP_API_BASE_URL: ${NEXT_PUBLIC_MINIAPP_API_BASE_URL:-http://localhost:8080}
+    ports:
+      - "127.0.0.1:3001:3001"  # 仅本地访问，通过 Nginx 反向代理
+    depends_on:
+      - web_admin
+      - miniapp_api
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - redpacket_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Prometheus（监控指标收集）
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: redpacket_prometheus
+    restart: always
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+    volumes:
+      - ./deploy/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"  # 仅本地访问
+    networks:
+      - redpacket_network
+
+  # Grafana（监控可视化）
+  grafana:
+    image: grafana/grafana:latest
+    container_name: redpacket_grafana
+    restart: always
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL:-http://localhost:3000}
+      GF_INSTALL_PLUGINS: ""
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./deploy/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./deploy/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    ports:
+      - "127.0.0.1:3000:3000"  # 仅本地访问，通过 Nginx 反向代理
+    depends_on:
+      - prometheus
+    networks:
+      - redpacket_network
+
+volumes:
+  db_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  redpacket_network:
+    driver: bridge
+

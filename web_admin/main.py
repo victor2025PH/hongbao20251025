@@ -30,13 +30,15 @@ from web_admin.controllers.covers import router as covers_router
 from web_admin.controllers.export import router as export_router
 from web_admin.controllers.adjust import router as adjust_router
 from web_admin.controllers.reset import router as reset_router
-from web_admin.controllers.envelopes import router as envelopes_router
+from web_admin.controllers.envelopes import router as envelopes_router, api_router as envelopes_api_router
 from web_admin.controllers.recharge import router as recharge_router
-from web_admin.controllers.settings import router as settings_router
+from web_admin.controllers.settings import router as settings_router, api_router as settings_api_router
 from web_admin.controllers.audit import router as audit_router
+from web_admin.controllers.stats import router as stats_api_router
+from web_admin.controllers.logs import router as logs_api_router
 from web_admin.controllers.approvals import router as approvals_router
 from web_admin.controllers.queue import router as queue_router
-from web_admin.controllers.public_groups import router as public_groups_router
+from web_admin.controllers.public_groups import router as public_groups_router, api_router as public_groups_api_router
 from web_admin.controllers.public_group_reports import router as public_group_reports_router
 from web_admin.controllers.invites import router as invites_router
 from web_admin.controllers.users import router as users_router
@@ -44,6 +46,7 @@ from web_admin.controllers.a11y import router as a11y_router
 from web_admin.controllers.ledger import router as ledger_router
 from web_admin.controllers.ipn import router as ipn_router
 from web_admin.controllers.sheet_users import router as sheet_users_router
+from web_admin.controllers.tags import router as tags_router
 
 # 仅保留 FastAPI 版本的 StaticFiles
 from fastapi.staticfiles import StaticFiles
@@ -232,14 +235,20 @@ def create_app() -> FastAPI:
     app.include_router(adjust_router)
     app.include_router(reset_router)
     app.include_router(envelopes_router)
+    app.include_router(envelopes_api_router)  # REST API for tasks
     app.include_router(recharge_router)
     app.include_router(settings_router)
+    app.include_router(settings_api_router)  # REST API for settings
     app.include_router(audit_router)
+    app.include_router(stats_api_router)  # REST API for stats (overview, tasks, groups)
+    app.include_router(logs_api_router)  # REST API for logs
     app.include_router(approvals_router)
     app.include_router(queue_router)
     app.include_router(invites_router)
     app.include_router(users_router)
+    app.include_router(tags_router)
     app.include_router(public_groups_router)
+    app.include_router(public_groups_api_router)  # REST API for groups
     app.include_router(public_group_reports_router)
     app.include_router(a11y_router)
     app.include_router(ledger_router)

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="flex justify-between items-center mb-6">
+<div class="flex justify-between items-center mb-4">
   <div>
     <h1 class="text-xl font-semibold">{{ t('admin.public_groups.dashboard_title') }}</h1>
     <p class="text-sm text-gray-500">{{ t('admin.public_groups.dashboard_subtitle') }}</p>
@@ -30,24 +30,51 @@
     </button>
   </div>
 </div>
+<p class="text-xs text-gray-500 mb-6">{{ t('admin.public_groups.dashboard_filters_help') }}</p>
 
 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" id="totalsCards">
-  <!-- Totals cards will be injected -->
+  <div class="bg-white border rounded-md p-4 shadow-sm flex flex-col gap-2" data-total-key="view">
+    <p class="text-xs text-gray-500">{{ t('admin.public_groups.dashboard_cards_view') }}</p>
+    <p class="text-2xl font-semibold stat-value">0</p>
+    <p class="text-[11px] text-gray-400">{{ t('admin.public_groups.dashboard_cards_view_hint') }}</p>
+  </div>
+  <div class="bg-white border rounded-md p-4 shadow-sm flex flex-col gap-2" data-total-key="click">
+    <p class="text-xs text-gray-500">{{ t('admin.public_groups.dashboard_cards_click') }}</p>
+    <p class="text-2xl font-semibold stat-value">0</p>
+    <p class="text-[11px] text-gray-400">{{ t('admin.public_groups.dashboard_cards_click_hint') }}</p>
+  </div>
+  <div class="bg-white border rounded-md p-4 shadow-sm flex flex-col gap-2" data-total-key="join">
+    <p class="text-xs text-gray-500">{{ t('admin.public_groups.dashboard_cards_join') }}</p>
+    <p class="text-2xl font-semibold stat-value">0</p>
+    <p class="text-[11px] text-gray-400">{{ t('admin.public_groups.dashboard_cards_join_hint') }}</p>
+  </div>
+  <div class="bg-white border rounded-md p-4 shadow-sm flex flex-col gap-2" data-total-key="created">
+    <p class="text-xs text-gray-500">{{ t('admin.public_groups.dashboard_cards_created') }}</p>
+    <p class="text-2xl font-semibold stat-value">0</p>
+    <p class="text-[11px] text-gray-400">{{ t('admin.public_groups.dashboard_cards_created_hint') }}</p>
+  </div>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
   <div class="bg-white border rounded-md p-4 shadow-sm">
     <h2 class="text-sm font-semibold mb-3">{{ t('admin.public_groups.dashboard_conversion') }}</h2>
-    <ul class="text-sm text-gray-600 space-y-2" id="conversionList"></ul>
+    <p class="text-xs text-gray-500 mb-3">{{ t('admin.public_groups.dashboard_conversion_help') }}</p>
+    <ul class="text-sm text-gray-600 space-y-2" id="conversionList">
+      <li>{{ t('admin.public_groups.dashboard_conversion_placeholder_click') }}</li>
+      <li>{{ t('admin.public_groups.dashboard_conversion_placeholder_join') }}</li>
+      <li>{{ t('admin.public_groups.dashboard_conversion_placeholder_ratio') }}</li>
+    </ul>
   </div>
 
   <div class="bg-white border rounded-md p-4 shadow-sm">
     <h2 class="text-sm font-semibold mb-3">{{ t('admin.public_groups.dashboard_status') }}</h2>
+    <p class="text-xs text-gray-500 mb-3">{{ t('admin.public_groups.dashboard_status_help') }}</p>
     <ul class="text-sm text-gray-600 space-y-1" id="statusList"></ul>
   </div>
 
   <div class="bg-white border rounded-md p-4 shadow-sm md:col-span-2">
     <h2 class="text-sm font-semibold mb-3">{{ t('admin.public_groups.dashboard_timeline') }}</h2>
+    <p class="text-xs text-gray-500 mb-3">{{ t('admin.public_groups.dashboard_timeline_help') }}</p>
     <table class="w-full text-sm text-left">
       <thead class="border-b text-gray-500">
         <tr>
@@ -63,6 +90,7 @@
 
   <div class="bg-white border rounded-md p-4 shadow-sm">
     <h2 class="text-sm font-semibold mb-3">{{ t('admin.public_groups.dashboard_creations') }}</h2>
+    <p class="text-xs text-gray-500 mb-3">{{ t('admin.public_groups.dashboard_creations_help') }}</p>
     <table class="w-full text-sm text-left">
       <thead class="border-b text-gray-500">
         <tr>
@@ -76,11 +104,13 @@
 
   <div class="bg-white border rounded-md p-4 shadow-sm">
     <h2 class="text-sm font-semibold mb-3">{{ t('admin.public_groups.dashboard_tags') }}</h2>
+    <p class="text-xs text-gray-500 mb-3">{{ t('admin.public_groups.dashboard_tags_help') }}</p>
     <ul class="text-sm text-gray-600 space-y-1" id="tagList"></ul>
   </div>
 
   <div class="bg-white border rounded-md p-4 shadow-sm md:col-span-2">
     <h2 class="text-sm font-semibold mb-3">{{ t('admin.public_groups.dashboard_top_groups') }}</h2>
+    <p class="text-xs text-gray-500 mb-3">{{ t('admin.public_groups.dashboard_top_groups_help') }}</p>
     <table class="w-full text-sm text-left">
       <thead class="border-b text-gray-500">
         <tr>
@@ -95,6 +125,13 @@
   </div>
 </div>
 
+<script type="application/json" id="dashboardStatusLabels">{{ {
+  "active": t('admin.public_groups.dashboard_status_active'),
+  "paused": t('admin.public_groups.dashboard_status_paused'),
+  "review": t('admin.public_groups.dashboard_status_review'),
+  "removed": t('admin.public_groups.dashboard_status_removed'),
+  "_other": t('admin.public_groups.dashboard_status_other')
+} | tojson }}</script>
 <script type="application/json" id="dashboardData">{{ summary_json | safe }}</script>
 <script>
 (function () {
@@ -102,6 +139,8 @@
   const reloadBtn = document.getElementById('reloadBtn');
   const rangeSelect = document.getElementById('rangeSelect');
   const topSelect = document.getElementById('topSelect');
+  const statusLabelsEl = document.getElementById('dashboardStatusLabels');
+  const statusLabels = statusLabelsEl ? JSON.parse(statusLabelsEl.textContent || '{}') : {};
   let summary = {};
 
   function render() {
@@ -114,23 +153,13 @@
     const topTags = summary.top_tags || [];
     const topGroups = summary.top_groups || [];
 
-    const cards = [
-      { label: 'view', value: totals.view || 0 },
-      { label: 'click', value: totals.click || 0 },
-      { label: 'join', value: totals.join || 0 },
-      { label: 'created', value: totals.created || 0 }
-    ];
-
-    const cardsContainer = document.getElementById('totalsCards');
-    cardsContainer.innerHTML = '';
-    cards.forEach(card => {
-      const div = document.createElement('div');
-      div.className = 'bg-white border rounded-md p-4 shadow-sm';
-      div.innerHTML = `
-        <p class="text-xs uppercase text-gray-500">${card.label}</p>
-        <p class="text-2xl font-semibold mt-2">${card.value}</p>
-      `;
-      cardsContainer.appendChild(div);
+    document.querySelectorAll('#totalsCards [data-total-key]').forEach(card => {
+      const key = card.getAttribute('data-total-key');
+      const value = totals[key] || 0;
+      const valueNode = card.querySelector('.stat-value');
+      if (valueNode) {
+        valueNode.textContent = value;
+      }
     });
 
     const conversionList = document.getElementById('conversionList');
@@ -144,7 +173,8 @@
     statusList.innerHTML = '';
     Object.entries(status).forEach(([state, count]) => {
       const li = document.createElement('li');
-      li.textContent = `${state}: ${count}`;
+      const label = statusLabels[state] || statusLabels._other || state;
+      li.textContent = `${label}: ${count}`;
       statusList.appendChild(li);
     });
 

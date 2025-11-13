@@ -501,3 +501,88 @@ def logout(req: Request, csrf_token: str = Form(default="")):
     _audit("auth.logout", True, req)
     req.session.clear()
     return RedirectResponse(url="/admin/login?error=logged+out", status_code=302)
+
+
+# -------- REST API: 登录状态检查（JSON 格式） --------
+@router.get("/api/v1/auth/status", response_class=JSONResponse)
+def get_auth_status(req: Request):
+    """
+    检查当前登录状态（JSON 格式，供前端调用）
+    返回是否已登录以及用户信息
+    """
+    u = req.session.get(SESSION_USER_KEY)
+    if u:
+        return JSONResponse({
+            "ok": True,
+            "authenticated": True,
+            "user": {
+                "username": u.get("username"),
+                "tg_id": u.get("tg_id"),
+            }
+        })
+    return JSONResponse({
+        "ok": True,
+        "authenticated": False,
+        "user": None
+    })
+
+
+# -------- REST API: 登录接口（JSON 格式） --------
+@router.post("/api/v1/auth/login", response_class=JSONResponse)
+def api_login(
+    req: Request,
+    username: str = Form(""),
+    password: str = Form(""),
+):
+    """
+    API 登录接口（JSON 格式，供前端调用）
+    注意：此接口与 HTML 登录接口共享相同的认证逻辑
+    使用模块内已有的函数（已在文件顶部定义）
+    """
+    
+    # 登录节流检查
+    allowed, reason = _rate_check_and_bump(req, username)
+    if not allowed:
+        _audit("auth.login_locked", False, req, note=reason)
+        return JSONResponse(
+            {"ok": False, "message": f"Too many attempts. {reason}"},
+            status_code=429
+        )
+    
+    # 用户名校验
+    if username.strip() != _env_user():
+        _rate_fail(req, username)
+        _audit("auth.username_invalid", False, req)
+        return JSONResponse(
+            {"ok": False, "message": "Invalid username"},
+            status_code=401
+        )
+    
+    # 密码校验
+    if not _verify_password(password or ""):
+        _rate_fail(req, username)
+        _audit("auth.password_invalid", False, req)
+        return JSONResponse(
+            {"ok": False, "message": "Invalid password"},
+            status_code=401
+        )
+    
+    # 登录成功：写会话
+    req.session[SESSION_USER_KEY] = {
+        "username": username.strip(),
+        "tg_id": int(os.getenv("ADMIN_TG_ID") or 0),
+    }
+    req.session[TWOFA_PASSED_KEY] = True
+    
+    # 节流记录重置
+    _rate_reset(req, username)
+    _audit("auth.login_ok", True, req)
+    
+    return JSONResponse({
+        "ok": True,
+        "message": "Login successful",
+        "user": {
+            "username": username.strip(),
+            "tg_id": int(os.getenv("ADMIN_TG_ID") or 0),
+        }
+    })

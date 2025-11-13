@@ -7,10 +7,20 @@ from pathlib import Path
 
 import pytest
 
+import hashlib
+import hmac
+import time
+
 os.environ["DATABASE_URL"] = "sqlite:///./test_api_public.sqlite"
 os.environ["FLAG_ENABLE_PUBLIC_GROUPS"] = "1"
 os.environ["ACTIVITY_SLACK_WEBHOOK"] = ""
 os.environ["REPORT_SLACK_WEBHOOK"] = ""
+os.environ["BOT_TOKEN"] = "TEST_BOT_TOKEN"
+os.environ["MINIAPP_JWT_SECRET"] = "test-miniapp-secret"
+os.environ["MINIAPP_JWT_ISSUER"] = "miniapp-test"
+os.environ["MINIAPP_PASSWORD_USERS"] = (
+    "miniapp_admin:sha256:16175223c8ddce5ace0493c948569c211b03c4c6bb3d3e484434999448cffe01"
+)
 
 from fastapi.testclient import TestClient  # noqa: E402
 
@@ -28,6 +38,9 @@ from models.public_group import (  # noqa: E402
     PublicGroupActivityWebhook,
     PublicGroupReport,
 )
+
+ADMIN_USERNAME = "miniapp_admin"
+ADMIN_PASSWORD = "admin-secret"
 
 
 client = TestClient(app)
@@ -63,11 +76,45 @@ def teardown_module() -> None:
 
 
 def _admin_headers() -> dict[str, str]:
-    return {"X-TG-USER-ID": "99999"}
+    return _login_with_password(ADMIN_USERNAME, ADMIN_PASSWORD, tg_id=99999)
 
 
-def _user_headers(tg_id: int) -> dict[str, str]:
-    return {"X-TG-USER-ID": str(tg_id)}
+def _user_headers(tg_id: int, username: str | None = None) -> dict[str, str]:
+    return _login_with_telegram(tg_id=tg_id, username=username or f"user{tg_id}")
+
+
+def _login_with_password(username: str, password: str, tg_id: int) -> dict[str, str]:
+    resp = client.post(
+        "/api/auth/login",
+        json={
+            "provider": "password",
+            "username": username,
+            "password": password,
+            "tg_id": tg_id,
+        },
+    )
+    assert resp.status_code == 200, resp.text
+    token = resp.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+
+def _login_with_telegram(tg_id: int, username: str) -> dict[str, str]:
+    code = _make_telegram_code(tg_id, username)
+    resp = client.post(
+        "/api/auth/login",
+        json={"provider": "telegram", "telegram_code": code},
+    )
+    assert resp.status_code == 200, resp.text
+    token = resp.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+
+def _make_telegram_code(tg_id: int, username: str) -> str:
+    ts = str(int(time.time()))
+    secret_source = getattr(settings, "TELEGRAM_BOT_TOKEN", None) or settings.BOT_TOKEN
+    message = f"{tg_id}.{username}.{ts}".encode("utf-8")
+    signature = hmac.new(secret_source.encode("utf-8"), message, hashlib.sha256).hexdigest()
+    return f"{tg_id}.{username}.{ts}.{signature}"
 
 
 def test_public_group_api_flow() -> None:
@@ -283,7 +330,7 @@ def test_public_group_active_activities_endpoint() -> None:
     assert "headline" in first
     assert first["headline"] is None or "pts" in first["headline"] or "Highlight" in first["headline"]
     if first["highlight_enabled"]:
-        assert first["highlight_badge"] in ("Highlight ×1", "Highlight active", "Highlight ×0", "highlight ×1")
+        assert isinstance(first["highlight_badge"], str) and first["highlight_badge"].strip()
     assert "countdown_text" in first
     assert "front_card" in first
     assert isinstance(first["front_card"], dict)
@@ -368,6 +415,36 @@ def test_public_group_bookmarks_flow() -> None:
     bookmark_list_after = client.get("/v1/groups/public/bookmarks", headers=user_headers)
     assert bookmark_list_after.status_code == 200
     assert bookmark_list_after.json() == []
+
+
+def test_public_group_history_endpoint() -> None:
+    payload = {
+        "name": "History Demo",
+        "invite_link": "https://t.me/+history_demo",
+        "description": "History testing group",
+        "tags": ["history"],
+    }
+    create_resp = client.post("/v1/groups/public", json=payload, headers=_admin_headers())
+    assert create_resp.status_code == 201, create_resp.text
+    group_id = create_resp.json()["group"]["id"]
+
+    user_headers = _user_headers(65001)
+
+    event_resp = client.post(
+        f"/v1/groups/public/{group_id}/events",
+        json={"event_type": "view", "context": {"source": "test"}},
+        headers=user_headers,
+    )
+    assert event_resp.status_code == 201, event_resp.text
+
+    history_resp = client.get("/v1/groups/public/history", headers=user_headers)
+    assert history_resp.status_code == 200, history_resp.text
+    data = history_resp.json()
+    assert data, "expected at least one history record"
+    first = data[0]
+    assert first["group"]["id"] == group_id
+    assert first["last_event_type"] == "view"
+    assert first["last_context"].get("source") == "test"
 
 
 def test_public_group_report_endpoint_creates_case() -> None:

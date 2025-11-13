@@ -1,0 +1,1116 @@
+﻿key,en,es,fr,de,pt,th,vi,id,ms,fil,zh
+admin.adjust.amount,Amount,,,,,,,,,,金额
+admin.adjust.amount.ask_fx,"""✍️ Enter amount (positive add, negative subtract)""","""✍️ Introduce el importe (positivo = sumar, negativo = restar)""","""✍️ Entre le montant (positif = ajouter, négatif = retirer)""","""✍️ Betrag eingeben (positiv = hinzufügen, negativ = abziehen)""",,,"""✍️ Nhập số tiền (dương = cộng, âm = trừ)""",,,,"""✍️ 请输入金额（正数增加，负数减少）"""
+admin.adjust.amount.ask_point,"""✍️ Enter points delta (positive/negative), e.g., 100 or -50""","""✍️ Introduce cambio de puntos (p. ej. 100 o -50)""","""✍️ Entre la variation de points (ex. 100 ou -50)""","""✍️ Punkteänderung eingeben (z. B. 100 oder -50)""",,,"""✍️ Nhập thay đổi điểm (ví dụ 100 hoặc -50)""",,,,"""✍️ 请输入积分变动值（正数加 / 负数减），如 100 或 -50"""
+admin.adjust.amount.hint_fx,"""Up to 6 decimals, e.g., 12.345678 or -0.5""","""Hasta 6 decimales, p. ej. 12.345678 o -0.5""","""Jusqu’à 6 décimales. Ex. 12.345678 ou -0.5""","""Bis zu 6 Dezimalstellen, z. B. 12.345678 oder -0.5""",,,"""Tối đa 6 chữ số thập phân. Ví dụ 12.345678 hoặc -0.5""",,,,"""支持最多 6 位小数，例如 12.345678 或 -0.5"""
+admin.adjust.ask_user,"""👤 Target user: send <code>UserID</code> or <code>@username</code>""","""👤 Envía <code>ID</code> o <code>@usuario</code>""","""👤 Envoie <code>ID</code> ou <code>@nom</code> de l’utilisateur""","""👤 Sende <code>ID</code> oder <code>@Nutzername</code>""",,,"""👤 Gửi <code>ID</code> hoặc <code>@username</code> của người dùng""",,,,"""👤 请输入目标用户：发送 <code>用户ID</code> 或 <code>@用户名</code>"""
+admin.adjust.asset,Asset,,,,,,,,,,资产
+admin.adjust.balance_after,"""💼 Current balance""","""💼 Saldo actual""","""💼 Solde actuel""","""💼 Aktuelles Guthaben""",,,"""💼 Số dư hiện tại""",,,,"""💼 当前余额"""
+admin.adjust.button,"""➕ Balance adjustment""","""➕ Ajustar saldo""","""➕ Ajuster le solde""","""➕ Guthaben anpassen""",,,"""➕ Điều chỉnh số dư""",,,,"""➕ 余额调整"""
+admin.adjust.cancelled,"""Cancelled.""","""Operación cancelada.""","""Opération annulée.""","""Vorgang abgebrochen.""",,,"""Đã hủy thao tác.""",,,,"""已取消操作。"""
+admin.adjust.choose_asset,"""💱 Choose an asset:""","""💱 Elige activo:""","""💱 Choisis l’actif :""","""💱 Vermögenswert wählen:""",,,"""💱 Chọn tài sản:""",,,,"""💱 请选择资产："""
+admin.adjust.confirm.amount,"""• Delta: {amount}""","""• Cambio: {amount}""","""• Variation : {amount}""","""• Änderung: {amount}""",,,"""• Thay đổi: {amount}""",,,,"""• 变动：{amount}"""
+admin.adjust.confirm.asset,"""• Asset: {token}""","""• Activo: {token}""","""• Actif : {token}""","""• Asset: {token}""",,,"""• Tài sản: {token}""",,,,"""• 资产：{token}"""
+admin.adjust.confirm.memo,"""• Note: {memo}""","""• Nota: {memo}""","""• Note : {memo}""","""• Notiz: {memo}""",,,"""• Ghi chú: {memo}""",,,,"""• 备注：{memo}"""
+admin.adjust.confirm.title,"""✅ Confirm adjustment""","""✅ Confirma el ajuste""","""✅ Confirme l’ajustement""","""✅ Anpassung bestätigen""",,,"""✅ Xác nhận điều chỉnh""",,,,"""✅ 请确认以下调整"""
+admin.adjust.confirm.user,"""• User: {user}""","""• Usuario: {user}""","""• Utilisateur : {user}""","""• Nutzer: {user}""",,,"""• Người dùng: {user}""",,,,"""• 用户：{user}"""
+admin.adjust.errors.bad_amount,"""❌ Invalid amount""","""❌ Importe inválido""","""❌ Montant invalide""","""❌ Ungültiger Betrag""",,,"""❌ Số tiền không hợp lệ""",,,,"""❌ 金额格式不正确，请重新输入"""
+admin.adjust.errors.bad_user,"""❌ Invalid user ID or @username""","""❌ Formato inválido. Envía ID o @usuario""","""❌ Format invalide. Envoie un ID ou @nom""","""❌ Ungültiges Format. ID oder @Nutzername senden""",,,"""❌ Định dạng sai. Gửi ID hoặc @username""",,,,"""❌ 格式不正确，请输入用户ID或 @用户名"""
+admin.adjust.errors.zero,"""❌ Value cannot be 0""","""❌ El valor no puede ser 0""","""❌ La valeur ne peut pas être 0""","""❌ Wert darf nicht 0 sein""",,,"""❌ Giá trị không thể là 0""",,,,"""❌ 数值不能为 0"""
+admin.adjust.execute,Execute,,,,,,,,,,执行
+admin.adjust.fail,"""❌ Adjustment failed""","""❌ Falló el ajuste. Intenta de nuevo.""","""❌ Échec. Réessaie.""","""❌ Anpassung fehlgeschlagen. Später erneut versuchen.""",,,"""❌ Điều chỉnh thất bại. Thử lại sau.""",,,,"""❌ 余额调整失败，请稍后再试。"""
+admin.adjust.fail_count,Fail count,,,,,,,,,,失败条数
+admin.adjust.insufficient,Insufficient balance,,,,,,,,,,余额不足
+admin.adjust.memo.ask,"""📝 Optional note (or send 'skip')""","""📝 Nota opcional (o ‘skip’)""","""📝 Note optionnelle (ou ‘skip’)""","""📝 Optionale Notiz (oder ‚skip‘)""",,,"""📝 Ghi chú (tùy chọn, hoặc gửi 'skip')""",,,,"""📝 可填写备注（或发送 'skip' 略过）"""
+admin.adjust.note,Note,,,,,,,,,,备注
+admin.adjust.preview,Preview,,,,,,,,,,预览
+admin.adjust.success,"""✅ Adjustment completed""","""✅ Ajuste completado""","""✅ Ajustement terminé""","""✅ Anpassung abgeschlossen""",,,"""✅ Đã điều chỉnh xong""",,,,"""✅ 余额调整完成"""
+admin.adjust.success_count,Success count,,,,,,,,,,成功条数
+admin.adjust.title,Balance Adjustment,,,,,,,,,,余额调整
+admin.adjust.users,"Users (ID/@, multiple separated)",,,,,,,,,,用户（ID/@，多项分隔）
+admin.adjust_failed,"""❌ Adjustment failed: {reason}""","""❌ Falló el ajuste: {reason}""","""❌ Échec : {reason}""","""❌ Anpassung fehlgeschlagen: {reason}""",,,"""❌ Điều chỉnh thất bại: {reason}""",,,,"""❌ 调整失败：{reason}"""
+admin.adjust_success,"""✅ Adjusted {amount} {token} to user {uid}""","""✅ Ajustados {amount} {token} al usuario {uid}""","""✅ Ajusté {amount} {token} pour l’utilisateur {uid}""","""✅ {amount} {token} an Nutzer {uid} angepasst""",,,"""✅ Đã điều chỉnh {amount} {token} cho người dùng {uid}""",,,,"""✅ 已调整 {amount} {token} 给用户 {uid}"""
+admin.approvals.approve,Approve,,,,,,,,,,通过
+admin.approvals.need_two_admins,Two admins required,,,,,,,,,,需要两名管理员确认
+admin.approvals.reject,Reject,,,,,,,,,,拒绝
+admin.approvals.title,Approvals,,,,,,,,,,高危操作审批
+admin.audit.detail,Detail,,,,,,,,,,详情
+admin.audit.operation,Operation,,,,,,,,,,操作
+admin.audit.operator,Operator,,,,,,,,,,操作人
+admin.audit.title,Audit Log,,,,,,,,,,审计日志
+admin.common.actions,Actions,,,,,,,,,,操作
+admin.common.back,Back,,,,,,,,,,返回
+admin.common.cancel,Cancel,,,,,,,,,,取消
+admin.common.confirm,Confirm,,,,,,,,,,确认
+admin.common.copy,Copy,,,,,,,,,,复制
+admin.common.created_at,Created at,,,,,,,,,,创建时间
+admin.common.delete,Delete,,,,,,,,,,删除
+admin.common.disabled,Disabled,,,,,,,,,,已停用
+admin.common.download,Download,,,,,,,,,,下载
+admin.common.edit,Edit,,,,,,,,,,编辑
+admin.common.enabled,Enabled,,,,,,,,,,已启用
+admin.common.off,Off,,,,,,,,,,关
+admin.common.on,On,,,,,,,,,,开
+admin.common.preview,Preview,,,,,,,,,,预览
+admin.common.refresh,Refresh,,,,,,,,,,刷新
+admin.common.reset,Reset,,,,,,,,,,重置
+admin.common.save,Save,,,,,,,,,,保存
+admin.common.search,Search,,,,,,,,,,搜索
+admin.common.status,Status,,,,,,,,,,状态
+admin.common.title,Admin,,,,,,,,,,后台管理
+admin.common.updated_at,Updated at,,,,,,,,,,更新时间
+admin.covers.add_fail,"""❌ Upload failed: {reason}""","""❌ Error al subir: {reason}""","""❌ Échec d’upload : {reason}""","""❌ Upload fehlgeschlagen: {reason}""",,,"""❌ Tải lên thất bại: {reason}""",,,,"""❌ 上传失败：{reason}"""
+admin.covers.add_ok,"""✅ Cover added ID={id}""","""✅ Portada añadida ID={id}""","""✅ Couverture ajoutée ID={id}""","""✅ Cover hinzugefügt ID={id}""",,,"""✅ Đã thêm ảnh bìa ID={id}""",,,,"""✅ 已添加红包封面 ID={id}"""
+admin.covers.back_to_mgr,"""⬅️ Back""","""⬅️ Volver a portadas""","""⬅️ Retour""","""⬅️ Zurück zur Verwaltung""",,,"""⬅️ Quay lại quản lý bìa""",,,,"""⬅️ 返回封面管理"""
+admin.covers.copy_fail_hint,"Possible reasons:
+• Bot not in the channel or lacks permissions;
+• Wrong channel ID (should start with -100).","Posibles causas:
+• El bot no está en el canal o no puede publicar;
+• ID de canal incorrecta (debe empezar por -100).","Causes possibles :
+• Bot absent du canal ou sans droit de publier ;
+• ID de canal incorrect (doit commencer par -100).","Mögliche Ursachen:
+• Bot nicht im Kanal oder ohne Senderechte;
+• Falsche Kanal-ID (sollte mit -100 beginnen).",,,"Nguyên nhân có thể:
+• Bot chưa vào kênh hoặc không có quyền đăng;
+• ID kênh sai (phải bắt đầu bằng -100).",,,,"可能原因：
+• 机器人未加入频道或没有“发布消息”权限；
+• 频道ID填写错误（应为以 -100 开头的数值ID）。"
+admin.covers.delete_btn,"""🗑 Delete cover""","""🗑 Eliminar portada""","""🗑 Supprimer""","""🗑 Cover löschen""",,,"""🗑 Xóa ảnh bìa""",,,,"""🗑 删除封面"""
+admin.covers.delete_fail,"""❌ Cover #{id} not found""","""❌ Portada #{id} no encontrada""","""❌ Couverture #{id} introuvable""","""❌ Cover #{id} nicht gefunden""",,,"""❌ Không tìm thấy ảnh bìa #{id}""",,,,"""❌ 未找到红包封面 #{id}"""
+admin.covers.delete_ok,"""✅ Deleted cover #{id}""","""✅ Portada #{id} eliminada""","""✅ Couverture #{id} supprimée""","""✅ Cover #{id} gelöscht""",,,"""✅ Đã xóa ảnh bìa #{id}""",,,,"""✅ 已删除红包封面 #{id}"""
+admin.covers.delete_pick,"""Choose a cover to delete:""","""Elige la portada a eliminar:""","""Choisis la couverture à supprimer :""","""Wähle ein Cover zum Löschen:""",,,"""Chọn ảnh bìa để xóa:""",,,,"""请选择要删除的封面："""
+admin.covers.empty,No covers,"""📭 No hay portadas.""","""📭 Aucune couverture.""","""📭 Keine Cover vorhanden.""",,,"""📭 Chưa có ảnh bìa.""",,,,暂无封面
+admin.covers.file_label,File,,,,,,,,,,选择文件
+admin.covers.list,List,,,,,,,,,,封面列表
+admin.covers.list_btn,"""📚 View covers""","""📚 Lista de portadas""","""📚 Voir la liste""","""📚 Coverliste""",,,"""📚 Danh sách ảnh bìa""",,,,"""📚 查看封面列表"""
+admin.covers.menu_desc,"""🎨 Manage packet covers\nChoose an action:""","""🎨 Gestión de portadas\nElige una acción:""","""🎨 Gestion des couvertures\nChoisis une action :""","""🎨 Coververwaltung\nBitte Aktion wählen:""",,,"""🎨 Quản lý ảnh bìa\nHãy chọn thao tác:""",,,,"""🎨 管理红包封面\n请选择操作："""
+admin.covers.menu_title,"""🎨 Manage Covers""","""🎨 Gestionar portadas""","""🎨 Gérer les couvertures""","""🎨 Cover verwalten""",,,"""🎨 Quản lý ảnh bìa phong bao""",,,,"""🎨 管理红包封面"""
+admin.covers.no_channel,"""❌ COVER_CHANNEL_ID not configured.""","""❌ COVER_CHANNEL_ID no configurado en settings.""","""❌ COVER_CHANNEL_ID non configuré dans settings.""","""❌ COVER_CHANNEL_ID in settings nicht konfiguriert.""",,,"""❌ Chưa cấu hình COVER_CHANNEL_ID trong settings.""",,,,"""❌ 尚未配置素材频道 ID（settings.COVER_CHANNEL_ID）。请先在配置中设置。"""
+admin.covers.preview_fail,"""❌ Preview failed.""","""❌ Vista previa fallida.""","""❌ Échec de l’aperçu.""","""❌ Vorschau fehlgeschlagen.""",,,"""❌ Xem trước thất bại.""",,,,"""❌ 预览失败。"""
+admin.covers.preview_fail_hint,"Possible reasons:
+• Bot not in the channel or lacks “Post Messages”;
+• Wrong channel ID;
+• Record missing a valid file_id.","Posibles causas:
+• El bot no está en el canal o no puede publicar;
+• ID de canal incorrecta;
+• Registro sin file_id válida.","Causes possibles :
+• Bot absent du canal ou sans droit de publier ;
+• ID de canal erroné ;
+• Enregistrement sans file_id valide.","Mögliche Ursachen:
+• Bot nicht im Kanal oder ohne Senderechte;
+• Kanal-ID fehlerhaft;
+• Eintrag ohne gültige file_id.",,,"Nguyên nhân có thể:
+• Bot chưa vào kênh hoặc không có quyền đăng;
+• Sai ID kênh;
+• Bản ghi thiếu file_id hợp lệ.",,,,"可能原因：
+• 机器人未加入频道或没有“发布消息”权限；
+• 频道ID错误；
+• 记录缺少有效的 file_id。"
+admin.covers.preview_ok,"""✅ Preview sent""","""✅ Vista previa enviada""","""✅ Aperçu envoyé""","""✅ Vorschau gesendet""",,,"""✅ Đã gửi bản xem trước""",,,,"""✅ 已发送预览"""
+admin.covers.remove,Remove,,,,,,,,,,删除封面
+admin.covers.title,Cover Library,,,,,,,,,,封面库
+admin.covers.title_label,Title and #tags,,,,,,,,,,标题与#标签
+admin.covers.toggle,Toggle,,,,,,,,,,上下架
+admin.covers.upload,Upload,,,,,,,,,,上传封面
+admin.covers.upload_ask,"""Send an image as a packet cover. You may add a title.""","""Envía una imagen como portada. Puedes añadir título.""","""Envoie une image comme couverture. Tu peux ajouter un titre.""","""Sende ein Bild als Cover. Optional mit Titel.""",,,"""Hãy gửi một ảnh làm ảnh bìa. Có thể kèm tiêu đề.""",,,,"""请发送一张图片作为红包封面，可附加标题说明。"""
+admin.covers.upload_btn,"""➕ Upload cover""","""➕ Subir portada""","""➕ Importer une couverture""","""➕ Cover hochladen""",,,"""➕ Tải ảnh bìa""",,,,"""➕ 上传封面"""
+admin.dashboard.envelopes_active,Active packets,,,,,,,,,,进行中红包
+admin.dashboard.ledger_7d_amount,Last-7-day amount,,,,,,,,,,近7日流水金额
+admin.dashboard.ledger_7d_count,Last-7-day entries,,,,,,,,,,近7日流水笔数
+admin.dashboard.recharge_pending,Pending orders,,,,,,,,,,待支付订单
+admin.dashboard.recharge_success,Successful orders,,,,,,,,,,成功订单
+admin.dashboard.users_total,Users,,,,,,,,,,用户总数
+admin.envelopes.claims,Claims,,,,,,,,,,领取明细
+admin.envelopes.id,Packet ID,,,,,,,,,,红包ID
+admin.envelopes.lucky,Best Luck,,,,,,,,,,幸运王
+admin.envelopes.summary,Overview,,,,,,,,,,概览
+admin.envelopes.title,Packet Details,,,,,,,,,,红包详情
+admin.errors.no_permission,No permission,,,,,,,,,,无权限
+admin.errors.not_found,Not found,,,,,,,,,,资源不存在
+admin.errors.unknown,Unknown error,,,,,,,,,,出错了，请稍后再试
+admin.errors.validation,Invalid parameters,,,,,,,,,,参数不合法
+admin.export.all_users_ledger,Full export (users + ledger),,,,,,,,,,全量导出（用户+流水）
+admin.export.done,Export done,,,,,,,,,,导出完成
+admin.export.ledger_only,Ledger only,,,,,,,,,,仅流水
+admin.export.selected_users,Selected users,,,,,,,,,,指定用户导出
+admin.export.start,Start export,,,,,,,,,,开始导出
+admin.export.title,Data Export,,,,,,,,,,数据导出
+admin.export.users_label,"Specific users (ID or @username, comma separated)",,,,,,,,,,指定用户（ID 或 @用户名，逗号分隔）
+admin.export.users_only,Users only,,,,,,,,,,仅用户
+admin.export_all,"""📊 Full export""","""📊 Completo""","""📊 Complet""","""📊 Komplett""",,,"""📊 Toàn bộ""",,,,"""📊 全量导出"""
+admin.export_done,"""✅ Export finished. Files:""","""✅ Exportación lista. Archivo abajo:""","""✅ Export terminé. Fichier ci-dessous :""","""✅ Export fertig. Datei unten:""",,,"""✅ Xuất xong. Tệp bên dưới:""",,,,"""✅ 导出完成，文件如下："""
+admin.export_empty,"""📭 No data""","""📭 Sin datos""","""📭 Aucune donnée""","""📭 Keine Daten""",,,"""📭 Không có dữ liệu""",,,,"""📭 查无数据"""
+admin.export_failed,"""❌ Export failed: {reason}""","""❌ Falló: {reason}""","""❌ Échec : {reason}""","""❌ Fehlgeschlagen: {reason}""",,,"""❌ Xuất thất bại: {reason}""",,,,"""❌ 生成失败：{reason}"""
+admin.export_intro,"""Choose export scope""","""Elige el alcance de exportación""","""Choisis une portée d’export""","""Exportumfang wählen""",,,"""Chọn phạm vi xuất""",,,,"""请选择导出范围"""
+admin.export_service_missing,"""❌ Export service missing (services/export_service.py)""","""❌ Servicio de exportación no disponible (falta services/export_service.py)""","""❌ Service d’export indisponible (services/export_service.py manquant)""","""❌ Exportdienst nicht verfügbar (services/export_service.py fehlt)""",,,"""❌ Dịch vụ xuất không khả dụng (thiếu services/export_service.py)""",,,,"""❌ 导出服务不可用（缺少 services/export_service.py）"""
+admin.export_user,"""👤 By user""","""👤 Por usuario""","""👤 Par utilisateur""","""👤 Nach Nutzer""",,,"""👤 Theo người dùng""",,,,"""👤 按用户导出"""
+admin.filters.active_since,Active since,,,,,,,,,,最近活跃
+admin.filters.balance_range,Balance range,,,,,,,,,,余额区间
+admin.filters.created_between,Registered between,,,,,,,,,,注册时间
+admin.filters.invited_by,Invited by,,,,,,,,,,邀请人
+admin.filters.title,Advanced Filters,,,,,,,,,,高级筛选
+admin.filters.token,Token,,,,,,,,,,币种
+admin.login.blocked,You are not an admin,,,,,,,,,,你没有管理员权限
+admin.login.invalid,Wrong username or password,,,,,,,,,,账号或密码不正确
+admin.login.otp_hint,2FA is required for high-risk actions after login,,,,,,,,,,登录后进行高危操作需二次验证
+admin.login.otp_input,6-digit code,,,,,,,,,,6位验证码
+admin.login.otp_invalid,Invalid or expired code,,,,,,,,,,验证码无效或已过期
+admin.login.otp_required,Please send the code first,,,,,,,,,,需要验证码，请先获取
+admin.login.otp_resent,Code resent,,,,,,,,,,验证码已重新发送
+admin.login.otp_send,Send code to Telegram,,,,,,,,,,发送验证码到 Telegram
+admin.login.password,Password,,,,,,,,,,密码
+admin.login.submit,Sign in,,,,,,,,,,登录
+admin.login.title,Admin Login,,,,,,,,,,管理员登录
+admin.login.username,Admin Account,,,,,,,,,,管理员账号
+admin.nav.adjust,Adjustment,,,,,,,,,,余额调整
+admin.nav.approvals,Approvals,,,,,,,,,,审批
+admin.nav.audit,Audit Log,,,,,,,,,,审计日志
+admin.nav.covers,Covers,,,,,,,,,,封面库
+admin.nav.dashboard,Dashboard,,,,,,,,,,仪表盘
+admin.nav.envelopes,Packets,,,,,,,,,,红包
+admin.nav.export,Export,,,,,,,,,,导出
+admin.nav.invites,Invites,,,,,,,,,,邀请活动
+admin.nav.public_group_reports,Reports,,,,,,,,,,举报工单
+admin.nav.public_groups,Public Groups,,,,,,,,,,公开群审查
+admin.nav.queue,Tasks,,,,,,,,,,任务队列
+admin.nav.recharge,Top-ups,,,,,,,,,,充值订单
+admin.nav.reset,Balance Reset,,,,,,,,,,余额清零
+admin.nav.settings,Settings,,,,,,,,,,设置
+admin.nav.signout,Sign out,,,,,,,,,,退出登录
+admin.nav.tags,Tags,,,,,,,,,,标签管理
+admin.nav.users,Users,,,,,,,,,,用户
+admin.no_permission,"""⛔ No permission.""","""⛔ Sin permisos.""","""⛔ Pas d’autorisation.""","""⛔ Keine Berechtigung.""",,,"""⛔ Bạn không có quyền.""",,,,"""⛔ 你没有权限。"""
+admin.pagination.next,Next,,,,,,,,,,下一页
+admin.pagination.prev,Prev,,,,,,,,,,上一页
+admin.pagination.total,Total,,,,,,,,,,合计
+admin.public_groups.approve,"""Approve""",,,,,,,,,,"""通过"""
+admin.public_groups.bulk_checkbox_label,"""Select {name} for bulk actions""",,,,,,,,,,"""选择 {name} 进行批量操作"""
+admin.public_groups.bulk_error,"""Bulk update failed, please retry.""",,,,,,,,,,"""批量操作失败，请稍后重试。"""
+admin.public_groups.bulk_no_selection,"""Select at least one group.""",,,,,,,,,,"""请先选择群组。"""
+admin.public_groups.bulk_note_placeholder,"""Optional note for audit trail""",,,,,,,,,,"""可填写备注，便于留痕"""
+admin.public_groups.bulk_partial,"""Updated {updated} groups, {failed} failed.""",,,,,,,,,,"""成功 {updated} 个，失败 {failed} 个。"""
+admin.public_groups.bulk_processing,"""Applying...""",,,,,,,,,,"""正在批量处理..."""
+admin.public_groups.bulk_selected_label,"""Selected {count} groups""",,,,,,,,,,"""已选 {count} 个群组"""
+admin.public_groups.bulk_success,"""Updated {updated} groups.""",,,,,,,,,,"""已成功更新 {updated} 个群组。"""
+admin.public_groups.empty_high_risk,"""No high-risk groups for now.""",,,,,,,,,,"""当前没有高风险群。"""
+admin.public_groups.empty_paused,"""No paused groups.""",,,,,,,,,,"""没有暂停的群组。"""
+admin.public_groups.empty_removed,"""No removed groups.""",,,,,,,,,,"""没有被移除的群组。"""
+admin.public_groups.empty_review,"""No groups waiting for review.""",,,,,,,,,,"""暂无待审核的公开群。"""
+admin.public_groups.high_risk_tab,"""High Risk (score ≥ threshold)""",,,,,,,,,,"""风险较高（得分≥阈值）"""
+admin.public_groups.members,"""Members""",,,,,,,,,,"""成员数"""
+admin.public_groups.no_desc,"""No description provided.""",,,,,,,,,,"""未填写简介。"""
+admin.public_groups.pause,"""Pause""",,,,,,,,,,"""暂停"""
+admin.public_groups.paused_tab,"""Paused Groups""",,,,,,,,,,"""已暂停"""
+admin.public_groups.remove,"""Remove""",,,,,,,,,,"""下架"""
+admin.public_groups.removed_tab,"""Removed Groups""",,,,,,,,,,"""已移除"""
+admin.public_groups.review_tab,"""Pending Review""",,,,,,,,,,"""待审核"""
+admin.public_groups.reward_pool,"""Reward Pool""",,,,,,,,,,"""奖励池"""
+admin.public_groups.risk_score,"""Risk Score""",,,,,,,,,,"""风险分"""
+admin.public_groups.status,"""Status""",,,,,,,,,,"""状态"""
+admin.public_groups.status_ok,"""Status updated to {status}""",,,,,,,,,,"""状态已更新为 {status}"""
+admin.public_groups.subtitle,"""Audit risk scores, approve or pause groups, and respond to reports.""",,,,,,,,,,"""查看风险评分、审核上线、暂停或下架，处理举报与复核事项。"""
+admin.public_groups.title,"""Public Group Review Board""",,,,,,,,,,"""公开交友群风控面板"""
+admin.public_groups_reports.action_assign,"""Assign to (Telegram ID)""",,,,,,,,,,"""指派至（Telegram ID）"""
+admin.public_groups_reports.action_assign_placeholder,"""e.g. 90001""",,,,,,,,,,"""例如 90001"""
+admin.public_groups_reports.action_priority,"""Priority""",,,,,,,,,,"""优先级"""
+admin.public_groups_reports.action_resolution_note,"""Resolution note""",,,,,,,,,,"""处理说明"""
+admin.public_groups_reports.action_resolution_placeholder,"""Optional closing summary""",,,,,,,,,,"""可填写结案摘要或后续计划"""
+admin.public_groups_reports.action_status,"""Status""",,,,,,,,,,"""调整状态"""
+admin.public_groups_reports.action_success,"""Operation succeeded.""",,,,,,,,,,"""操作已成功完成。"""
+admin.public_groups_reports.action_update,"""Save changes""",,,,,,,,,,"""保存变更"""
+admin.public_groups_reports.actions_heading,"""Update case""",,,,,,,,,,"""更新工单"""
+admin.public_groups_reports.activities_bonus_points,"""Extra Bonus""",,,,,,,,,,"""额外奖励"""
+admin.public_groups_reports.activities_bulk_apply,"""Apply updates""",,,,,,,,,,"""套用更新"""
+admin.public_groups_reports.activities_bulk_error,"""Bulk update failed.""",,,,,,,,,,"""批量操作失败，请稍后重试。"""
+admin.public_groups_reports.activities_bulk_export_all,"""Export all""",,,,,,,,,,"""导出全部"""
+admin.public_groups_reports.activities_bulk_export_selected,"""Export selected""",,,,,,,,,,"""导出已选"""
+admin.public_groups_reports.activities_bulk_highlight_keep,"""No change""",,,,,,,,,,"""不变更"""
+admin.public_groups_reports.activities_bulk_highlight_off,"""Disable""",,,,,,,,,,"""停用"""
+admin.public_groups_reports.activities_bulk_highlight_on,"""Enable""",,,,,,,,,,"""启用"""
+admin.public_groups_reports.activities_bulk_no_selection,"""Please select at least one activity.""",,,,,,,,,,"""请先选择活动。"""
+admin.public_groups_reports.activities_bulk_partial,"""Updated {updated} activities, {failed} failed.""",,,,,,,,,,"""已更新 {updated} 个，{failed} 个失败。"""
+admin.public_groups_reports.activities_bulk_pause,"""Pause""",,,,,,,,,,"""暂停"""
+admin.public_groups_reports.activities_bulk_processing,"""Processing...""",,,,,,,,,,"""处理中..."""
+admin.public_groups_reports.activities_bulk_resume,"""Resume""",,,,,,,,,,"""启用"""
+admin.public_groups_reports.activities_bulk_selected_label,"""Selected {count} campaigns""",,,,,,,,,,"""已选 {count} 个活动"""
+admin.public_groups_reports.activities_bulk_success,"""Updated {updated} activities.""",,,,,,,,,,"""已更新 {updated} 个活动。"""
+admin.public_groups_reports.activities_caps,"""Limits""",,,,,,,,,,"""发放限制"""
+admin.public_groups_reports.activities_create_submit,"""Create Campaign""",,,,,,,,,,"""创建活动"""
+admin.public_groups_reports.activities_create_title,"""Create Join Bonus Campaign""",,,,,,,,,,"""新增入群奖励活动"""
+admin.public_groups_reports.activities_daily_cap,"""Daily Cap""",,,,,,,,,,"""每日上限"""
+admin.public_groups_reports.activities_description,"""Description""",,,,,,,,,,"""活动简介"""
+admin.public_groups_reports.activities_empty,"""No campaigns yet. Create your first join bonus above.""",,,,,,,,,,"""尚无活动，可在左侧表单创建。"""
+admin.public_groups_reports.activities_end_at,"""End Time""",,,,,,,,,,"""结束时间"""
+admin.public_groups_reports.activities_existing,"""Existing Campaigns""",,,,,,,,,,"""现有活动"""
+admin.public_groups_reports.activities_front_badge,"""Badge text""",,,,,,,,,,"""角标文字"""
+admin.public_groups_reports.activities_front_cta_label,"""CTA label""",,,,,,,,,,"""按钮文字"""
+admin.public_groups_reports.activities_front_cta_label_hint,"""Optional button text, e.g. 'Join now'.""",,,,,,,,,,"""例如「立即加入」，留空则使用默认提示。"""
+admin.public_groups_reports.activities_front_cta_link,"""CTA link""",,,,,,,,,,"""按钮链接"""
+admin.public_groups_reports.activities_front_preview,"""Front card preview""",,,,,,,,,,"""前台预览"""
+admin.public_groups_reports.activities_front_priority,"""Display priority""",,,,,,,,,,"""展示优先级"""
+admin.public_groups_reports.activities_front_priority_hint,"""Lower numbers appear first in MiniApp/Bot surfaces. Default: 100.""",,,,,,,,,,"""数字越小越靠前，默认 100。"""
+admin.public_groups_reports.activities_front_subtitle,"""Front card subtitle""",,,,,,,,,,"""前台副标题"""
+admin.public_groups_reports.activities_front_subtitle_hint,"""Short summary shown in MiniApp/Bot cards.""",,,,,,,,,,"""MiniApp/Bot 卡片下方的简短说明。"""
+admin.public_groups_reports.activities_front_title,"""Front card title""",,,,,,,,,,"""前台标题"""
+admin.public_groups_reports.activities_front_title_hint,"""Overrides the MiniApp/Bot card title; defaults to the campaign name.""",,,,,,,,,,"""用于 MiniApp/Bot 卡片的标题，留空则使用活动名称。"""
+admin.public_groups_reports.activities_highlight_enabled,"""Enable MiniApp highlight slot""",,,,,,,,,,"""启用 MiniApp 置顶曝光"""
+admin.public_groups_reports.activities_highlight_info,"""Highlight""",,,,,,,,,,"""曝光设置"""
+admin.public_groups_reports.activities_highlight_slots,"""Highlight Slots""",,,,,,,,,,"""额外曝光位"""
+admin.public_groups_reports.activities_name,"""Campaign Name""",,,,,,,,,,"""活动名称"""
+admin.public_groups_reports.activities_no_end,"""No end date""",,,,,,,,,,"""无限期"""
+admin.public_groups_reports.activities_report_alert_heading,"""Alerts detected in this range""",,,,,,,,,,"""以下活动需关注"""
+admin.public_groups_reports.activities_report_conversions,"""Conversions""",,,,,,,,,,"""转化人数"""
+admin.public_groups_reports.activities_report_end,"""End""",,,,,,,,,,"""结束日期"""
+admin.public_groups_reports.activities_report_export_csv,"""Export CSV""",,,,,,,,,,"""导出 CSV"""
+admin.public_groups_reports.activities_report_filter_alerts,"""Only show alerts""",,,,,,,,,,"""仅显示异常"""
+admin.public_groups_reports.activities_report_grants,"""Grants""",,,,,,,,,,"""发放次数"""
+admin.public_groups_reports.activities_report_link,"""View performance report""",,,,,,,,,,"""查看活动报表"""
+admin.public_groups_reports.activities_report_points,"""Points""",,,,,,,,,,"""奖励星数"""
+admin.public_groups_reports.activities_report_slack_failures,"""Slack failures""",,,,,,,,,,"""Slack 失败次数"""
+admin.public_groups_reports.activities_report_start,"""Start""",,,,,,,,,,"""开始日期"""
+admin.public_groups_reports.activities_report_subtitle,"""Review daily grants, bonus points and export for analysis.""",,,,,,,,,,"""汇总每日发放与加码情况，可下载 CSV 进行分析。"""
+admin.public_groups_reports.activities_report_title,"""Campaign Performance Report""",,,,,,,,,,"""公开群活动绩效报表"""
+admin.public_groups_reports.activities_report_total,"""Total grants / points""",,,,,,,,,,"""总发放 / 总星数"""
+admin.public_groups_reports.activities_report_total_conversions,"""Total conversions""",,,,,,,,,,"""总转化人数"""
+admin.public_groups_reports.activities_report_total_points,"""Total points""",,,,,,,,,,"""总发放星数"""
+admin.public_groups_reports.activities_report_webhook_failures,"""Webhook failures""",,,,,,,,,,"""Webhook 失败次数"""
+admin.public_groups_reports.activities_report_webhook_rate,"""Webhook success""",,,,,,,,,,"""Webhook 成功率"""
+admin.public_groups_reports.activities_report_webhook_success,"""Webhook success""",,,,,,,,,,"""Webhook 成功率"""
+admin.public_groups_reports.activities_reward_points,"""Bonus Points""",,,,,,,,,,"""奖励星数"""
+admin.public_groups_reports.activities_start_at,"""Start Time""",,,,,,,,,,"""开始时间"""
+admin.public_groups_reports.activities_subtitle,"""Configure join bonus campaigns and manage their lifecycle.""",,,,,,,,,,"""配置公开群入群奖励活动并管理其启停。"""
+admin.public_groups_reports.activities_time_range,"""Time range""",,,,,,,,,,"""活动周期"""
+admin.public_groups_reports.activities_title,"""Automated Campaigns""",,,,,,,,,,"""自动化活动"""
+admin.public_groups_reports.activities_toggle_pause,"""Pause""",,,,,,,,,,"""暂停"""
+admin.public_groups_reports.activities_toggle_resume,"""Resume""",,,,,,,,,,"""恢复"""
+admin.public_groups_reports.activities_total_cap,"""Total Cap""",,,,,,,,,,"""总上限"""
+admin.public_groups_reports.activities_type_join_bonus,"""Join bonus""",,,,,,,,,,"""入群奖励"""
+admin.public_groups_reports.back_to_groups,"""Back to groups""",,,,,,,,,,"""返回公开群列表"""
+admin.public_groups_reports.back_to_list,"""Back to report list""",,,,,,,,,,"""返回举报列表"""
+admin.public_groups_reports.dashboard_clicks,"""Clicks""",,,,,,,,,,"""点击"""
+admin.public_groups_reports.dashboard_conversion,"""Conversion Summary""",,,,,,,,,,"""转化概览"""
+admin.public_groups_reports.dashboard_created,"""Created""",,,,,,,,,,"""新建数量"""
+admin.public_groups_reports.dashboard_creations,"""New Groups""",,,,,,,,,,"""新建群统计"""
+admin.public_groups_reports.dashboard_date,"""Date""",,,,,,,,,,"""日期"""
+admin.public_groups_reports.dashboard_days,"""days""",,,,,,,,,,"""天"""
+admin.public_groups_reports.dashboard_error,"""Failed to load stats. Please retry.""",,,,,,,,,,"""加载统计失败，请稍后重试。"""
+admin.public_groups_reports.dashboard_group,"""Group""",,,,,,,,,,"""群组"""
+admin.public_groups_reports.dashboard_joins,"""Joins""",,,,,,,,,,"""入群"""
+admin.public_groups_reports.dashboard_loading,"""Loading...""",,,,,,,,,,"""加载中..."""
+admin.public_groups_reports.dashboard_range,"""Range""",,,,,,,,,,"""时间范围"""
+admin.public_groups_reports.dashboard_refresh,"""Refresh""",,,,,,,,,,"""刷新"""
+admin.public_groups_reports.dashboard_status,"""Status Breakdown""",,,,,,,,,,"""状态分布"""
+admin.public_groups_reports.dashboard_subtitle,"""Review conversion trends, creation volume, and top tags.""",,,,,,,,,,"""一站式查看曝光、点击、入群与热门标签趋势。"""
+admin.public_groups_reports.dashboard_tags,"""Top Tags""",,,,,,,,,,"""热门标签"""
+admin.public_groups_reports.dashboard_timeline,"""Exposure → Click → Join Timeline""",,,,,,,,,,"""曝光 → 点击 → 入群趋势"""
+admin.public_groups_reports.dashboard_title,"""Public Group Dashboard""",,,,,,,,,,"""公开群成效仪表板"""
+admin.public_groups_reports.dashboard_top,"""Top N""",,,,,,,,,,"""热门数量"""
+admin.public_groups_reports.dashboard_top_groups,"""Top Groups""",,,,,,,,,,"""热门群组"""
+admin.public_groups_reports.dashboard_views,"""Views""",,,,,,,,,,"""曝光"""
+admin.public_groups_reports.detail_subtitle,"""Review case context, add notes, and close out the report.""",,,,,,,,,,"""梳理上下文、留下处理记录并及时结案。"""
+admin.public_groups_reports.detail_title,"""Report Detail""",,,,,,,,,,"""举报工单详情"""
+admin.public_groups_reports.empty,"""No reports found for the current filter.""",,,,,,,,,,"""暂无符合条件的举报工单。"""
+admin.public_groups_reports.field_created,"""Created at""",,,,,,,,,,"""创建时间"""
+admin.public_groups_reports.field_description,"""Description""",,,,,,,,,,"""举报内容"""
+admin.public_groups_reports.field_group_id,"""Group ID""",,,,,,,,,,"""群组 ID"""
+admin.public_groups_reports.field_group_link,"""Invite link""",,,,,,,,,,"""邀请链接"""
+admin.public_groups_reports.field_group_name,"""Name""",,,,,,,,,,"""群组名称"""
+admin.public_groups_reports.field_group_status,"""Status""",,,,,,,,,,"""当前状态"""
+admin.public_groups_reports.field_id,"""Case ID""",,,,,,,,,,"""工单编号"""
+admin.public_groups_reports.field_priority,"""Priority""",,,,,,,,,,"""优先级"""
+admin.public_groups_reports.field_reporter,"""Reporter""",,,,,,,,,,"""举报人"""
+admin.public_groups_reports.field_resolution_note,"""Resolution note""",,,,,,,,,,"""处理说明"""
+admin.public_groups_reports.field_resolved,"""Resolved at""",,,,,,,,,,"""结案时间"""
+admin.public_groups_reports.field_status,"""Status""",,,,,,,,,,"""状态"""
+admin.public_groups_reports.field_type,"""Type""",,,,,,,,,,"""举报类别"""
+admin.public_groups_reports.field_updated,"""Updated at""",,,,,,,,,,"""更新时间"""
+admin.public_groups_reports.filter_all_status,"""All statuses""",,,,,,,,,,"""全部状态"""
+admin.public_groups_reports.filter_apply,"""Apply filters""",,,,,,,,,,"""应用筛选"""
+admin.public_groups_reports.filter_reset,"""Reset""",,,,,,,,,,"""重置"""
+admin.public_groups_reports.filter_status,"""Status""",,,,,,,,,,"""状态"""
+admin.public_groups_reports.group_info,"""Group""",,,,,,,,,,"""关联群组"""
+admin.public_groups_reports.group_missing,"""Group has been removed.""",,,,,,,,,,"""群组已被移除。"""
+admin.public_groups_reports.inline_assign_me,"""Assign to me""",,,,,,,,,,"""指派给我"""
+admin.public_groups_reports.inline_assign_success,"""Assigned to you.""",,,,,,,,,,"""已指派给你。"""
+admin.public_groups_reports.inline_error,"""Update failed. Please retry.""",,,,,,,,,,"""操作失败，请稍后重试。"""
+admin.public_groups_reports.inline_mark_dismissed,"""Dismiss""",,,,,,,,,,"""驳回"""
+admin.public_groups_reports.inline_mark_in_progress,"""In progress""",,,,,,,,,,"""处理中"""
+admin.public_groups_reports.inline_mark_resolved,"""Resolve""",,,,,,,,,,"""结案"""
+admin.public_groups_reports.inline_note_prompt,"""Add a resolution note (optional):""",,,,,,,,,,"""填写处理说明（可选）："""
+admin.public_groups_reports.inline_status_updated,"""Case updated.""",,,,,,,,,,"""工单已更新。"""
+admin.public_groups_reports.insights_alerts_count,"""alerts""",,,,,,,,,,"""条预警"""
+admin.public_groups_reports.insights_alerts_empty,"""No alerts – all activities look healthy.""",,,,,,,,,,"""暂无预警，整体表现正常。"""
+admin.public_groups_reports.insights_alerts_title,"""Alerts""",,,,,,,,,,"""异常提醒"""
+admin.public_groups_reports.insights_card_conversions,"""Conversions""",,,,,,,,,,"""转化次数"""
+admin.public_groups_reports.insights_card_points,"""Points""",,,,,,,,,,"""奖励星数"""
+admin.public_groups_reports.insights_card_slack,"""Slack Failures""",,,,,,,,,,"""Slack 失败数"""
+admin.public_groups_reports.insights_card_success,"""Webhook Success""",,,,,,,,,,"""Webhook 成功率"""
+admin.public_groups_reports.insights_chart_series_conversions,"""Conversions""",,,,,,,,,,"""转化次数"""
+admin.public_groups_reports.insights_chart_series_points,"""Points""",,,,,,,,,,"""奖励星数"""
+admin.public_groups_reports.insights_chart_title,"""Daily Conversions & Bonus Points""",,,,,,,,,,"""每日转化与星数趋势"""
+admin.public_groups_reports.insights_error,"""Failed to load activity insights.""",,,,,,,,,,"""加载活动洞察失败，请稍后重试。"""
+admin.public_groups_reports.insights_filter_activity,"""Activity""",,,,,,,,,,"""活动"""
+admin.public_groups_reports.insights_filter_all,"""All""",,,,,,,,,,"""全部"""
+admin.public_groups_reports.insights_filter_apply,"""Update""",,,,,,,,,,"""更新"""
+admin.public_groups_reports.insights_filter_days,"""Preset (days)""",,,,,,,,,,"""快捷天数"""
+admin.public_groups_reports.insights_filter_range,"""Range""",,,,,,,,,,"""时间范围"""
+admin.public_groups_reports.insights_link,"""View Activity Insights""",,,,,,,,,,"""查看活动洞察"""
+admin.public_groups_reports.insights_loading,"""Loading...""",,,,,,,,,,"""加载中..."""
+admin.public_groups_reports.insights_subtitle,"""Monitor campaign conversions, bonus points, and webhook health.""",,,,,,,,,,"""聚焦入群转化、奖励星数与 Webhook 健康度。"""
+admin.public_groups_reports.insights_table_activity,"""Activity""",,,,,,,,,,"""活动"""
+admin.public_groups_reports.insights_table_conversions,"""Conversions""",,,,,,,,,,"""转化"""
+admin.public_groups_reports.insights_table_points,"""Points""",,,,,,,,,,"""星数"""
+admin.public_groups_reports.insights_table_slack,"""Slack Failures""",,,,,,,,,,"""Slack 失败"""
+admin.public_groups_reports.insights_table_success,"""Success Rate""",,,,,,,,,,"""成功率"""
+admin.public_groups_reports.insights_title,"""Activity Insights""",,,,,,,,,,"""活动成效洞察"""
+admin.public_groups_reports.insights_top_title,"""Top Activities""",,,,,,,,,,"""热门活动"""
+admin.public_groups_reports.note_operator,"""Operator""",,,,,,,,,,"""操作人"""
+admin.public_groups_reports.notes_count,"""entries""",,,,,,,,,,"""条记录"""
+admin.public_groups_reports.notes_empty,"""No notes yet.""",,,,,,,,,,"""尚未填写处理记录。"""
+admin.public_groups_reports.notes_heading,"""Activity log""",,,,,,,,,,"""处理记录"""
+admin.public_groups_reports.notes_new,"""Add internal note""",,,,,,,,,,"""新增处理记录"""
+admin.public_groups_reports.notes_placeholder,"""Write your note here...""",,,,,,,,,,"""填写处理说明或沟通结果..."""
+admin.public_groups_reports.notes_submit,"""Add note""",,,,,,,,,,"""新增记录"""
+admin.public_groups_reports.pagination_summary,"""Showing {start}–{end} of {total} cases""",,,,,,,,,,"""第 {start} – {end} 条，共 {total} 条记录"""
+admin.public_groups_reports.report_info,"""Report information""",,,,,,,,,,"""举报信息"""
+admin.public_groups_reports.search_label,"""Search""",,,,,,,,,,"""关键词"""
+admin.public_groups_reports.search_placeholder,"""Group name, type, reporter or description""",,,,,,,,,,"""群名称 / 举报类型 / 举报人 / 描述"""
+admin.public_groups_reports.status_dismissed,"""Dismissed""",,,,,,,,,,"""已驳回"""
+admin.public_groups_reports.status_in_progress,"""In progress""",,,,,,,,,,"""处理中"""
+admin.public_groups_reports.status_pending,"""Pending""",,,,,,,,,,"""待处理"""
+admin.public_groups_reports.status_resolved,"""Resolved""",,,,,,,,,,"""已解决"""
+admin.public_groups_reports.subtitle,"""Track incoming reports, assign operators, and close loops.""",,,,,,,,,,"""记录并跟进用户举报，指派负责人并闭环处理。"""
+admin.public_groups_reports.table_assigned,"""Assigned to""",,,,,,,,,,"""指派人"""
+admin.public_groups_reports.table_created,"""Created""",,,,,,,,,,"""创建时间"""
+admin.public_groups_reports.table_group,"""Group""",,,,,,,,,,"""群组"""
+admin.public_groups_reports.table_id,"""ID""",,,,,,,,,,"""工单编号"""
+admin.public_groups_reports.table_priority,"""Priority""",,,,,,,,,,"""优先级"""
+admin.public_groups_reports.table_status,"""Status""",,,,,,,,,,"""状态"""
+admin.public_groups_reports.table_summary,"""Summary""",,,,,,,,,,"""摘要"""
+admin.public_groups_reports.table_type,"""Type""",,,,,,,,,,"""类别"""
+admin.public_groups_reports.title,"""Public Group Reports""",,,,,,,,,,"""公开群举报工单"""
+admin.public_groups_reports.view_detail,"""View detail""",,,,,,,,,,"""查看详情"""
+admin.queue.done,Done,,,,,,,,,,已完成
+admin.queue.enqueue,Enqueue,,,,,,,,,,加入队列
+admin.queue.failed,Failed,,,,,,,,,,失败
+admin.queue.running,Running,,,,,,,,,,进行中
+admin.queue.title,Export Queue,,,,,,,,,,导出任务队列
+admin.recharge.address,Address,,,,,,,,,,收款地址
+admin.recharge.amount,Order amount,,,,,,,,,,下单金额
+admin.recharge.expire,Set expired,,,,,,,,,,置为过期
+admin.recharge.final_pay,Final due,,,,,,,,,,最终应付
+admin.recharge.network,Network,,,,,,,,,,网络
+admin.recharge.order_id,Order ID,,,,,,,,,,订单号
+admin.recharge.payment_url,Payment link,,,,,,,,,,支付链接
+admin.recharge.refresh,Refresh,,,,,,,,,,刷新状态
+admin.recharge.status.EXPIRED,Expired,,,,,,,,,,已过期
+admin.recharge.status.FAILED,Failed,,,,,,,,,,失败
+admin.recharge.status.PENDING,Pending,,,,,,,,,,待支付
+admin.recharge.status.SUCCESS,Success,,,,,,,,,,成功
+admin.recharge.title,Top-up Orders,,,,,,,,,,充值订单
+admin.recharge.token,Token,,,,,,,,,,代币
+admin.reset.all.confirm_phrase.invalid,"""❌ Wrong passphrase. Cancelled.""",,,,,,,,,,"""❌ 口令不正确，已取消。"""
+admin.reset.btn.all,"""⚠️ Reset all users""",,,,,,,,,,"""⚠️ 批量清零（全体）"""
+admin.reset.btn.select,"""🧹 Reset selected (ID/@)""",,,,,,,,,,"""🧹 指定清零（按ID/@）"""
+admin.reset.confirm_title,"""Confirmation""",,,,,,,,,,二次确认
+admin.reset.disallowed,"""Reset disabled in this environment""",,,,,,,,,,当前环境禁止清零，请联系超管
+admin.reset.dryrun,"""Dry run""",,,,,,,,,,试运行
+admin.reset.everyone,"""Reset for all users""",,,,,,,,,,对全体用户清零
+admin.reset.execute,"""Confirm reset""",,,,,,,,,,确认清零
+admin.reset.passphrase,"""Passphrase""",,,,,,,,,,口令
+admin.reset.select.input,"""Enter targets to reset (user IDs or @usernames). Multiple supported by comma/space/semicolon/newline.""",,,,,,,,,,"""请输入需要清零的目标（用户ID或@用户名），支持多个，逗号/空格/分号/换行分隔："""
+admin.reset.selected,"""Reset for selected users""",,,,,,,,,,对所选用户清零
+admin.reset.title,Balance Reset,,,,,,,,,,余额清零
+admin.send_file_failed,"""❌ File send failed: {reason}""","""❌ Error al enviar archivo: {reason}""","""❌ Envoi du fichier échoué : {reason}""","""❌ Dateiübertragung fehlgeschlagen: {reason}""",,,"""❌ Gửi tệp thất bại: {reason}""",,,,"""❌ 发送文件失败：{reason}"""
+admin.settings,"""⚙️ Settings""","""⚙️ Configuración""","""⚙️ Paramètres""","""⚙️ Einstellungen""",,,"""⚙️ Cài đặt hệ thống""",,,,"""⚙️ 系统设置"""
+admin.settings.feature_flags,Feature Flags,,,,,,,,,,功能开关
+admin.settings.title,Settings,,,,,,,,,,系统设置
+admin.settings.toggle_first,Toggle one feature to start,,,,,,,,,,切换一个可用开关
+admin.stats,"""📈 Overview""","""📈 Estadísticas""","""📈 Statistiques""","""📈 Statistiken""",,,"""📈 Tổng quan thống kê""",,,,"""📈 统计概览"""
+admin.stats_active_today,"""🔥 Active today: {n}""","""🔥 Usuarios activos hoy: {n}""","""🔥 Utilisateurs actifs aujourd’hui : {n}""","""🔥 Heute aktive Nutzer: {n}""",,,"""🔥 Người dùng hoạt động hôm nay: {n}""",,,,"""🔥 今日活跃用户：{n}"""
+admin.stats_ongoing,"""⏳ Ongoing: {n}""","""⏳ En curso: {n}""","""⏳ En cours : {n}""","""⏳ Laufend: {n}""",,,"""⏳ Đang diễn ra: {n}""",,,,"""⏳ 进行中：{n}"""
+admin.stats_recharge,"""💰 Top-up summary:""","""💰 Suma de recargas:""","""💰 Somme des recharges :""","""💰 Aufladungssumme:""",,,"""💰 Tổng nạp:""",,,,"""💰 充值汇总："""
+admin.stats_total_env,"""🧧 Total packets: {n}""","""🧧 Sobres totales: {n}""","""🧧 Total d’enveloppes : {n}""","""🧧 Umschläge gesamt: {n}""",,,"""🧧 Tổng số phong bao: {n}""",,,,"""🧧 总红包：{n}"""
+admin.stats_users,"""👥 Users: {n}""","""👥 Usuarios: {n}""","""👥 Utilisateurs : {n}""","""👥 Nutzer: {n}""",,,"""👥 Người dùng: {n}""",,,,"""👥 用户数：{n}"""
+admin.table.amount,Amount,,,,,,,,,,金额
+admin.table.note,Note,,,,,,,,,,备注
+admin.table.result,Result,,,,,,,,,,结果
+admin.table.token,Token,,,,,,,,,,币种
+admin.table.user,User,,,,,,,,,,用户
+admin.table.username,Username,,,,,,,,,,用户名
+admin.tags.disable,Disable tag,,,,,,,,,,禁用标签
+admin.tags.hot,Hot tags,,,,,,,,,,热门标签
+admin.tags.title,Tags,,,,,,,,,,标签管理
+admin.toast.copied,Copied,,,,,,,,,,已复制
+admin.toast.deleted,Deleted,,,,,,,,,,已删除
+admin.toast.done,Done,,,,,,,,,,已完成
+admin.toast.saved,Saved,,,,,,,,,,已保存
+admin.toggle_auto,"""🔁 Toggle auto mode""","""🔁 Alternar modo automático""","""🔁 Basculer mode auto""","""🔁 Automatik umschalten""",,,"""🔁 Bật/Tắt chế độ tự động""",,,,"""🔁 开关自动模式"""
+admin.twofactor.fail,Verification failed,,,,,,,,,,校验失败
+admin.twofactor.need_otp,Code sent,,,,,,,,,,验证码已发送
+admin.twofactor.ok,Verified,,,,,,,,,,已通过二次验证
+admin.twofactor.send,Send code,,,,,,,,,,发送验证码
+admin.twofactor.title,Two-factor,,,,,,,,,,二次校验
+admin.twofactor.verify,Verify,,,,,,,,,,验证
+asset.points,"""⭐ Points""","""⭐ Puntos""","""⭐ Points""","""⭐ Punkte""",,,,,,,"""⭐ 积分"""
+asset.title,"""💼 My Assets""","""💼 Mis activos""","""💼 Mes actifs""","""💼 Meine Vermögenswerte""",,,,,,,"""💼 我的资产"""
+asset.ton,"""🪙 TON""","""🪙 TON""","""🪙 TON""","""🪙 TON""",,,,,,,"""🪙 TON"""
+asset.usdt,"""💵 USDT""","""💵 USDT""","""💵 USDT""","""💵 USDT""",,,,,,,"""💵 USDT"""
+balance.recharge,"""💳 Top up""","""💳 Recargar""","""💳 Recharger""","""💳 Aufladen""",,"""💳 เติมเงิน""","""💳 Nạp tiền""",,,,"""💳 去充值"""
+balance.template,"🧾 Current balance
+💵 USDT: {usdt}
+🪙 TON: {ton}
+⭐ Points: {points}
+
+🎯 Current token: <b>{token}</b>
+🧾 Pending charge: {real_amt}","🧾 Saldo actual
+💵 USDT: {usdt}
+🪙 TON: {ton}
+⭐ Puntos: {points}
+
+🎯 Moneda actual: <b>{token}</b>
+🧾 Cargo previsto: {real_amt}","🧾 Solde actuel
+💵 USDT : {usdt}
+🪙 TON : {ton}
+⭐ Points : {points}
+
+🎯 Devise courante : <b>{token}</b>
+🧾 Débit prévu : {real_amt}","🧾 Aktuelles Guthaben
+💵 USDT: {usdt}
+🪙 TON: {ton}
+⭐ Punkte: {points}
+
+🎯 Aktuelle Währung: <b>{token}</b>
+🧾 Geplante Belastung: {real_amt}",,"🧾 ยอดคงเหลือปัจจุบัน  
+💵 USDT: {usdt}  
+🪙 TON: {ton}  
+⭐ คะแนน: {points}  
+
+🎯 สกุลเงินปัจจุบัน: <b>{token}</b>  
+🧾 จะหัก: {real_amt}","🧾 Số dư hiện tại
+💵 USDT: {usdt}
+🪙 TON: {ton}
+⭐ Điểm: {points}
+
+🎯 Loại tiền hiện tại: <b>{token}</b>
+🧾 Sẽ trừ: {real_amt}",,,,"🧾 当前余额
+💵 USDT: {usdt}
+🪙 TON: {ton}
+⭐ 积分: {points}
+
+🎯 当前币种：<b>{token}</b>
+🧾 准备扣款：{real_amt}"
+balance.title,"""💼 My Assets""","""💼 Mis activos""","""💼 Mes actifs""","""💼 Meine Vermögenswerte""",,"""💼 สินทรัพย์ของฉัน""","""💼 Tài sản của tôi""",,,,"""💼 我的资产"""
+balance.withdraw,"""🏧 Withdraw""","""🏧 Retirar""","""🏧 Retirer""","""🏧 Auszahlen""",,"""🏧 ถอนเงิน""","""🏧 Rút tiền""",,,,"""🏧 去提现"""
+balance_card.template,"🧾 Current balance
+💵 USDT: {usdt}
+🪙 TON: {ton}
+⭐ Points: {points}
+
+🎯 Current token: <b>{token}</b>
+🧾 Pending charge: {real_amt}","🧾 Saldo actual
+💵 USDT: {usdt}
+🪙 TON: {ton}
+⭐ Puntos: {points}
+
+🎯 Moneda actual: <b>{token}</b>
+🧾 Cargo previsto: {real_amt}","🧾 Solde actuel
+💵 USDT : {usdt}
+🪙 TON : {ton}
+⭐ Points : {points}
+
+🎯 Devise courante : <b>{token}</b>
+🧾 Débit prévu : {real_amt}","🧾 Aktuelles Guthaben
+💵 USDT: {usdt}
+🪙 TON: {ton}
+⭐ Punkte: {points}
+
+🎯 Aktuelle Währung: <b>{token}</b>
+🧾 Geplante Belastung: {real_amt}",,,"🧾 Số dư hiện tại
+💵 USDT: {usdt}
+🪙 TON: {ton}
+⭐ Điểm: {points}
+
+🎯 Loại tiền hiện tại: <b>{token}</b>
+🧾 Sẽ trừ: {real_amt}",,,,"🧾 当前余额
+💵 USDT: {usdt}
+🪙 TON: {ton}
+⭐ 积分: {points}
+
+🎯 当前币种：<b>{token}</b>
+🧾 准备扣款：{real_amt}"
+balance_page.points,"""⭐ Points: {amount}""","""⭐ Puntos: {amount}""","""⭐ Points : {amount}""","""⭐ Punkte: {amount}""",,"""⭐ คะแนน: {amount}""","""⭐ Điểm: {amount}""",,,,"""⭐ 积分：{amount}"""
+balance_page.title,"""💼 Balance Overview""","""💼 Vista general""","""💼 Vue d’ensemble""","""💼 Gesamtübersicht""",,"""💼 ภาพรวมสินทรัพย์""","""💼 Tổng quan tài sản""",,,,"""💼 资产概览"""
+balance_page.ton,"""🪙 TON: {amount}""","""🪙 TON: {amount}""","""🪙 TON : {amount}""","""🪙 TON: {amount}""",,"""🪙 TON: {amount}""","""🪙 TON: {amount}""",,,,"""🪙 TON：{amount}"""
+balance_page.usdt,"""💵 USDT: {amount}""","""💵 USDT: {amount}""","""💵 USDT : {amount}""","""💵 USDT: {amount}""",,"""💵 USDT: {amount}""","""💵 USDT: {amount}""",,,,"""💵 USDT：{amount}"""
+common.bad_request,"""⚠️ Bad request. Try again.""","""⚠️ Solicitud inválida. Intenta de nuevo.""","""⚠️ Requête invalide. Réessaie.""","""⚠️ Ungültige Anfrage. Bitte erneut versuchen.""",,,"""⚠️ Yêu cầu không hợp lệ. Vui lòng thử lại.""",,,,"""⚠️ 请求有误，请重试"""
+common.close,"""Close""","""Cerrar""","""Fermer""","""Schließen""",,,"""Đóng""",,,,"""关闭"""
+common.copied_tip,"""Copied content sent""","""Contenido copiable enviado""","""Contenu copiable envoyé""","""Kopierbarer Inhalt gesendet""",,,"""Đã gửi nội dung có thể sao chép""",,,,"""已发送可复制内容"""
+common.custom_amount,"""✏️ Custom amount""","""✏️ Importe personalizado""","""✏️ Montant personnalisé""","""✏️ Eigener Betrag""",,,"""✏️ Số tiền tùy chọn""",,,,"""✏️ 自定义金额"""
+common.custom_shares,"""✏️ Custom shares""","""✏️ Partes personalizadas""","""✏️ Parts personnalisées""","""✏️ Eigene Anteilzahl""",,,"""✏️ Số phần tùy chọn""",,,,"""✏️ 自定义份数"""
+common.invalid,"""Invalid operation""","""Acción inválida""","""Action invalide""","""Ungültige Aktion""",,,"""Hành động không hợp lệ""",,,,"""无效操作"""
+common.next,"""Next »""","""Siguiente »""","""Suivant »""","""Weiter »""",,,"""Tiếp »""",,,,"""下一页 »"""
+common.not_available,"""⛔ Not available for now""","""⛔ Función no disponible por ahora""","""⛔ Fonction temporairement indisponible""","""⛔ Funktion derzeit nicht verfügbar""",,,"""⛔ Chức năng tạm thời không khả dụng""",,,,"""⛔ 该功能暂不可用，请稍后再试"""
+common.not_found,"""🔍 Not found""","""🔍 No encontrado""","""🔍 Introuvable""","""🔍 Nicht gefunden""",,,"""🔍 Không tìm thấy""",,,,"""🔍 未找到"""
+common.ok_emoji,"""👌""","""👌""","""👌""","""👌""",,,"""👌""",,,,"""👌"""
+common.prev,"""« Prev""","""« Anterior""","""« Précédent""","""« Zurück""",,,"""« Trước""",,,,"""« 上一页"""
+common.processing,"""⏳ Checking balance...""","""⏳ Comprobando saldo…""","""⏳ Vérification du solde…""","""⏳ Guthaben wird geprüft…""",,,"""⏳ Đang kiểm tra số dư…""",,,,"""⏳ 正在检查余额..."""
+common.refresh,"""🔄 Refresh""","""🔄 Actualizar""","""🔄 Actualiser""","""🔄 Aktualisieren""",,,"""🔄 Làm mới""",,,,"""🔄 刷新状态"""
+common.skip,"""➡️ Skip""","""➡️ Omitir""","""➡️ Passer""","""➡️ Überspringen""",,,"""➡️ Bỏ qua""",,,,"""➡️ 跳过"""
+common.wait_emoji,"""⏳""","""⏳""","""⏳""","""⏳""",,,"""⏳""",,,,"""⏳"""
+env.amount.ask,"""💰 Enter total amount (e.g., 12.34)""","""💰 Introduce el importe total (p. ej. 12.34)""","""💰 Entre le montant total (ex. 12.34)""","""💰 Bitte Gesamtbetrag eingeben (z. B. 12.34)""",,,,,,,"""💰 请输入红包总金额（如 12.34）"""
+env.back,"""⬅️ Back""","""⬅️ Atrás""","""⬅️ Retour""","""⬅️ Zurück""",,,,,,,"""⬅️ 返回"""
+env.cancel,"""✖️ Cancel""","""✖️ Cancelar""","""✖️ Annuler""","""✖️ Abbrechen""",,,,,,,"""✖️ 取消"""
+env.cancelled,"""✅ Cancelled. Funds were returned.""","""✅ Cancelado. Reembolso realizado.""","""✅ Annulé. Remboursement effectué.""","""✅ Abgebrochen. Betrag erstattet.""",,,,,,,"""✅ 已取消，款项已原路退回。"""
+env.confirm.hint,"""After confirming, a packet card will be created and delivered.""","""Se creará y enviará la tarjeta del sobre.""","""Une carte d’enveloppe sera créée et envoyée.""","""Danach wird eine Umschlagkarte erstellt und gesendet.""",,,,,,,"""确认后将创建并投放红包卡片。"""
+env.confirm.title,"""✅ Confirm parameters""","""✅ Confirma los parámetros""","""✅ Confirme les paramètres""","""✅ Parameter bestätigen""",,,,,,,"""✅ 请确认参数"""
+env.confirm_page.amount_label,"""💵 Amount:""","""💵 Importe: ""","""💵 Montant : ""","""💵 Betrag: """,,,,,,,"""💵 金额："""
+env.confirm_page.cover_label,"""🖼 Cover:""","""🖼 Portada: ""","""🖼 Couverture : ""","""🖼 Cover: """,,,,,,,"""🖼 封面："""
+env.confirm_page.dist_label,"""⚖️ Distribution:""","""⚖️ Reparto: ""","""⚖️ Répartition : ""","""⚖️ Verteilung: """,,,,,,,"""⚖️ 分配方式："""
+env.confirm_page.fixed_tip,"""🟰 Fixed""","""🟰 Fijo""","""🟰 Fixe""","""🟰 Fix""",,,,,,,"""🟰 固定"""
+env.confirm_page.loc_label,"""📍 Location:""","""📍 Destino: ""","""📍 Emplacement : ""","""📍 Ort: """,,,,,,,"""📍 投放位置："""
+env.confirm_page.memo_label,"""📝 Note:""","""📝 Mensaje: ""","""📝 Message : ""","""📝 Nachricht: """,,,,,,,"""📝 祝福语："""
+env.confirm_page.random_tip,"""🎲 Random""","""🎲 Aleatorio""","""🎲 Aléatoire""","""🎲 Zufällig""",,,,,,,"""🎲 随机"""
+env.confirm_page.shares_label,"""📦 Shares:""","""📦 Partes: ""","""📦 Parts : ""","""📦 Anteile: """,,,,,,,"""📦 份数："""
+env.confirm_page.title,"""🧧 Confirm Packet""","""🧧 Confirmación del sobre""","""🧧 Confirmation""","""🧧 Umschlag bestätigen""",,,,,,,"""🧧 确认红包信息"""
+env.confirm_page.token_label,"""🪙 Token:""","""🪙 Moneda: ""","""🪙 Devise : ""","""🪙 Währung: """,,,,,,,"""🪙 币种："""
+env.continue_in_dm,"""Continue in DM ➡️""","""Seguir por privado ➡️""","""Continuer en privé ➡️""","""Im Privatchat fortsetzen ➡️""",,,,,,,"""在私聊继续 ➡️"""
+env.copy.hint,"""🧩 Copied last packet parameters. Send the <b>total amount</b> to continue (will charge immediately).""","""🧩 Parámetros del último sobre copiados. Envía el 【importe total】 para continuar (se debita al instante).""","""🧩 Paramètres de la dernière enveloppe copiés. Envoie le 【montant total】 pour continuer (débit immédiat).""","""🧩 Parameter des letzten Umschlags kopiert. Sende den 【Gesamtbetrag】, um fortzufahren (wird sofort belastet).""",,,,,,,"""🧩 已复制上次红包参数。请发送【总金额】以继续（将会立刻扣款）。"""
+env.cover.change,"""🖼 Change cover""","""🖼 Cambiar portada""","""🖼 Changer de couverture""","""🖼 Cover wechseln""",,,,,,,"""🖼 更换封面"""
+env.cover.change_btn,"""🖼 Change cover""","""🖼 Cambiar portada""","""🖼 Changer de couverture""","""🖼 Cover wechseln""",,,,,,,"""🖼 更换封面"""
+env.cover.entry_tip,"""Pick from the media channel or “Skip.”""","""Puedes elegir una portada del canal de medios, o «Omitir».""","""Tu peux choisir une couverture depuis le canal de médias, ou « Passer ».""","""Wähle ein Cover aus dem Medienkanal oder „Überspringen“.""",,,,,,,"""你可以从素材频道选择一个封面，也可“跳过”。"""
+env.cover.from_channel,"""🖼 From media channel""","""🖼 Desde el canal""","""🖼 Depuis le canal""","""🖼 Aus dem Kanal""",,,,,,,"""🖼 从素材频道选择"""
+env.cover.item,"""Cover""","""Portada""","""Couverture""","""Cover""",,,,,,,"""封面"""
+env.cover.next,"""Next »""","""Siguiente »""","""Suivant »""","""Weiter »""",,,,,,,"""下一页 »"""
+env.cover.none,"""🚫 No cover""","""🚫 Sin portada""","""🚫 Pas de couverture""","""🚫 Kein Cover""",,,,,,,"""🚫 不使用封面"""
+env.cover.open_list,"""🖼 Choose cover""","""🖼 Elegir portada""","""🖼 Choisir une couverture""","""🖼 Cover wählen""",,,,,,,"""🖼 选择封面"""
+env.cover.pick_title,"""🖼 Choose cover (media channel)""","""🖼 Elige portada (canal)""","""🖼 Choisis une couverture (canal)""","""🖼 Cover wählen (Kanal)""",,,,,,,"""🖼 请选择封面（素材频道）"""
+env.cover.prev,"""« Prev""","""« Anterior""","""« Précédent""","""« Zurück""",,,,,,,"""« 上一页"""
+env.cover.repick,"""🔄 Pick again""","""🔄 Elegir de nuevo""","""🔄 Rechoisir""","""🔄 Neu wählen""",,,,,,,"""🔄 重新选择"""
+env.cover.use_this,"""✅ Use this cover""","""✅ Usar esta portada""","""✅ Utiliser cette couverture""","""✅ Dieses Cover verwenden""",,,,,,,"""✅ 使用此封面"""
+env.custom_input,"""✏️ Custom input""","""✏️ Entrada personalizada""","""✏️ Saisie personnalisée""","""✏️ Eigene Eingabe""",,,,,,,"""✏️ 自定义输入"""
+env.dist.ask,"""⚖️ Choose distribution""","""⚖️ Elige el modo de reparto""","""⚖️ Choisis le mode de répartition""","""⚖️ Verteilungsart wählen""",,,,,,,"""⚖️ 请选择分配方式"""
+env.dist.fixed,"""🟰 Even split (fixed)""","""🟰 Igualitario (fijo)""","""🟰 Égalitaire (fixe)""","""🟰 Gleichmäßig (fix)""",,,,,,,"""🟰 平均分（固定）"""
+env.dist.random,"""🎲 Random (luck)""","""🎲 Suerte (aleatorio)""","""🎲 Chance (aléatoire)""","""🎲 Glück (zufällig)""",,,,,,,"""🎲 拼手气（随机）"""
+env.dm_hint,"""🔒 For privacy, continue in DM. Tap the blue button below.""","""🔒 Para tu privacidad, seguimos por privado. Pulsa el botón azul.""","""🔒 Pour ta vie privée, on continue en privé. Clique le bouton bleu ci-dessous.""","""🔒 Zum Schutz der Privatsphäre geht es im Privatchat weiter. Klicke unten den blauen Button.""",,,,,,,"""🔒 为保护隐私，已在私聊继续发红包。点下面蓝色按钮进入私聊。"""
+env.errors.insufficient,"""💳 Insufficient balance — top up or lower the amount.""","""💳 Saldo insuficiente. Recarga o reduce el importe.""","""💳 Solde insuffisant. Recharge ou diminue le montant.""","""💳 Unzureichendes Guthaben. Bitte aufladen oder Betrag senken.""",,,,,,,"""💳 余额不足 —— 请先充值或降低金额。"""
+env.errors.invalid_amount,"""❌ Invalid amount format. Please re-enter.""","""❌ Importe inválido. Inténtalo de nuevo.""","""❌ Montant invalide. Réessaie.""","""❌ Ungültiger Betrag. Bitte erneut eingeben.""",,,,,,,"""❌ 金额格式不正确，请重新输入。"""
+env.errors.invalid_shares,"""❌ Invalid shares. Please re-enter.""","""❌ Número de partes inválido. Inténtalo de nuevo.""","""❌ Nombre de parts invalide. Réessaie.""","""❌ Ungültige Anteilzahl. Bitte erneut eingeben.""",,,,,,,"""❌ 份数不正确，请重新输入。"""
+env.errors.no_rights,"""🚫 Bot has no send permission in the group. Grant “Send Messages.”""","""🚫 El bot no tiene permiso para enviar mensajes en ese grupo.""","""🚫 Le bot n’a pas le droit d’envoyer des messages ici.""","""🚫 Bot hat keine Senderechte in dieser Gruppe.""",,,,,,,"""🚫 机器人在该群没有发言权限，请授予“发送消息”。"""
+env.errors.not_found,"""❌ Target group not found. Check chat_id or link.""","""❌ Grupo no encontrado. Revisa chat_id o enlace.""","""❌ Groupe introuvable. Vérifie le chat_id ou le lien.""","""❌ Gruppe nicht gefunden. chat_id oder Link prüfen.""",,,,,,,"""❌ 未找到该群，请检查 chat_id 或链接。"""
+env.errors.not_in_chat,"""🚫 Bot is not in the group. Invite it first.""","""🚫 El bot no está en ese grupo. Invítalo primero.""","""🚫 Le bot n’est pas dans ce groupe. Invite-le d’abord.""","""🚫 Bot ist nicht in dieser Gruppe. Bitte zuerst einladen.""",,,,,,,"""🚫 机器人不在该群，请先将机器人邀请入群。"""
+env.errors.not_ready,"""⚠️ Parameters incomplete. Follow the steps.""","""⚠️ Parámetros incompletos. Sigue los pasos.""","""⚠️ Paramètres incomplets. Suis les étapes.""","""⚠️ Parameter unvollständig. Bitte den Schritten folgen.""",,,,,,,"""⚠️ 参数未填写完整，请按步骤操作。"""
+env.errors.unknown,"""⚠️ Cannot verify the target chat. Try later.""","""⚠️ No se pudo verificar el grupo. Intenta más tarde.""","""⚠️ Impossible de vérifier le groupe. Réessaie.""","""⚠️ Gruppe konnte nicht verifiziert werden. Später erneut versuchen.""",,,,,,,"""⚠️ 无法验证目标群，请稍后再试。"""
+env.fail.create,"""❌ Creation failed. Try again later.""","""❌ Error al crear. Inténtalo más tarde.""","""❌ Échec de création, réessaie plus tard.""","""❌ Erstellung fehlgeschlagen. Bitte später erneut versuchen.""",,,,,,,"""❌ 创建失败，请稍后重试。"""
+env.fail.post,"""⚠️ Created but failed to post the card. Check the target chat.""","""⚠️ Creado, pero fallo al publicar la tarjeta. Revisa el destino.""","""⚠️ Créée, mais l’envoi de la carte a échoué. Vérifie la cible.""","""⚠️ Erstellt, aber Kartensendung fehlgeschlagen. Ziel prüfen.""",,,,,,,"""⚠️ 已创建成功，但投放卡片失败，请检查目标会话。"""
+env.fail.quick_refund,"""❌ Quick send failed. Refunded.""","""❌ Envío rápido fallido, reembolso emitido.""","""❌ Envoi rapide échoué, remboursé.""","""❌ Schnellsenden fehlgeschlagen, erstattet.""",,,,,,,"""❌ 快捷发送失败，已退款。"""
+env.input_amount_tip,"""✍️ You can directly send a number""","""✍️ También puedes enviar un número directamente""","""✍️ Tu peux aussi envoyer un nombre directement""","""✍️ Du kannst auch direkt eine Zahl senden""",,,,,,,"""✍️ 也可直接发送金额数字"""
+env.input_shares_tip,"""✍️ You can directly send the shares""","""✍️ También puedes enviar un número directamente""","""✍️ Tu peux aussi envoyer un nombre directement""","""✍️ Du kannst auch direkt eine Zahl senden""",,,,,,,"""✍️ 也可直接发送份数数字"""
+env.loc.ask,"""📍 Choose delivery location""","""📍 Elige el destino""","""📍 Choisis l’emplacement""","""📍 Zielort wählen""",,,,,,,"""📍 请选择投放位置"""
+env.loc.dm,"""💬 DM""","""💬 En privado""","""💬 Message privé""","""💬 Privat senden""",,,,,,,"""💬 私聊发送"""
+env.loc.here,"""📣 Current group""","""📣 En este grupo""","""📣 Dans ce groupe""","""📣 In dieser Gruppe""",,,,,,,"""📣 当前群内"""
+env.loc.pick,"""🎯 Specific group""","""🎯 Elegir grupo""","""🎯 Choisir un groupe""","""🎯 Gruppe auswählen""",,,,,,,"""🎯 指定群聊"""
+env.loc.pick_tip,"ℹ️ Tip: group chat_id usually starts with -100. You can also send a link or @username:
+• Example 1: @yourgroup or https://t.me/yourgroup
+• Example 2: message link https://t.me/c/123456789/1 (parsed as -100123456789)
+• Example 3: -100123456789 (raw chat_id)","ℹ️ Nota: las chat_id de grupo suelen empezar por -100. También puedes enviar un enlace o @usuario:
+• Ejemplo 1: @tugrupo o https://t.me/tugrupo
+• Ejemplo 2: enlace de mensaje https://t.me/c/123456789/1 (se resolverá a -100123456789)
+• Ejemplo 3: -100123456789 (chat_id directa)","ℹ️ Conseil : les chat_id de groupe commencent souvent par -100. Tu peux aussi envoyer un lien ou un @nom :
+• Exemple 1 : @votregroupe ou https://t.me/votregroupe
+• Exemple 2 : lien de message https://t.me/c/123456789/1 (sera résolu en -100123456789)
+• Exemple 3 : -100123456789 (chat_id direct)","ℹ️ Hinweis: Gruppen-chat_id beginnen oft mit -100. Du kannst auch einen Link oder @Namen senden:
+• Beispiel 1: @deinegruppe oder https://t.me/deinegruppe
+• Beispiel 2: Nachrichtenlink https://t.me/c/123456789/1 (ergibt -100123456789)
+• Beispiel 3: -100123456789 (direkte chat_id)",,,,,,,"ℹ️ 提示：群聊 chat_id 通常以 -100 开头；也可以发送群链接或 @用户名，我会自动解析：
+• 示例 1：@yourgroup 或 https://t.me/yourgroup
+• 示例 2：消息链接 https://t.me/c/123456789/1（将解析为 -100123456789）
+• 示例 3：-100123456789（直接 chat_id）"
+env.memo.ask,"📝 <b>Blessing/Note (optional)</b>
+• Type in the input box below
+• Emojis and new lines supported; skip if you prefer
+• Example: New day, let’s go! 🎉","📝 <b>Mensaje de buenos deseos (opcional)</b>
+• Escribe lo que quieras decir en el campo de abajo
+• Emojis y saltos de línea ok. O pulsa «Omitir»
+• Ejemplo: ¡Que tengas un gran día! 🎉","📝 <b>Message de vœux (optionnel)</b>
+• Saisis ce que tu veux dire dans le champ ci-dessous
+• Émojis et sauts de ligne ok. Sinon clique « Passer »
+• Exemple : Belle journée à tous ! 🎉","📝 <b>Glückwunschtext (optional)</b>
+• Schreibe unten, was du sagen willst
+• Emojis und Zeilenumbrüche ok. Oder „Überspringen“ tippen
+• Beispiel: Auf einen guten Tag zusammen! 🎉",,,,,,,"📝 <b>填写祝福语（可选）</b>
+• 直接在下面的输入栏，键入你想说的话
+• 支持表情与换行；不想填写可点「跳过」继续
+• 示例：新的一天，大家加油！🎉"
+env.memo_label,"""📝 Note:""","""📝 Mensaje: ""","""📝 Message : ""","""📝 Nachricht: """,,,,,,,"""📝 祝福语："""
+env.mode.point,"""⭐ Points""","""⭐ Puntos""","""⭐ Points""","""⭐ Punkte""",,,,,,,"""⭐ 积分"""
+env.mode.ton,"""🪙 TON""","""🪙 TON""","""🪙 TON""","""🪙 TON""",,,,,,,"""🪙 TON"""
+env.mode.usdt,"""💵 USDT""","""💵 USDT""","""💵 USDT""","""💵 USDT""",,,,,,,"""💵 USDT"""
+env.mode_title,"""🔘 Choose a token""","""🔘 Elige la moneda""","""🔘 Choisis la devise""","""🔘 Wähle die Währung""",,,,,,,"""🔘 请选择币种"""
+env.open_group_btn,"""➡️ Go to packet group""","""➡️ Abrir grupo""","""➡️ Ouvrir le groupe""","""➡️ Gruppe öffnen""",,,,,,,"""➡️ 前往红包群"""
+env.quick.no_template,"""📭 No template yet — grab one round first.""","""📭 Sin plantilla. Reclama un sobre y vuelve.""","""📭 Aucun modèle. Récupère une enveloppe puis reviens.""","""📭 Kein Template vorhanden. Greife erst einen Umschlag und versuche es dann erneut.""",,,,,,,"""📭 暂无模板 —— 先抢一个红包再来试试吧。"""
+env.relay.only_lucky,"""🍀 Only the Best-Luck user can forward.""","""🍀 Solo el afortunado de la ronda puede reenviar.""","""🍀 Seul l’heureux gagnant peut relayer.""","""🍀 Nur der Glückliche dieser Runde darf weiterleiten.""",,,,,,,"""🍀 只有本轮幸运儿可以转发哦。"""
+env.send,"""🚀 Confirm & Send""","""🚀 Confirmar y enviar""","""🚀 Confirmer et envoyer""","""🚀 Bestätigen und senden""",,,,,,,"""🚀 确认并发送"""
+env.shares.ask,"""📦 Enter number of shares (e.g., 10)""","""📦 Introduce el número de partes (p. ej. 10)""","""📦 Entre le nombre de parts (ex. 10)""","""📦 Bitte Anzahl der Anteile eingeben (z. B. 10)""",,,,,,,"""📦 请输入份数（如 10）"""
+env.success.sent,"""✅ Packet sent!""","""✅ Sobre enviado.""","""✅ Enveloppe envoyée.""","""✅ Umschlag gesendet.""",,,,,,,"""✅ 红包已发送！"""
+env.tg.add_group,"""➕ Add a group""","""➕ Añadir grupo""","""➕ Ajouter un groupe""","""➕ Gruppe hinzufügen""",,,,,,,"""➕ 添加群聊"""
+env.tg.bind_help,"""🧩 How to bind: invite the bot to your group and grant send permission, then come back to pick it; or tap “🎯 Manual Group ID” and enter a -100 chat_id.""","""🧩 Invita al bot a tu grupo y dale permiso para enviar. Luego elígelo aquí. O usa «🎯 Elegir grupo» e introduce una chat_id -100.""","""🧩 Invite le bot dans ton groupe avec droit d’envoi, puis reviens ici pour le choisir. Ou clique « 🎯 Choisir un groupe » et saisis un chat_id -100.""","""🧩 Lade den Bot in deine Gruppe ein und gib Senderechte. Wähle sie danach hier aus. Oder nutze „🎯 Gruppe auswählen“ und gib eine -100-chat_id ein.""",,,,,,,"""🧩 绑定说明：将机器人邀请进你的群并授予发言权限，然后回到这里选择该群；或点击“🎯 手动指定群聊”输入 -100 开头的 chat_id。"""
+env.tg.bind_help_text,"""🧩 How to bind: invite the bot to your group and grant send permission, then come back to pick it; or tap “🎯 Manual Group ID” and enter a -100 chat_id.""","""🧩 Invita al bot a tu grupo con permiso de envío y elígelo aquí. O usa «🎯 Elegir grupo».""","""🧩 Invite le bot dans ton groupe avec droit d’envoi, puis reviens ici pour le choisir. Ou utilise « 🎯 Choisir un groupe ».""","""🧩 Lade den Bot in deine Gruppe mit Senderechten ein und wähle sie hier. Oder nutze „🎯 Gruppe auswählen“.""",,,,,,,"""🧩 绑定说明：将机器人邀请进你的群并授予发言权限，然后回到这里选择该群；或点击“🎯 手动指定群聊”输入 -100 开头的 chat_id。"""
+env.tg.bind_in_group,"""🪄 Bind in the group""","""🪄 Vincular en el grupo""","""🪄 Lier dans le groupe""","""🪄 In der Gruppe verknüpfen""",,,,,,,"""🪄 在群里绑定"""
+env.tg.bind_new,"""➕ Bind new group""","""➕ Vincular nuevo grupo""","""➕ Lier un nouveau groupe""","""➕ Neue Gruppe verknüpfen""",,,,,,,"""➕ 绑定新群"""
+env.tg.change,"""🔄 Change group""","""🔄 Cambiar grupo""","""🔄 Changer de groupe""","""🔄 Gruppe wechseln""",,,,,,,"""🔄 更换目标群"""
+env.tg.choose,"""📌 Choose a target group:""","""📌 Elige el grupo objetivo:""","""📌 Choisis le groupe cible :""","""📌 Wähle die Zielgruppe:""",,,,,,,"""📌 请选择要使用的目标群："""
+env.tg.chosen,"""✅ Selected: {title}""","""✅ Seleccionado: {title}""","""✅ Sélectionné : {title}""","""✅ Gewählt: {title}""",,,,,,,"""✅ 已选择：{title}"""
+env.tg.chosen_bold,"""🔖 <b>Selected: {title}</b>""","""🔖 <b>Seleccionado: {title}</b>""","""🔖 <b>Sélectionné : {title}</b>""","""🔖 <b>Gewählt: {title}</b>""",,,,,,,"""🔖 <b>已选择：{title}</b>"""
+env.tg.current,"""📌 Current target group""","""📌 Grupo objetivo actual""","""📌 Groupe cible actuel""","""📌 Aktuelle Zielgruppe""",,,,,,,"""📌 当前目标群"""
+env.tg.go_bind,"""🪄 Bind in the group""","""🪄 Vincular en el grupo""","""🪄 Lier depuis le groupe""","""🪄 In der Gruppe verknüpfen""",,,,,,,"""🪄 去群里绑定"""
+env.tg.manual_pick,"""🎯 Manual Group ID""","""🎯 Elegir grupo manualmente""","""🎯 Choisir un groupe""","""🎯 Gruppe manuell wählen""",,,,,,,"""🎯 手动指定群聊"""
+env.tg.parse_fail,"❌ Could not parse the link or username.
+Send one of the following:
+• Public group link, e.g., https://t.me/yourgroup
+• Message link, e.g., https://t.me/c/123456789/1
+• Raw chat_id, e.g., -100123456789","❌ No se reconoció el enlace o el usuario.
+Envía uno de estos formatos:
+• Enlace público del grupo, p. ej. https://t.me/tugrupo
+• Enlace de mensaje, p. ej. https://t.me/c/123456789/1
+• chat_id directa, p. ej. -100123456789","❌ Lien ou nom d’utilisateur non reconnu.
+Envoie l’un des formats suivants :
+• Lien public de groupe, ex. https://t.me/votregroupe
+• Lien de message, ex. https://t.me/c/123456789/1
+• chat_id direct, ex. -100123456789","❌ Link oder Nutzername nicht erkannt.
+Sende eines der folgenden Formate:
+• Öffentlicher Gruppenlink, z. B. https://t.me/deinegruppe
+• Nachrichtenlink, z. B. https://t.me/c/123456789/1
+• Direkte chat_id, z. B. -100123456789",,,,,,,"❌ 无法识别该链接或用户名。
+请发送以下任一格式：
+• 公共群链接，例如 https://t.me/yourgroup
+• 消息链接，例如 https://t.me/c/123456789/1
+• 直接 chat_id，例如 -100123456789"
+env.tg.parse_ok,"""✅ Parsed and saved: <b>{title}</b> (<code>{chat_id}</code>)""","""✅ Reconocido y guardado: <b>{title}</b> (<code>{chat_id}</code>)""","""✅ Reconnu et enregistré : <b>{title}</b> (<code>{chat_id}</code>)""","""✅ Erkannt und gespeichert: <b>{title}</b> (<code>{chat_id}</code>)""",,,,,,,"""✅ 已识别并保存：<b>{title}</b>（<code>{chat_id}</code>）"""
+env.tg.preset,"""📍 Pre-set target group: {chat_id}""","""📍 Grupo objetivo preconfigurado: {chat_id}""","""📍 Groupe cible présélectionné : {chat_id}""","""📍 Voreingestellte Zielgruppe: {chat_id}""",,,,,,,"""📍 已预设目标群：{chat_id}"""
+env.tg.unbound,"""🔧 No target group yet.""","""🔧 Sin grupo objetivo.""","""🔧 Aucun groupe cible.""","""🔧 Keine Zielgruppe verknüpft.""",,,,,,,"""🔧 尚未绑定目标群。"""
+env.tg.unbound_bold,"""🧩 <b>No target group bound</b>""","""🧩 <b>No tienes grupo objetivo aún</b>""","""🧩 <b>Aucun groupe cible lié</b>""","""🧩 <b>Noch keine Zielgruppe</b>""",,,,,,,"""🧩 <b>你还没有绑定目标群</b>"""
+env.tg.unbound_tip,"""🔧 No target group bound. Mention the bot in your group to bind, or tap “Manual Group ID.”""","""🔧 Aún no hay grupo objetivo vinculado. Menciona al bot en el grupo objetivo para vincularlo, o usa «🎯 Elegir grupo» e introduce una chat_id -100.""","""🔧 Aucun groupe cible lié. Mentionne le bot dans le groupe cible pour lier, ou clique « 🎯 Choisir un groupe » et entre un chat_id -100...""","""🔧 Noch keine Zielgruppe verknüpft. Erwähne den Bot in der Zielgruppe, oder nutze „🎯 Gruppe auswählen“ und gib eine -100-chat_id ein.""",,,,,,,"""🔧 还没有绑定任何目标群。可到目标群里 @机器人 进行绑定，或点下方“手动指定群聊”。"""
+env.tg.use_this,"""👉 Use this group""","""👉 Usar este grupo""","""👉 Utiliser ce groupe""","""👉 Diese Gruppe nutzen""",,,,,,,"""👉 使用此群继续"""
+env.title,"""🧧 Send Packet Wizard""","""🧧 Asistente de envío""","""🧧 Assistant d’envoi""","""🧧 Sende-Assistent""",,,,,,,"""🧧 发红包向导"""
+env_send.back,"""⬅️ Back""","""⬅️ Atrás""","""⬅️ Retour""","""⬅️ Zurück""",,"""⬅️ กลับ""","""⬅️ Quay lại""",,,,"""⬅️ 返回"""
+env_send.go_group,"""🔗 Go to group""","""🔗 Abrir grupo""","""🔗 Ouvrir le groupe""","""🔗 Gruppe öffnen""",,"""🔗 เปิดกลุ่ม""","""🔗 Mở nhóm""",,,,"""🔗 前往红包群"""
+env_send.ok,"""✅ I’ve sent it!""","""✅ Enviado.""","""✅ Envoyé.""","""✅ Gesendet.""",,"""✅ ส่งแล้ว""","""✅ Đã gửi.""",,,,"""✅ 我已发送！"""
+env_send.preview_btn,"""👀 Preview packet card""","""👀 Vista previa""","""👀 Aperçu""","""👀 Vorschau""",,"""👀 ดูตัวอย่าง""","""👀 Xem trước""",,,,"""👀 预览红包卡片"""
+env_send.previewed_ok,"""✅ Packet sent!""","""✅ Sobre enviado.""","""✅ Enveloppe envoyée.""","""✅ Umschlag gesendet.""",,"""✅ ส่งซองอั่งเปาแล้ว""","""✅ Phong bao đã được gửi.""",,,,"""✅ 红包已发送！"""
+env_send.tips,"""Type your blessing in the input area below.\n• Images/voice supported; avoid pure ads\n• Example: New day, let’s go! 🎉""","""Escribe tu mensaje en el campo de abajo.\n• Evita publicidad pura.\n• Ejemplo: ¡Buen día para todos! 🎉""","""Saisis ton message dans le champ ci-dessous.\n• Évite la pub brute. \n• Ex : Belle journée à tous ! 🎉""","""Schreibe deinen Text ins Eingabefeld.\n• Bitte keine reine Werbung.\n• Beispiel: Auf einen guten Tag! 🎉""",,"""พิมพ์ข้อความในช่องด้านล่าง\n• หลีกเลี่ยงข้อความโฆษณา\n• ตัวอย่าง: ขอให้ทุกคนโชคดี 🎉""","""Hãy viết lời chúc trong ô bên dưới.\n• Tránh quảng cáo lộ liễu.\n• Ví dụ: Chúc mọi người một ngày tuyệt vời! 🎉""",,,,"""建议在下面的输入框，输入你想说的话\n• 支持图片/语音；不单纯塞广告【易删】\n• 示例：新的一天，大家加油！🎉"""
+env_send.title,"""🧧 Choose packet parameters (optional)""","""🧧 Elige los parámetros (opcional)""","""🧧 Choisis les paramètres (optionnels)""","""🧧 Parameter wählen (optional)""",,"""🧧 เลือกพารามิเตอร์ (ไม่บังคับ)""","""🧧 Chọn tham số (tùy chọn)""",,,,"""🧧 请选择红包参数（可选）"""
+env_sent.mvp_line,"""🏆 You’re the “Best Luck” this round. Reuse the parameters with one tap:""","""🏆 Eres la “mejor suerte” de la ronda. Reutiliza estos parámetros:""","""🏆 Tu es « meilleure chance » de la manche. Réutilise ces paramètres :""","""🏆 Du bist „Bestes Glück“ dieser Runde. Parameter wiederverwenden:""",,"""🏆 คุณคือผู้โชคดีที่สุดของรอบนี้ ส่งอีกครั้งด้วยข้อมูลเดียวกัน:""","""🏆 Bạn là “người may mắn nhất” của vòng. Dùng lại tham số này để gửi nhanh:""",,,,"""🏆 你是本轮“手气最佳”。一键复用此轮参数发送红包："""
+env_sent.mvp_send_btn,"""🏆 Best-Luck Send""","""🏆 Enviar como MVP""","""🏆 Envoyer en tant que MVP""","""🏆 Als MVP senden""",,"""🏆 ส่งในฐานะ MVP""","""🏆 Gửi với tư cách MVP""",,,,"""🏆 最佳手气发红包"""
+env_sent.you_sent,"""You sent {amount} USDT!""","""Has enviado {amount} USDT.""","""Tu as envoyé {amount} USDT.""","""Du hast {amount} USDT gesendet.""",,"""คุณได้ส่ง {amount} USDT!""","""Bạn đã gửi {amount} USDT!""",,,,"""你发出 {amount} USDT！"""
+errors.bad_request,"""⚠️ Bad request. Try again.""","""⚠️ Solicitud inválida. Intenta de nuevo.""","""⚠️ Requête invalide. Réessaie.""","""⚠️ Ungültige Anfrage. Bitte erneut versuchen.""",,,"""⚠️ Yêu cầu không hợp lệ. Vui lòng thử lại.""",,,,"""⚠️ 请求有误，请重试"""
+errors.not_found,"""🔍 Not found""","""🔍 No encontrado""","""🔍 Introuvable""","""🔍 Nicht gefunden""",,,"""🔍 Không tìm thấy""",,,,"""🔍 未找到"""
+errors.only_mvp,"""⚠️ Only the round MVP can do this""","""⚠️ Solo para el MVP de la ronda""","""⚠️ Réservé au MVP de la manche""","""⚠️ Nur für den MVP dieser Runde""",,,"""⚠️ Chỉ dành cho MVP của vòng""",,,,"""⚠️ 仅限本轮 MVP 操作"""
+faq.grab.body,"1) On seeing a packet card, tap “Grab now”;
+2) Amount is random; ledger is recorded automatically;
+3) After the round, view Best Luck and ranking.","1. En la tarjeta, pulsa 【Reclamar ahora】;
+2. Importe aleatorio, se registra automáticamente;
+3. Al finalizar, revisa “mejor suerte”.","1. Sur la carte, clique 【Récupérer maintenant】 ;
+2. Montant aléatoire, comptabilisé automatiquement ;
+3. À la fin, consulte “meilleure chance”.","1. Auf der Karte 【Jetzt greifen】 tippen;
+2. Betrag ist zufällig und wird verbucht;
+3. Nach Ende „Bestes Glück“ ansehen.",,,"1. Trên thẻ, bấm 【Nhận ngay】;
+2. Số tiền là ngẫu nhiên, sẽ tự động ghi vào lịch sử;
+3. Khi kết thúc, xem “người may mắn nhất”.",,,,"1. 在群里看到红包卡片，点击【立即抢】；
+2. 金额为随机拼手气，系统会自动记账；
+3. 回合结束可在总结里查看“幸运之星”等信息。"
+faq.grab.title,"""🤲 How to grab""","""🤲 Reclamar sobre""","""🤲 Récupérer une enveloppe""","""🤲 Umschlag greifen""",,,"""🤲 Cách nhận phong bao""",,,,"""🤲 如何抢红包"""
+faq.rank.body,"· After a round ends, view the round ranking and Best Luck;
+· The Today page may be toggled by feature flags.","· Tras cada ronda, revisa la clasificación y la “estrella de la suerte”;
+· La entrada “Resumen de hoy” puede variar según la versión.","· Après chaque manche, consulte le classement et le “lucky star” ;
+· L’entrée “Bilan du jour” peut dépendre de la version.","· Nach jeder Runde Rangliste und „Glücksstern“ ansehen;
+· „Heutige Bilanz“ kann je nach Version variieren.",,,"· Sau mỗi vòng có thể xem BXH và “ngôi sao may mắn”;
+· Mục “Thống kê hôm nay” có thể phụ thuộc phiên bản.",,,,"· 抢包回合结束后可以查看当轮排行与“幸运之星”；
+· 今日战绩入口可能根据版本开关显示与否。"
+faq.rank.title,"""🏆 Ranking / Today""","""🏆 Clasificación/Resumen""","""🏆 Classement/Bilan""","""🏆 Rangliste/Bilanz""",,,"""🏆 BXH/Thống kê hôm nay""",,,,"""🏆 排行/今日战绩"""
+faq.recharge.body,"· Use Assets/Top-up/Withdraw wizards;
+· On-chain confirmations take time;
+· Contact the admin if issues occur.","· Usa «Mis activos/Recarga/Retiro» y sigue el asistente;
+· Las confirmaciones en la red llevan tiempo;
+· Ante anomalías, contacta con un admin.","· Utilise “Mes actifs/Recharge/Retrait” et suis l’assistant ;
+· Les confirmations réseau prennent du temps ;
+· En cas d’anomalie, contacte un admin.","· Nutze „Meine Vermögenswerte/Aufladen/Auszahlen“ und folge dem Assistenten;
+· On-Chain-Bestätigungen brauchen Zeit;
+· Bei Problemen Admin kontaktieren.",,,"· Vào “Tài sản của tôi/Nạp/Rút” và làm theo hướng dẫn;
+· Xác nhận trên chuỗi cần thời gian, vui lòng chờ;
+· Nếu bất thường, liên hệ quản trị viên.",,,,"· 进入“我的资产/充值/提现”向导，按提示完成；
+· 区块链网络需要确认时间，请耐心等待；
+· 如遇异常请联系管理员。"
+faq.recharge.title,"""💳 Top-up & Withdraw""","""💳 Recarga y retiro""","""💳 Recharge & Retrait""","""💳 Aufladen & Auszahlung""",,,"""💳 Nạp & Rút""",,,,"""💳 充值与提现"""
+faq.rules.body,"· Only random split (luck);
+· The bot never participates in grabbing;
+· For detailed terms, see channel posts or contact admin.","· Solo distribución aleatoria;
+· El bot no participa;
+· Para más detalles, consulta el canal de anuncios o al admin.","· Répartition uniquement aléatoire ;
+· Le bot ne participe pas ;
+· Pour plus de détails, vois le canal d’annonces ou contacte un admin.","· Ausschließlich Zufallsverteilung;
+· Bot nimmt nicht teil;
+· Für Details: Ankündigungskanal oder Admin.",,,"· Chỉ phân phối ngẫu nhiên;
+· Bot không tham gia nhận;
+· Xem kênh thông báo hoặc liên hệ quản trị viên để biết chi tiết.",,,,"· 仅拼手气随机分配；
+· 机器人不参与抢包；
+· 如需详细条款，请查看频道公告或联系管理员。"
+faq.rules.title,"""⚖️ Rules & Fairness""","""⚖️ Reglas y equidad""","""⚖️ Règles & Équité""","""⚖️ Regeln & Fairness""",,,"""⚖️ Quy tắc & Công bằng""",,,,"""⚖️ 规则与公平性"""
+faq.send.body,"1) Menu → Send;
+2) Choose token (USDT / TON / ⭐ points), total amount, shares;
+3) Choose location (group/DM), optional note, then confirm;
+4) For groups, ensure the bot is invited and has send permission.","1. Menú → Enviar sobre;
+2. Elige moneda, total y partes;
+3. Elige destino (grupo/privado), mensaje opcional, confirmar;
+4. En grupos, asegúrate de que el bot esté y pueda enviar.","1. Menu → Envoyer ;
+2. Choisir devise, total, parts ;
+3. Choisir l’emplacement (groupe/privé), message optionnel, confirmer ;
+4. Pour un groupe, assure-toi que le bot est présent avec droit d’envoi.","1. Menü → Umschlag senden;
+2. Währung, Gesamtbetrag, Anteile wählen;
+3. Ort wählen (Gruppe/privat), optionaler Text, bestätigen;
+4. In Gruppen sicherstellen, dass der Bot anwesend ist und senden darf.",,,"1. Mở menu → Gửi phong bao;
+2. Chọn loại tiền (USDT/TON/⭐ điểm), tổng tiền, số phần;
+3. Chọn nơi gửi (nhóm/riêng), nhập lời chúc (tùy chọn), xác nhận;
+4. Nếu gửi vào nhóm, đảm bảo bot đã vào và có quyền gửi tin.",,,,"1. 打开菜单 → 发红包；
+2. 选择币种（USDT / TON / ⭐积分）、总额、份数；
+3. 选择投放位置（群内/私聊），补充祝福语（可跳过），确认发送；
+4. 如果投放到群，请确保机器人已在目标群且有发言权限。"
+faq.send.title,"""🧧 How to send""","""🧧 Enviar sobre""","""🧧 Envoyer une enveloppe""","""🧧 Umschlag senden""",,,"""🧧 Cách gửi phong bao""",,,,"""🧧 如何发红包"""
+hb.grab,"""🤲 Grab now""","""🤲 Reclamar ahora""","""🤲 Récupérer maintenant""","""🤲 Jetzt greifen""",,"""🤲 รับตอนนี้""","""🤲 Nhận ngay""",,,,"""🤲 立即抢"""
+hb.rank_btn,"""🏆 View ranking""","""🏆 Ver clasificación""","""🏆 Voir le classement""","""🏆 Rangliste ansehen""",,"""🏆 ดูอันดับ""","""🏆 Xem bảng xếp hạng""",,,,"""🏆 查看排行"""
+help.ai_empty,"""Please send your question.""","""Envía tu pregunta directamente.""","""Envoie directement ta question.""","""Sende deine Frage direkt.""",,,"""Hãy gửi câu hỏi trực tiếp.""",,,,"""请直接发送你的问题～"""
+help.ai_fallback,"""Didn’t fully get that. Try keywords: send, grab, top-up, withdraw, rules, fairness. Or tap the buttons below.""","""No entendí del todo. Prueba: enviar sobre, reclamar, recarga, retiro, reglas, equidad. O usa los botones de abajo.""","""Je n’ai pas bien compris. Essaie : envoyer enveloppe, récupérer, recharge, retrait, règles, équité. Ou utilise les boutons ci-dessous.""","""Nicht ganz verstanden. Versuche: Umschlag senden, greifen, aufladen, auszahlen, Regeln, Fairness. Oder nutze die Buttons unten.""",,,"""Mình chưa hiểu rõ. Thử các từ khóa: gửi phong bao, nhận phong bao, nạp, rút, quy tắc, công bằng. Hoặc dùng các nút bên dưới.""",,,,"""我没有完全听懂你的问题。你可以试试这些关键词：发红包、抢红包、充值、提现、规则、公平性。也可以点下方按钮浏览常见问题。"""
+help.ask_ai,"""💡 Ask me (AI)""","""💡 Preguntarme (IA)""","""💡 Me demander (IA)""","""💡 Mich fragen (KI)""",,,"""💡 Hỏi mình (AI)""",,,,"""💡 直接问我（AI）"""
+help.ask_ai_btn,"""🤖 Ask me (AI)""","""🤖 Preguntarme (IA)""","""🤖 Me demander (IA)""","""🤖 Mich fragen (KI)""",,,"""🤖 Hỏi mình (AI)""",,,,"""🤖 直接问我（AI）"""
+help.ask_me,"""Send your question (中文/English).""","""Envía tu pregunta (中文/English/Español ok).""","""Envoie ta question (中文/English/Français ok).""","""Sende deine Frage (中文/English/Deutsch ok).""",,,"""Gửi câu hỏi của bạn (中文/English/Tiếng Việt đều được).""",,,,"""请直接把你的问题发给我（支持中文/English）～"""
+help.ask_placeholder,"""e.g., How to send to a specific group?""","""Ej.: ¿Cómo envío a un grupo específico?""","""Ex. : comment envoyer vers un groupe précis ?""","""Z. B.: Wie sende ich in eine bestimmte Gruppe?""",,,"""Ví dụ: Làm sao gửi vào nhóm chỉ định?""",,,,"""例如：怎么把红包发到指定群？"""
+help.exit_ai,"""🚪 Exit AI mode""","""🚪 Salir del modo IA""","""🚪 Quitter le mode IA""","""🚪 KI-Modus verlassen""",,,"""🚪 Thoát chế độ AI""",,,,"""🚪 退出 AI 模式"""
+help.exit_ai_tip,"""To exit, tap “Exit AI mode” or go back.""","""Para salir, pulsa «Salir del modo IA» o Atrás.""","""Pour quitter, clique « Quitter le mode IA » ou Retour.""","""Zum Beenden „KI-Modus verlassen“ oder Zurück tippen.""",,,"""Để thoát, bấm “Thoát chế độ AI” hoặc Quay lại.""",,,,"""如需退出，可点下方“退出 AI 模式”或点击返回。"""
+help.exit_ok,"""Exited AI mode.""","""Modo IA desactivado.""","""Mode IA quitté.""","""KI-Modus beendet.""",,,"""Đã thoát chế độ AI.""",,,,"""已退出 AI 模式。"""
+help.faq.grab,"""🤲 How to grab""","""🤲 Reclamar sobre""","""🤲 Récupérer une enveloppe""","""🤲 Umschlag greifen""",,,"""🤲 Cách nhận phong bao""",,,,"""🤲 如何抢红包"""
+help.faq.rank,"""🏆 Ranking / Today""","""🏆 Clasificación/Resumen""","""🏆 Classement/Bilan""","""🏆 Rangliste/Bilanz""",,,"""🏆 BXH/Thống kê hôm nay""",,,,"""🏆 排行/今日战绩"""
+help.faq.recharge,"""💳 Top-up & Withdraw""","""💳 Recarga y retiro""","""💳 Recharge & Retrait""","""💳 Aufladen & Auszahlung""",,,"""💳 Nạp & Rút""",,,,"""💳 充值与提现"""
+help.faq.rules,"""⚖️ Rules & Fairness""","""⚖️ Reglas y equidad""","""⚖️ Règles & Équité""","""⚖️ Regeln & Fairness""",,,"""⚖️ Quy tắc & Công bằng""",,,,"""⚖️ 规则与公平性"""
+help.faq.send,"""🧧 How to send""","""🧧 Enviar sobre""","""🧧 Envoyer une enveloppe""","""🧧 Umschlag senden""",,,"""🧧 Cách gửi phong bao""",,,,"""🧧 如何发红包"""
+help.faq.withdraw,"""🏧 How to withdraw""","""🏧 Retiro""","""🏧 Retrait""","""🏧 Auszahlung""",,,"""🏧 Rút tiền""",,,,"""🏧 如何提现"""
+help.subtitle,"""Browse FAQs or just ask me directly.""","""FAQ rápida. También puedes preguntar directamente.""","""FAQ rapide. Tu peux aussi me poser ta question directement.""","""Schnelle FAQ. Du kannst mir auch direkt schreiben.""",,,"""Câu hỏi thường gặp nhanh; bạn cũng có thể hỏi trực tiếp.""",,,,"""常见问题一键查看；也可以直接向我提问～"""
+help.thinking,"""Thinking...""","""Pensando. Un momento…""","""Je réfléchis. Patience…""","""Ich denke nach. Einen Moment…""",,,"""Đang suy nghĩ… vui lòng đợi.""",,,,"""思考中，请稍候..."""
+help.title,"""❓ Help Center""","""❓ Centro de ayuda""","""❓ Centre d’aide""","""❓ Hilfezentrum""",,,"""❓ Trung tâm trợ giúp""",,,,"""❓ 帮助中心"""
+hongbao.buttons.relay,"""🔁 Forward""","""🔁 Reenviar""","""🔁 Relayer""","""🔁 Weiterleiten""",,,,,,,"""🔁 转发"""
+hongbao.cover.pick_title,"""🖼 Pick a cover to attach:""","""🖼 Elige una portada:""","""🖼 Choisis une couverture :""","""🖼 Wähle ein Cover:""",,,,,,,"""🖼 请选择要附加的封面："""
+hongbao.cover.used_ok,"""✅ Cover attached and card sent""","""✅ Portada añadida y tarjeta enviada""","""✅ Couverture ajoutée et carte envoyée""","""✅ Cover angefügt und Karte gesendet""",,,,,,,"""✅ 封面已附加并发送卡片"""
+hongbao.errors.only_mvp,"""⚠️ Only the Best-Luck user can continue to send""","""⚠️ Solo el usuario con mejor suerte puede enviar el siguiente""","""⚠️ Seul l’utilisateur meilleur chance peut envoyer la suivante""","""⚠️ Nur der Nutzer mit bestem Glück darf den nächsten Umschlag senden""",,,,,,,"""⚠️ 只有最佳手气用户才能继续发红包"""
+hongbao.grab_dup,"""⚠️ You already grabbed this packet.""","""⚠️ Ya reclamaste este sobre.""","""⚠️ Tu as déjà récupéré cette enveloppe.""","""⚠️ Du hast diesen Umschlag bereits gegriffen.""",,,,,,,"""⚠️ 你已经抢过这个红包啦。"""
+hongbao.grab_now,"""🤲 Grab Now""","""🤲 Reclamar ahora""","""🤲 Récupérer maintenant""","""🤲 Jetzt greifen""",,,,,,,"""🤲 立即抢"""
+hongbao.grab_ok,"""🎉 You grabbed {amount} {token}!""","""🎉 ¡Has reclamado {amount} {token}!""","""🎉 Tu as récupéré {amount} {token} !""","""🎉 Du hast {amount} {token} gegriffen!""",,,,,,,"""🎉 你抢到 {amount} {token}！"""
+hongbao.mvp.success,"""✅ New packet created from the Best-Luck data""","""✅ Nuevo sobre creado con los datos del MVP""","""✅ Nouvelle enveloppe créée avec les données du MVP""","""✅ Neuer Umschlag mit MVP-Daten erstellt""",,,,,,,"""✅ 已使用最佳手气数据生成新红包"""
+hongbao.summary.left,"""📦 Left: {left} shares""","""📦 Restantes: {left} parte(s)""","""📦 Restant : {left} part(s)""","""📦 Übrig: {left} Anteil(e)""",,,,,,,"""📦 剩余：{left} 份"""
+hongbao.summary.title,"""📊 <b>Round Summary</b>""","""📊 <b>Resumen de la ronda</b>""","""📊 <b>Résumé de la manche</b>""","""📊 <b>Rundenzusammenfassung</b>""",,,,,,,"""📊 <b>本轮总结</b>"""
+hongbao.summary.total,"""💰 Total: {amount} {token}, {shares} shares""","""💰 Total: {amount} {token}, {shares} parte(s)""","""💰 Total : {amount} {token}, {shares} part(s)""","""💰 Gesamt: {amount} {token}, {shares} Anteil(e)""",,,,,,,"""💰 总额：{amount} {token}，{shares} 份"""
+hongbao.view_rank,"""🏆 View Ranking""","""🏆 Ver clasificación""","""🏆 Voir le classement""","""🏆 Rangliste ansehen""",,,,,,,"""🏆 查看排行"""
+hongbao.wizard_title,"""🧧 Send Packet Wizard""","""🧧 Asistente de envío""","""🧧 Assistant d’envoi""","""🧧 Sende-Assistent""",,,,,,,"""🧧 发红包向导"""
+hongbao_result.dup,"""⚠️ You already grabbed this packet.""","""⚠️ Ya reclamaste este sobre.""","""⚠️ Tu as déjà récupéré cette enveloppe.""","""⚠️ Du hast diesen Umschlag bereits gegriffen.""",,"""⚠️ คุณรับไปแล้ว""","""⚠️ Bạn đã nhận phong bao này rồi.""",,,,"""⚠️ 你已经抢过这个红包啦。"""
+hongbao_result.duplicate,"""⚠️ You already grabbed this packet.""","""⚠️ Ya reclamaste este sobre.""","""⚠️ Tu as déjà récupéré cette enveloppe.""","""⚠️ Du hast diesen Umschlag bereits gegriffen.""",,"""⚠️ คุณรับไปแล้ว""","""⚠️ Bạn đã nhận phong bao này rồi.""",,,,"""⚠️ 你已经抢过这个红包啦。"""
+hongbao_result.ok,"""🎉 You grabbed {amount} {token}!""","""🎉 ¡Has reclamado {amount} {token}!""","""🎉 Tu as récupéré {amount} {token} !""","""🎉 Du hast {amount} {token} gegriffen!""",,"""🎉 คุณได้รับ {amount} {token}!""","""🎉 Bạn đã nhận được {amount} {token}!""",,,,"""🎉 你抢到 {amount} {token}！"""
+hongbao_summary.left,"""📦 Left: {left} shares""","""📦 Restantes: {left} parte(s)""","""📦 Restant : {left} part(s)""","""📦 Übrig: {left} Anteil(e)""",,"""📦 เหลือ: {left} ซอง""","""📦 Còn lại: {left} phần""",,,,"""📦 剩余：{left} 份"""
+hongbao_summary.title,"""📊 <b>Round Summary</b>""","""📊 <b>Resumen de la ronda</b>""","""📊 <b>Résumé de la manche</b>""","""📊 <b>Rundenzusammenfassung</b>""",,"""📊 <b>สรุปรอบนี้</b>""","""📊 <b>Tổng kết vòng</b>""",,,,"""📊 <b>本轮总结</b>"""
+hongbao_summary.total,"""💰 Total: {amount} {token}, {shares} shares""","""💰 Total: {amount} {token}, {shares} parte(s)""","""💰 Total : {amount} {token}, {shares} part(s)""","""💰 Gesamt: {amount} {token}, {shares} Anteil(e)""",,"""💰 รวม: {amount} {token}, {shares} ซอง""","""💰 Tổng: {amount} {token}, {shares} phần""",,,,"""💰 总额：{amount} {token}，{shares} 份"""
+labels.amount,"""💵 Amount""","""💵 Importe""","""💵 Montant""","""💵 Betrag""",,,"""💵 Số tiền""",,,,"""💵 金额"""
+labels.energy,"""⚡ Energy""","""⚡ Energía""","""⚡ Énergie""","""⚡ Energie""",,,"""⚡ Năng lượng""",,,,"""⚡ 能量"""
+labels.is_last,"""🔚 Last""","""🔚 Último""","""🔚 Dernier""","""🔚 Letzter""",,,"""🔚 Cuối cùng""",,,,"""🔚 末位"""
+labels.last,"""🔚 Tail""","""🔚 Último""","""🔚 Dernier""","""🔚 Letzter""",,,"""🔚 Cuối""",,,,"""🔚 尾包"""
+labels.point,"""⭐ Star""","""⭐ Estrellas""","""⭐ Étoiles""","""⭐ Sterne""",,,"""⭐ Sao""",,,,"""⭐ 星星"""
+labels.token,"""🪙 Token""","""🪙 Moneda""","""🪙 Devise""","""🪙 Währung""",,,"""🪙 Loại tiền""",,,,"""🪙 币种"""
+labels.ton,"""🪙 TON""","""🪙 TON""","""🪙 TON""","""🪙 TON""",,,"""🪙 TON""",,,,"""🪙 TON"""
+labels.usdt,"""💵 USDT""","""💵 USDT""","""💵 USDT""","""💵 USDT""",,,"""💵 USDT""",,,,"""💵 USDT"""
+labels.user_id,"""🆔 User ID""","""🆔 ID de usuario""","""🆔 ID utilisateur""","""🆔 Benutzer-ID""",,,"""🆔 ID người dùng""",,,,"""🆔 用户ID"""
+labels.user_tg_id,"""🆔 Telegram User ID""","""🆔 ID de Telegram""","""🆔 ID Telegram""","""🆔 Telegram-ID""",,,"""🆔 ID Telegram""",,,,"""🆔 Telegram 用户ID"""
+lang.de,"""🇩🇪 Deutsch""","""🇩🇪 Deutsch""","""🇩🇪 Deutsch""","""🇩🇪 Deutsch""",,"""🇩🇪 Deutsch""","""🇩🇪 Deutsch""",,,,"""🇩🇪 Deutsch"""
+lang.en,"""🇺🇸 English""","""🇺🇸 English""","""🇺🇸 English""","""🇺🇸 English""",,"""🇺🇸 English""","""🇺🇸 English""",,,,"""🇺🇸 English"""
+lang.es,"""🇪🇸 Español""","""🇪🇸 Español""","""🇪🇸 Español""","""🇪🇸 Español""",,"""🇪🇸 Español""","""🇪🇸 Español""",,,,"""🇪🇸 Español"""
+lang.fr,"""🇫🇷 Français""","""🇫🇷 Français""","""🇫🇷 Français""","""🇫🇷 Français""",,"""🇫🇷 Français""","""🇫🇷 Français""",,,,"""🇫🇷 Français"""
+lang.hi,"""🇮🇳 हिन्दी""","""🇮🇳 हिन्दी""","""🇮🇳 हिन्दी""","""🇮🇳 हिन्दी""",,"""🇮🇳 हिन्दी""","""🇮🇳 हिन्दी""",,,,"""🇮🇳 हिन्दी"""
+lang.th,"""🇹🇭 ไทย""","""🇹🇭 ไทย""","""🇹🇭 ไทย""","""🇹🇭 ไทย""",,"""🇹🇭 ไทย""","""🇹🇭 ไทย""",,,,"""🇹🇭 ไทย"""
+lang.title,"""🌐 Choose language""","""🌐 请选择语言""","""🌐 请选择语言""","""🌐 请选择语言""",,"""🌐 请选择语言""","""🌐 请选择语言""",,,,"""🌐 请选择语言"""
+lang.vi,"""🇻🇳 Tiếng Việt""","""🇻🇳 Tiếng Việt""","""🇻🇳 Tiếng Việt""","""🇻🇳 Tiếng Việt""",,"""🇻🇳 Tiếng Việt""","""🇻🇳 Tiếng Việt""",,,,"""🇻🇳 Tiếng Việt"""
+lang.zh,"""🇨🇳 Simplified Chinese""","""🇨🇳 简体中文""","""🇨🇳 简体中文""","""🇨🇳 简体中文""",,"""🇨🇳 简体中文""","""🇨🇳 简体中文""",,,,"""🇨🇳 简体中文"""
+menu.admin,"""🛠 Admin Panel""","""🛠 Panel de admin""","""🛠 Panneau d’admin""","""🛠 Admin-Panel""",,,,,,,"""🛠 管理面板"""
+menu.assets,"""💼 My Assets""","""💼 Mis activos""","""💼 Mes actifs""","""💼 Meine Vermögenswerte""",,,,,,,"""💼 我的资产"""
+menu.back,"""⬅️ Back""","""⬅️ Atrás""","""⬅️ Retour""","""⬅️ Zurück""",,,,,,,"""⬅️ 返回"""
+menu.bind_hint_in_group,"""Detected you are configuring in a group. Click below to bind this group and continue in DM.""","""Detectada configuración en grupo. Pulsa abajo para vincularlo y seguir en privado.""","""Détecté un réglage en groupe. Clique ci-dessous pour lier ce groupe et continuer en privé.""","""Einstellung in einer Gruppe erkannt. Klicke unten, um diese Gruppe zu binden und privat fortzufahren.""",,,,,,,"""检测到你在群内设置。点击下方按钮绑定本群并在私聊继续。"""
+menu.bind_this_group,"""Bind this group and continue in DM ➡️""","""Vincular este grupo y seguir en privado ➡️""","""Lier ce groupe et continuer en privé ➡️""","""Diese Gruppe binden und privat fortsetzen ➡️""",,,,,,,"""绑定本群并在私聊继续 ➡️"""
+menu.bound_dm_tips,"""You have a target group bound. You can start sending here.""","""Ya tienes un grupo objetivo vinculado. Puedes empezar a enviar sobres aquí.""","""Un groupe cible est lié. Tu peux commencer à envoyer des enveloppes ici.""","""Eine Zielgruppe ist verknüpft. Du kannst hier Umschläge senden.""",,,,,,,"""你已绑定一个目标群，现在可以在这里开始发红包。"""
+menu.bound_go_dm,"""✅ Bound this group as target. Continue in DM.""","""✅ Grupo objetivo guardado. Continúa por privado.""","""✅ Groupe défini comme cible. Continue en message privé.""","""✅ Zielgruppe gesetzt. Bitte im Privatchat fortfahren.""",,,,,,,"""✅ 已绑定本群为目标群，请到私聊继续。"""
+menu.bound_ok,"""Bound and continued in DM""","""Vinculado y continuando por privado""","""Lié et continuation en privé""","""Gebunden und im Privatchat fortgesetzt""",,,,,,,"""已绑定并在私聊继续"""
+menu.help,"""❓ Help Center""","""❓ Centro de ayuda""","""❓ Centre d’aide""","""❓ Hilfezentrum""",,,,,,,"""❓ 帮助中心"""
+menu.language,"""🌐 Language""","""🌐 Idioma""","""🌐 Langue""","""🌐 Sprache""",,,,,,,"""🌐 语言"""
+menu.panel,"""🛠 Admin Panel""","""🛠 Panel de admin""","""🛠 Panneau d’admin""","""🛠 Admin-Panel""",,,,,,,"""🛠 管理面板"""
+menu.recharge,"""💰 Top-up Center""","""💰 Centro de recarga""","""💰 Centre de recharge""","""💰 Aufladezentrum""",,,,,,,"""💰 充值中心"""
+menu.send,"""🧧 Send Packet""","""🧧 Enviar sobre""","""🧧 Envoyer une enveloppe""","""🧧 Umschlag senden""",,,,,,,"""🧧 发红包"""
+menu.today,"""📊 Today’s Stats""","""📊 Resumen de hoy""","""📊 Bilan du jour""","""📊 Heutige Bilanz""",,,,,,,"""📊 今日战绩"""
+menu.welfare,"""🎁 Rewards""","""🎁 Centro de beneficios""","""🎁 Centre d’avantages""","""🎁 Vorteilscenter""",,,,,,,"""🎁 福利中心"""
+"phase.""100""","""🎉 Goal achieved!""","""🎉 ¡Objetivo alcanzado!""","""🎉 Objectif atteint.""","""🎉 Ziel erreicht!""",,"""🎉 สำเร็จ!""","""🎉 Mục tiêu đã đạt!""",,,,"""🎉 目标达成！"""
+"phase.""80_89""","""👍 Getting closer!""","""👍 Va mejorando.""","""👍 De mieux en mieux.""","""👍 Es wird.""",,"""👍 ดีขึ้นเรื่อยๆ""","""👍 Đang tốt dần.""",,,,"""👍 越来越近啦！"""
+"phase.""90_94""","""⚡ Great momentum!""","""⚡ Gran avance, sigue así.""","""⚡ Super avancée, continue.""","""⚡ Tolle Fortschritte, weiter so.""",,"""⚡ กำลังดีมาก""","""⚡ Tiến triển tốt, tiếp tục nào.""",,,,"""⚡ 进展很棒，继续！"""
+"phase.""95_98""","""🔥 Final sprint!""","""🔥 Recta final.""","""🔥 Dernière ligne droite.""","""🔥 Letzte Strecke.""",,"""🔥 โค้งสุดท้าย!""","""🔥 Chặng cuối.""",,,,"""🔥 最后一程 —— 加油！"""
+"phase.""99""","""✨ Almost there — push!""","""✨ Casi hecho — a rematar.""","""✨ Plus qu’un rien — fonce.""","""✨ Fast geschafft — Endspurt!""",,"""✨ อีกนิดเดียว!""","""✨ Chỉ còn chút nữa — tăng tốc!""",,,,"""✨ 只差一点点 —— 冲刺！"""
+rank.global_offline,"📉 Global ranking is off.
+Check 📊 Today’s Stats instead.","📉 Clasificación global desactivada.
+Consulta mejor 📊 Resumen de hoy.","📉 Classement global désactivé.
+Consulte plutôt 📊 Bilan du jour.","📉 Globale Rangliste deaktiviert.
+Sieh stattdessen 📊 Heutige Bilanz.",,"📉 ปิดอันดับรวมทั่วโลก  
+โปรดดู 📊 สถิติวันนี้","📉 BXH toàn cục đang tắt.
+Hãy xem 📊 Thống kê hôm nay.",,,,"📉 全局排行榜已关闭。
+可前往 📊 今日战绩 查看记录。"
+rank.lucky,"""🏅 MVP: ✨ {name} ✨ ({amount} {token})""","""🏅 MVP: ✨ {name} ✨ ({amount} {token})""","""🏅 MVP : ✨ {name} ✨ ({amount} {token})""","""🏅 MVP: ✨ {name} ✨ ({amount} {token})""",,"""🏅 MVP: ✨ {name} ✨ ({amount} {token})""","""🏅 MVP: ✨ {name} ✨ ({amount} {token})""",,,,"""🏅 MVP：✨ {name} ✨ （{amount} {token}）"""
+rank.meta_line,"""💰 Total: {amount} {token} · 📦 Shares: {shares}""","""💰 Total: {amount} {token} · 📦 Partes: {shares}""","""💰 Total : {amount} {token} · 📦 Parts : {shares}""","""💰 Gesamt: {amount} {token} · 📦 Anteile: {shares}""",,"""💰 รวม: {amount} {token} · 📦 ซอง: {shares}""","""💰 Tổng: {amount} {token} · 📦 Số phần: {shares}""",,,,"""💰 总额：{amount} {token} · 📦 份数：{shares}"""
+rank.mvp_dm_tip,"""🏅 You’re the Best-Luck this round. Reuse parameters with one tap:""","""🏅 Eres el MVP de esta ronda. Relanza con un toque:""","""🏅 Tu es le MVP de cette manche. Relance en un clic :""","""🏅 Du bist MVP dieser Runde. Mit einem Klick erneut senden:""",,"""🏅 คุณคือ MVP ของรอบนี้ ส่งอีกครั้งได้ทันที:""","""🏅 Bạn là MVP của vòng này. Gửi lại chỉ với một chạm:""",,,,"""🏅 你是本轮“最佳手气”，可一键复用此轮参数发红包："""
+rank.mvp_send_btn,"""🏅 Best-Luck Send""","""🏅 Enviar como MVP""","""🏅 Envoyer en tant que MVP""","""🏅 Als MVP senden""",,"""🏅 ส่งในฐานะ MVP""","""🏅 Gửi với tư cách MVP""",,,,"""🏅 最佳手气发红包"""
+rank.none,"""😅 No one yet""","""😅 Aún nadie""","""😅 Personne encore""","""😅 Noch niemand""",,"""😅 ยังไม่มีผู้เล่น""","""😅 Chưa có ai""",,,,"""😅 还没有人出手"""
+rank.round_btn,"""🏆 View round ranking""","""🏆 Ver ronda""","""🏆 Voir la manche""","""🏆 Runde ansehen""",,"""🏆 ดูอันดับรอบนี้""","""🏆 Xem BXH của vòng""",,,,"""🏆 查看本轮排行"""
+rank.round_title,"""🏆 <b>Best Luck of this round</b>""","""🏆 <b>Mejor suerte de la ronda</b>""","""🏆 <b>Meilleure chance de la manche</b>""","""🏆 <b>Bestes Glück dieser Runde</b>""",,"""🏆 <b>ผู้โชคดีที่สุดของรอบนี้</b>""","""🏆 <b>May mắn nhất vòng này</b>""",,,,"""🏆 <b>本轮最佳手气</b>"""
+rank.title,"""🏆 Best Luck""","""🏆 Mejor suerte""","""🏆 Meilleure chance""","""🏆 Bestes Glück""",,"""🏆 ผู้โชคดีที่สุด""","""🏆 Người may mắn nhất""",,,,"""🏆 手气最佳"""
+recharge.addr_instr,"💡 Send any amount of {token} to the address above (network: {network}).
+⏱ Funds will be credited after on-chain confirmation. Address is reusable.
+🔁 If you’ve paid, tap “Refresh status” to update.","💡 Envía cualquier importe de {token} a la dirección de arriba (red: {network}).
+⏱ Tras confirmaciones en cadena, se acreditará. Dirección válida de forma permanente y reutilizable.
+🔁 Si ya pagaste, pulsa «Actualizar estado».","💡 Envoie n’importe quel montant de {token} à l’adresse ci-dessus (réseau : {network}).
+⏱ Après confirmations on-chain, les fonds sont crédités. Adresse valide en continu, réutilisable.
+🔁 Si déjà payé, clique « Actualiser » pour mettre à jour.","💡 Sende einen beliebigen Betrag {token} an die obige Adresse (Netzwerk: {network}).
+⏱ Nach On-Chain-Bestätigung wird gutgeschrieben. Adresse ist dauerhaft gültig, mehrfach nutzbar.
+🔁 Bereits bezahlt? Klicke „Status aktualisieren“.",,"💡 โอน {token} ใดๆ ไปยังที่อยู่ข้างต้น (เครือข่าย: {network})  
+⏱ หลังยืนยันบนบล็อกเชน ยอดจะเข้าระบบโดยอัตโนมัติ  
+🔁 ถ้าโอนแล้ว ให้กด “รีเฟรชสถานะ” เพื่อตรวจสอบ","💡 Gửi bất kỳ số {token} nào đến địa chỉ trên (mạng: {network}).
+⏱ Sau khi xác nhận trên chuỗi, tiền sẽ tự động ghi có. Địa chỉ có hiệu lực lâu dài, dùng nhiều lần.
+🔁 Nếu đã chuyển, bấm “Làm mới trạng thái” để cập nhật.",,,,"💡 将任意金额的 {token} 打到上面的地址即充值成功（网络：{network}）。
+⏱ 链上确认后，资金会自动入账。本地址长期有效，可多次重复使用。
+🔁 如已转账，可点“刷新状态”更新到账。"
+recharge.addr_missing,"""No address to copy""","""No hay dirección para copiar""","""Aucune adresse copiable""","""Keine kopierbare Adresse""",,"""ไม่มีที่อยู่ให้คัดลอก""","""Không có địa chỉ để sao chép""",,,,"""没有可复制的地址"""
+recharge.choose_amount,"""Choose an amount""","""Elige el importe""","""Choisis le montant""","""Betrag wählen""",,"""เลือกจำนวน""","""Chọn số tiền""",,,,"""请选择金额"""
+recharge.choose_method,"""Choose a token""","""Elige la moneda""","""Choisis la devise""","""Währung wählen""",,"""เลือกสกุลเงิน""","""Chọn loại tiền""",,,,"""请选择币种"""
+recharge.copy_addr,"""📋 Copy address""","""📋 Copiar dirección""","""📋 Copier l’adresse""","""📋 Adresse kopieren""",,"""📋 คัดลอกที่อยู่""","""📋 Sao chép địa chỉ""",,,,"""📋 复制地址"""
+recharge.copy_amount,"""📋 Copy amount""","""📋 Copiar importe""","""📋 Copier le montant""","""📋 Betrag kopieren""",,"""📋 คัดลอกจำนวน""","""📋 Sao chép số tiền""",,,,"""📋 复制金额"""
+recharge.created,"""✅ Order created. Follow the instructions to pay.""","""✅ Pedido creado. Sigue las instrucciones.""","""✅ Commande créée. Suis les instructions.""","""✅ Bestellung erstellt. Bitte den Anweisungen folgen.""",,"""✅ สร้างคำสั่งแล้ว กรุณาทำตามขั้นตอน""","""✅ Đã tạo đơn. Hãy làm theo hướng dẫn.""",,,,"""✅ 订单已创建，请按提示完成支付。"""
+recharge.custom,"""✏️ Custom amount""","""✏️ Importe personalizado""","""✏️ Montant personnalisé""","""✏️ Eigener Betrag""",,"""✏️ ป้อนจำนวนเอง""","""✏️ Số tiền tùy chọn""",,,,"""✏️ 自定义金额"""
+recharge.deposit_addr,"""🔗 Deposit address""","""🔗 Dirección de depósito""","""🔗 Adresse de dépôt""","""🔗 Einzahlungsadresse""",,"""🔗 ที่อยู่สำหรับเติมเงิน""","""🔗 Địa chỉ nạp""",,,,"""🔗 充值地址"""
+recharge.fields.address,"""🏦 Address""","""🏦 Dirección""","""🏦 Adresse""","""🏦 Adresse""",,"""🏦 ที่อยู่""","""🏦 Địa chỉ""",,,,"""🏦 收款地址"""
+recharge.fields.amount,"""💵 Amount""","""💵 Importe""","""💵 Montant""","""💵 Betrag""",,"""💵 จำนวนเงิน""","""💵 Số tiền""",,,,"""💵 金额"""
+recharge.fields.created,"""🗓️ Created at""","""🗓️ Creado""","""🗓️ Créé le""","""🗓️ Erstellt""",,"""🗓️ วันที่สร้าง""","""🗓️ Thời điểm tạo""",,,,"""🗓️ 创建时间"""
+recharge.fields.expires,"""⏰ Expires at""","""⏰ Expira""","""⏰ Expire""","""⏰ Läuft ab""",,"""⏰ วันหมดอายุ""","""⏰ Hết hạn""",,,,"""⏰ 过期时间"""
+recharge.fields.id,"""🧾 Order ID""","""🧾 ID de pedido""","""🧾 ID commande""","""🧾 Bestell-ID""",,"""🧾 หมายเลขคำสั่งซื้อ""","""🧾 Mã đơn""",,,,"""🧾 订单编号"""
+recharge.fields.label,"""Status""","""Estado""","""Statut""","""Status""",,"""สถานะ""","""Trạng thái""",,,,"""状态"""
+recharge.fields.status.expired,"""🕒 Expired""","""🕒 Expirado""","""🕒 Expiré""","""🕒 Abgelaufen""",,"""🕒 หมดอายุ""","""🕒 Hết hạn""",,,,"""🕒 已过期"""
+recharge.fields.status.failed,"""❌ Failed""","""❌ Fallido""","""❌ Échec""","""❌ Fehlgeschlagen""",,"""❌ ล้มเหลว""","""❌ Thất bại""",,,,"""❌ 失败"""
+recharge.fields.status.pending,"""⏳ Pending""","""⏳ Pendiente""","""⏳ En attente""","""⏳ Ausstehend""",,"""⏳ รอดำเนินการ""","""⏳ Đang chờ""",,,,"""⏳ 待支付"""
+recharge.fields.status.success,"""✅ Success""","""✅ Exitoso""","""✅ Réussi""","""✅ Erfolgreich""",,"""✅ สำเร็จ""","""✅ Thành công""",,,,"""✅ 成功"""
+recharge.fields.token,"""🪙 Token""","""🪙 Moneda""","""🪙 Devise""","""🪙 Währung""",,"""🪙 สกุลเงิน""","""🪙 Loại tiền""",,,,"""🪙 币种"""
+recharge.input_custom,"""✏️ Enter a custom amount (send a number)""","""✏️ Introduce un importe (solo números)""","""✏️ Entre un montant (chiffres uniquement)""","""✏️ Eigener Betrag (nur Zahlen) eingeben""",,"""✏️ ป้อนจำนวนเงินด้วยตนเอง (เฉพาะตัวเลข)""","""✏️ Nhập số tiền (chỉ số)""",,,,"""✏️ 请输入自定义金额（直接发送数字）"""
+recharge.invalid_amount,"""❌ Invalid amount.""","""❌ Importe inválido.""","""❌ Montant invalide.""","""❌ Ungültiger Betrag.""",,"""❌ จำนวนเงินไม่ถูกต้อง""","""❌ Số tiền không hợp lệ.""",,,,"""❌ 金额格式不正确，请重新输入。"""
+recharge.invalid_amount_2dp,"""❌ Only two decimals supported.""","""❌ Máximo dos decimales.""","""❌ Deux décimales max.""","""❌ Maximal zwei Dezimalstellen.""",,"""❌ รองรับทศนิยม 2 หลักเท่านั้น""","""❌ Chỉ cho phép tối đa hai chữ số thập phân.""",,,,"""❌ 仅支持两位小数，请重新输入。"""
+recharge.invoice.address,"""Address""","""Dirección""","""Adresse""","""Adresse""",,"""ที่อยู่""","""Địa chỉ""",,,,"""地址"""
+recharge.invoice.amount,"""Amount""","""Importe""","""Montant""","""Betrag""",,"""จำนวน""","""Số tiền""",,,,"""金额"""
+recharge.invoice.expires,"""Expires""","""Expira""","""Expire""","""Läuft ab""",,"""หมดอายุ""","""Hết hạn""",,,,"""过期"""
+recharge.invoice.network,"""Network""","""Red""","""Réseau""","""Netzwerk""",,"""เครือข่าย""","""Mạng""",,,,"""网络"""
+recharge.invoice.title,"""Payment Info""","""Información de pago""","""Infos de paiement""","""Zahlungsinformation""",,"""ข้อมูลการชำระเงิน""","""Thông tin thanh toán""",,,,"""付款信息"""
+recharge.link,"""🔗 Payment link""","""🔗 Enlace de pago""","""🔗 Lien de paiement""","""🔗 Zahlungslink""",,"""🔗 ลิงก์ชำระเงิน""","""🔗 Liên kết thanh toán""",,,,"""🔗 支付链接"""
+recharge.loading,"""⏳ Generating payment info...""","""⏳ Generando información de pago…""","""⏳ Génération des infos de paiement…""","""⏳ Zahlungsinfos werden erstellt…""",,"""⏳ กำลังสร้างข้อมูลการชำระเงิน...""","""⏳ Đang tạo thông tin thanh toán…""",,,,"""⏳ 正在生成支付信息，请稍候…"""
+recharge.refresh,"""🔁 Refresh status""","""🔁 Actualizar estado""","""🔁 Actualiser""","""🔁 Status aktualisieren""",,"""🔁 รีเฟรชสถานะ""","""🔁 Làm mới trạng thái""",,,,"""🔁 刷新状态"""
+recharge.success_text,"""✅ Top-up succeeded!""","""✅ Recarga acreditada.""","""✅ Recharge créditée.""","""✅ Aufladung gutgeschrieben.""",,"""✅ เติมเงินสำเร็จ!""","""✅ Nạp tiền thành công.""",,,,"""✅ 充值到账成功！"""
+recharge.title,"""💰 Top-up Center""","""💰 Centro de recarga""","""💰 Centre de recharge""","""💰 Aufladezentrum""",,"""💰 เติมเงิน""","""💰 Trung tâm nạp tiền""",,,,"""💰 充值中心"""
+recharge.tutorial.address,"""Address""","""Dirección""","""Adresse""","""Adresse""",,"""ที่อยู่""","""Địa chỉ""",,,,"""地址"""
+recharge.tutorial.amount,"""Amount""","""Importe""","""Montant""","""Betrag""",,"""จำนวน""","""Số tiền""",,,,"""金额"""
+recharge.tutorial.expires,"""Expires""","""Expira""","""Expire""","""Läuft ab""",,"""หมดอายุ""","""Hết hạn""",,,,"""过期"""
+recharge.tutorial.network,"""Network""","""Red""","""Réseau""","""Netzwerk""",,"""เครือข่าย""","""Mạng""",,,,"""网络"""
+recharge.tutorial.step1,"""1️⃣ Choose token""","""1️⃣ Elegir moneda""","""1️⃣ Choisir la devise""","""1️⃣ Währung wählen""",,"""1️⃣ เลือกสกุลเงิน""","""1️⃣ Chọn loại tiền""",,,,"""1️⃣ 选择币种"""
+recharge.tutorial.step2,"""2️⃣ Amount""","""2️⃣ Importe""","""2️⃣ Montant""","""2️⃣ Betrag""",,"""2️⃣ ป้อนจำนวนเงิน""","""2️⃣ Số tiền""",,,,"""2️⃣ 转账金额"""
+recharge.tutorial.step3,"""3️⃣ Address""","""3️⃣ Dirección""","""3️⃣ Adresse""","""3️⃣ Adresse""",,"""3️⃣ คัดลอกที่อยู่""","""3️⃣ Địa chỉ""",,,,"""3️⃣ 转账地址"""
+recharge.tutorial.step4,"""4️⃣ QR payment (optional)""","""4️⃣ QR (opcional)""","""4️⃣ QR (optionnel)""","""4️⃣ QR (optional)""",,"""4️⃣ สแกน QR (ถ้ามี)""","""4️⃣ Mã QR (tùy chọn)""",,,,"""4️⃣ 二维码支付（可选）"""
+recharge.tutorial.step4_tip,"""Scan the message image with your wallet to pay""","""Paga escaneando este mensaje""","""Paie en scannant ce message""","""Mit Wallet diesen Beitrag scannen""",,"""ใช้กระเป๋าเงินสแกนรูปนี้เพื่อชำระ""","""Dùng ví quét ảnh trong tin nhắn này để thanh toán""",,,,"""使用钱包扫码本消息图片完成支付"""
+recharge.tutorial.step5,"""5️⃣ Confirm & credit""","""5️⃣ Confirmación""","""5️⃣ Confirmation""","""5️⃣ Bestätigung""",,"""5️⃣ ตรวจสอบและรอเงินเข้า""","""5️⃣ Xác nhận và ghi có""",,,,"""5️⃣ 确认与到账"""
+recharge.tutorial.step5_tip,"""After paying, tap “Refresh status” to check credit""","""Tras pagar, pulsa 【Actualizar estado】""","""Après paiement, clique 【Actualiser】""","""Nach Zahlung auf 【Status aktualisieren】 tippen""",,"""หลังโอน กด 【รีเฟรชสถานะ】 เพื่อตรวจสอบ""","""Sau khi thanh toán, bấm 【Làm mới trạng thái】 để kiểm tra""",,,,"""支付成功后点击下方【刷新状态】查看是否到账"""
+recharge.tutorial.title,"""💰 Top-up Center""","""💰 Centro de recarga""","""💰 Centre de recharge""","""💰 Aufladezentrum""",,"""💰 ศูนย์เติมเงิน""","""💰 Trung tâm nạp tiền""",,,,"""💰 充值中心"""
+recharge.tutorial.warn_amount,"""⚠️ Amount must match exactly, or it won’t credit!""","""⚠️ El importe debe coincidir exactamente o no se acreditará.""","""⚠️ Le montant doit correspondre exactement, sinon pas de crédit.""","""⚠️ Betrag muss exakt stimmen, sonst keine Gutschrift.""",,"""⚠️ ต้องโอนจำนวนที่ตรงกันเท่านั้น ไม่เช่นนั้นเงินจะไม่เข้า""","""⚠️ Số tiền phải khớp chính xác, nếu không sẽ không ghi có.""",,,,"""⚠️ 金额必须完全一致，否则不到账！"""
+record.fields.amount,"""💵 Amount""","""💵 Importe""","""💵 Montant""","""💵 Betrag""",,"""💵 จำนวนเงิน""","""💵 Số tiền""",,,,"""💵 金额"""
+record.fields.note,"""📝 Note""","""📝 Nota""","""📝 Note""","""📝 Notiz""",,"""📝 หมายเหตุ""","""📝 Ghi chú""",,,,"""📝 备注"""
+record.fields.time,"""🕒 Time""","""🕒 Hora""","""🕒 Heure""","""🕒 Zeit""",,"""🕒 เวลา""","""🕒 Thời gian""",,,,"""🕒 时间"""
+record.fields.token,"""🪙 Token""","""🪙 Moneda""","""🪙 Devise""","""🪙 Währung""",,"""🪙 สกุลเงิน""","""🪙 Tiền tệ""",,,,"""🪙 币种"""
+record.fields.type,"""🔖 Type""","""🔖 Tipo""","""🔖 Type""","""🔖 Typ""",,"""🔖 ประเภท""","""🔖 Loại""",,,,"""🔖 类型"""
+record.none,"""📭 No records.""","""📭 Sin registros.""","""📭 Aucune entrée.""","""📭 Keine Einträge.""",,"""📭 ไม่มีประวัติ""","""📭 Chưa có bản ghi.""",,,,"""📭 暂无账变记录。"""
+record.recent10,"""🕑 Latest 10:""","""🕑 Últimos 10:""","""🕑 10 derniers :""","""🕑 Letzte 10:""",,"""🕑 10 รายการล่าสุด:""","""🕑 10 mục gần đây:""",,,,"""🕑 最近 10 条："""
+record.title,"""📜 Ledger""","""📜 Historial""","""📜 Historique""","""📜 Buchungsverlauf""",,"""📜 ประวัติธุรกรรม""","""📜 Lịch sử giao dịch""",,,,"""📜 账变记录"""
+today.button,"""📊 Today’s Stats""","""📊 Resumen de hoy""","""📊 Bilan du jour""","""📊 Heutige Bilanz""",,"""📊 สถิติวันนี้""","""📊 Thống kê hôm nay""",,,,"""📊 今日战绩"""
+today.date_local,"""🕒 Local dates: {start} ~ {end} ({tz})""","""🕒 Fecha local: {start} ~ {end} ({tz})""","""🕒 Dates locales : {start} ~ {end} ({tz})""","""🕒 Lokales Datum: {start} ~ {end} ({tz})""",,"""🕒 วันที่ท้องถิ่น: {start} ~ {end} ({tz})""","""🕒 Ngày địa phương: {start} ~ {end} ({tz})""",,,,"""🕒 当地日期：{start} ~ {end}（{tz})"""
+today.empty,"""📭 No records.""","""📭 Sin datos.""","""📭 Aucune donnée.""","""📭 Keine Einträge.""",,"""📭 ไม่มีข้อมูล""","""📭 Chưa có dữ liệu.""",,,,"""📭 暂无记录。"""
+today.grabbed_only,"""🤲 Grabs today: {count}""","""🤲 Reclamaciones hoy: {count} veces""","""🤲 Récupérations aujourd’hui : {count} fois""","""🤲 Heute gegriffen: {count}×""",,"""🤲 วันนี้รับแล้ว {count} ครั้ง""","""🤲 Hôm nay đã nhận: {count} lần""",,,,"""🤲 今日共抢到：{count} 次"""
+today.income,"""📈 Income: {amount} {token}""","""📈 Ingresos: {amount} {token}""","""📈 Reçu : {amount} {token}""","""📈 Einnahmen: {amount} {token}""",,"""📈 รายรับ: {amount} {token}""","""📈 Nhận: {amount} {token}""",,,,"""📈 收入：{amount} {token}"""
+today.outcome,"""📉 Outcome: {amount} {token}""","""📉 Gastos: {amount} {token}""","""📉 Envoyé : {amount} {token}""","""📉 Ausgaben: {amount} {token}""",,"""📉 รายจ่าย: {amount} {token}""","""📉 Gửi: {amount} {token}""",,,,"""📉 支出：{amount} {token}"""
+today.title,"""📊 Today’s Stats (grabs only)""","""📊 Resumen de hoy (solo reclamaciones)""","""📊 Bilan du jour (récupérations uniquement)""","""📊 Heutige Bilanz (nur Greifvorgänge)""",,"""📊 สถิติวันนี้ (เฉพาะการรับ)""","""📊 Thống kê hôm nay (chỉ ghi nhận lượt nhận)""",,,,"""📊 今日战绩（仅抢到记录）"""
+types.ADJUSTMENT,"""🔧 Admin adjust""","""🔧 Ajuste admin""","""🔧 Ajustement admin""","""🔧 Admin-Anpassung""",,"""🔧 ปรับยอดโดยผู้ดูแล""","""🔧 Điều chỉnh quản trị""",,,,"""🔧 管理调整"""
+types.HONGBAO_GRAB,"""🤲 Grabbed""","""🤲 Reclamado""","""🤲 Récupération""","""🤲 Gegriffen""",,"""🤲 รับ""","""🤲 Nhận""",,,,"""🤲 抢到"""
+types.HONGBAO_SEND,"""🧧 Sent""","""🧧 Enviado""","""🧧 Envoi""","""🧧 Gesendet""",,"""🧧 ส่ง""","""🧧 Gửi""",,,,"""🧧 发出"""
+types.INVITE_REWARD,"""🎯 Invite reward""","""🎯 Recompensa por invitación""","""🎯 Récompense parrainage""","""🎯 Einladungsprämie""",,"""🎯 รางวัลเชิญเพื่อน""","""🎯 Thưởng mời bạn""",,,,"""🎯 邀请奖励"""
+types.RECHARGE,"""💰 Top-up""","""💰 Recarga""","""💰 Recharge""","""💰 Aufladung""",,"""💰 เติมเงิน""","""💰 Nạp tiền""",,,,"""💰 充值"""
+types.RESET,"""🧨 Batch reset""",,,,,,,,,,"""🧨 批量清零"""
+types.SIGNIN,"""🗓️ Check-in""","""🗓️ Registro""","""🗓️ Connexion""","""🗓️ Check-in""",,"""🗓️ เช็คอิน""","""🗓️ Điểm danh""",,,,"""🗓️ 签到"""
+types.WITHDRAW,"""🏧 Withdraw""","""🏧 Retiro""","""🏧 Retrait""","""🏧 Auszahlung""",,"""🏧 ถอนเงิน""","""🏧 Rút tiền""",,,,"""🏧 提现"""
+welcome,"""🎉 Welcome, {username}! Pick a feature 👇""","""🎉 ¡Bienvenido, {username}! Elige una función 👇""","""🎉 Bienvenue, {username} ! Choisis une fonction 👇""","""🎉 Willkommen, {username}! Wähle eine Funktion 👇""",,,,,,,"""🎉 欢迎，{username}！请选择功能 👇"""
+welcome_full.cta,"""🧭 Open the menu and try sending a packet!""","""🧭 Abre el menú y envía tu primer sobre.""","""🧭 Ouvre le menu et envoie ta première enveloppe.""","""🧭 Öffne das Menü und sende deinen ersten Umschlag.""",,,,,,,"""🧭 现在就从菜单进入，试着发一个红包吧！"""
+welcome_full.fair.points,"• 🎲 RNG: based on high-quality PRNG (Python secrets/random); amounts are drawn independently with sum guaranteed; <b>no user is favored</b>.
+• 🚫 Anti-cheat: one valid grab per user/device; rate-limit and bot behavior will be blocked.
+• 💠 Transparent & auditable: all send/grab events record time, amount and token; anomalies can be investigated.
+• 📨 Permission checks: posting only in groups where the bot has rights, preventing delivery failure or tampering.
+• 🛠 Fallback: on delivery failure, auto refund or ask to retry. No funds swallowed.","• 🎲 Azar: basado en fuente pseudoaleatoria de alta calidad (Python secrets/random). Cada parte se sortea de forma independiente y la suma respeta el total, <b>sin favoritismos</b>.
+• 🚫 Antitrampas: solo una reclamación válida por usuario/dispositivo. Se detectan frecuencias anómalas y scripts.
+• 💠 Trazabilidad: cada envío/reclamación se registra (hora, importe, moneda). Las anomalías son auditables.
+• 📨 Permisos: solo se publica en grupos donde el bot puede enviar mensajes. Nada de fantasmas.
+• 🛠 Contingencia: si falla el envío, se reembolsa o se sugiere reintentar. No se pierde dinero.","• 🎲 Aléa : basé sur une source pseudo-aléatoire de haute qualité (Python secrets/random). Chaque part est tirée indépendamment, la somme respecte le montant total, <b>sans favoritisme</b>.
+• 🚫 Anti-triche : un seul enregistrement valide par utilisateur/appareil. Détection des fréquences anormales et scripts.
+• 💠 Traçabilité : chaque envoi/récupération est journalisé (heure, montant, devise). Les anomalies sont auditables.
+• 📨 Permissions : dépôt uniquement dans les groupes où le bot peut parler. Pas de post fantôme.
+• 🛠 Rattrapage : échec d’envoi → remboursement ou demande de réessai. Pas d’argent disparu.","• 🎲 Zufall: basiert auf hochwertiger Pseudozufallsquelle (Python secrets/random). Jede Teilmenge wird unabhängig gezogen, die Summe entspricht dem Gesamtbetrag, <b>ohne Bevorzugung</b>.
+• 🚫 Anti-Cheat: Pro Nutzer/Gerät zählt nur ein gültiger Griff. Anormale Frequenzen und Skripte werden erkannt.
+• 💠 Nachvollziehbar: Jede Sendung/jeder Griff wird protokolliert (Zeit, Betrag, Währung). Auffälligkeiten sind prüfbar.
+• 📨 Rechteprüfung: Nur in Gruppen mit Senderechten des Bots wird gepostet. Keine Geisterposts.
+• 🛠 Fallback: Fehlgeschlagenes Posting → Erstattung oder erneuter Versuch. Kein Geldverlust.",,,,,,,"• 🎲 随机引擎：基于高质量伪随机源（Python secrets/random），每份金额独立抽取上限并保证总和等于总金额，<b>不偏向任何用户</b>。
+• 🚫 反作弊：同一用户/设备仅记一次有效抢取；风控可拦截异常频率与脚本行为。
+• 💠 透明可追溯：每次发/抢都会记账（时间、金额、币种），异常可人工核查。
+• 📨 权限校验：仅在机器人有发送权限的群内投放，避免投递失败或串改。
+• 🛠 失败兜底：投递失败/快速失败会自动退款或提示重试，不吞款。"
+welcome_full.fair.title,"""⚖️ Fairness""","""⚖️ Equidad y transparencia""","""⚖️ Équité et transparence""","""⚖️ Fairness und Transparenz""",,,,,,,"""⚖️ 公平公正声明"""
+welcome_full.howto.steps,"• 🧧 <b>Send</b>: choose token → total amount → shares → random (luck) → send.
+• 🤲 <b>Grab</b>: click “Grab now” on the card. Random amount, pure luck!
+• 🏆 <b>Ranking</b>: view “Best Luck” and records after each round ends.
+• 📊 <b>Today’s stats</b>: your send/grab amounts and counts for today.
+• 💳 <b>Top up / Withdraw</b>: supports USDT / TON. On-chain confirmation may take time.","• 🧧 <b>Enviar sobre</b>: elige moneda → importe total → número de partes → suerte (aleatorio) → enviar.
+• 🤲 <b>Reclamar</b>: toca 【Reclamar ahora】 en la tarjeta. Importe aleatorio, que decida la suerte.
+• 🏆 <b>Clasificación</b>: al terminar, consulta “mejor suerte” y el historial.
+• 📊 <b>Resumen de hoy</b>: total reclamado/enviado y número de acciones de hoy.
+• 💳 <b>Recarga/Retiro</b>: compatible con USDT / TON. Espera la confirmación en cadena.","• 🧧 <b>Envoyer une enveloppe</b> : choisis la devise → montant total → nombre de parts → chance aléatoire → envoyer.
+• 🤲 <b>Récupérer</b> : clique sur 【Récupérer maintenant】 sur la carte. Montant aléatoire, à la chance.
+• 🏆 <b>Classement</b> : à la fin, consulte “meilleure chance” et l’historique.
+• 📊 <b>Stats du jour</b> : total récupéré/envoyé et nombre d’actions aujourd’hui.
+• 💳 <b>Recharger/Retirer</b> : USDT / TON pris en charge. Attends la confirmation on-chain, respire.","• 🧧 <b>Umschlag senden</b>: Währung wählen → Gesamtbetrag → Anzahl der Anteile → Glück (zufällig) → Senden.
+• 🤲 <b>Greifen</b>: Auf der Karte auf 【Jetzt greifen】 tippen. Betrag ist zufällig, Glück entscheidet.
+• 🏆 <b>Rangliste</b>: Nach Ende siehst du „Bestes Glück“ und die Historie.
+• 📊 <b>Heutige Bilanz</b>: Heutige empfangene/gesendete Summe und Anzahl.
+• 💳 <b>Aufladen/Auszahlen</b>: USDT / TON werden unterstützt. Warte auf On-Chain-Bestätigung.",,,,,,,"• 🧧 <b>发红包</b>：选择币种 → 总金额 → 份数 → 拼手气（随机）→ 发送。
+• 🤲 <b>抢红包</b>：点卡片上的【立即抢】，金额随机、拼手气！
+• 🏆 <b>看排行</b>：结束后可查看本轮“手气最佳”与记录。
+• 📊 <b>今日战绩</b>：统计当日抢到/发出额度与次数。
+• 💳 <b>充值/提现</b>：支持 USDT / TON，链上到账请耐心等待。"
+welcome_full.howto.title,"""🎮 How it works""","""🎮 Cómo jugar""","""🎮 Comment jouer""","""🎮 So spielst du""",,,,,,,"""🎮 玩法"""
+welcome_full.rules.points,"• ⏱ The packet is open during its validity; remaining amount is refunded after timeout.
+• 👤 Each user can only grab once per round. Repeated clicks will be refused.
+• 🧮 <b>Luck = random split</b>, not equal. You might get the most, or possibly 0.
+• 🔄 Forwarding the packet card is supported (if enabled for the round).
+• 🧾 All balance changes are recorded in the “Ledger” for audit.","• ⏱ Se puede reclamar dentro del periodo de validez. Lo no reclamado se reembolsa al expirar.
+• 👤 Una reclamación por persona y por ronda. Clics repetidos serán rechazados.
+• 🧮 <b>Suerte = distribución aleatoria</b>. No es igualitaria. Puedes llevarte el máximo o quedarte en 0.
+• 🔄 Se puede reenviar la tarjeta de la ronda (si está activado y permitido).
+• 🧾 Todos los movimientos quedan registrados en “Historial”, para verificación.","• ⏱ Récupérable pendant la période de validité. Les parts restantes sont remboursées après expiration.
+• 👤 Une récupération par personne et par manche. Les clics répétés sont refusés.
+• 🧮 <b>Chance = répartition aléatoire</b>. Non égalitaire. Tu peux tout rafler comme tu peux faire 0.
+• 🔄 Tu peux transférer la carte de cette manche (si activé et autorisé pour la manche).
+• 🧾 Tous les mouvements sont consignés dans “Historique”, pour vérification.","• ⏱ Greifen ist innerhalb der Gültigkeit möglich. Übrig gebliebene Anteile werden nach Ablauf erstattet.
+• 👤 Pro Runde nur ein Greifen pro Person. Mehrfachklicks werden abgelehnt.
+• 🧮 <b>Glück = Zufallsverteilung</b>. Nicht gleichmäßig. Du kannst das Meiste bekommen oder eben 0.
+• 🔄 Weiterleiten der Karten dieser Runde ist möglich (falls aktiviert und erlaubt).
+• 🧾 Alle Buchungen erscheinen im „Verlauf“ und sind nachvollziehbar.",,,,,,,"• ⏱ 红包发出后在有效期内可抢，超时退回剩余金额。
+• 👤 每人每轮仅限抢一次，重复点击会提示已抢过。
+• 🧮 <b>拼手气 = 随机分配</b>，不等额；可能抢到最多，也可能为 0。
+• 🔄 支持转发本轮红包卡片（若开启且当前轮允许）。
+• 🧾 所有账变都会记录在“账变记录”中，便于核对。"
+welcome_full.rules.title,"""📜 Basic rules""","""📜 Reglas básicas""","""📜 Règles de base""","""📜 Grundregeln""",,,,,,,"""📜 基本规则"""
+welcome_full.subtitle,"🧧 <b>Red Packet Game</b>
+Send packets in groups/DM, grab packets, view rankings and records.
+Supports USDT / TON / ⭐ points. Multiple modes, easy to start!","🧧 <b>Introducción al juego de sobres</b>
+Aquí puedes enviar sobres, reclamarlos, ver clasificaciones y tu resumen del día, en grupos o por privado.
+Compatible con USDT / TON / ⭐ Puntos. Varios modos, listo en un clic.","🧧 <b>Présentation du jeu des enveloppes</b>
+Ici, tu peux envoyer des enveloppes, en récupérer, voir les classements et ton bilan du jour, en groupe ou en privé.
+Prend en charge USDT / TON / ⭐ Points. Plusieurs modes, prise en main en un clic.","🧧 <b>Einführung ins Umschlag-Spiel</b>
+Hier kannst du Umschläge senden, greifen, Ranglisten ansehen und deine Tagesbilanz checken – in Gruppen oder privat.
+Unterstützt USDT / TON / ⭐ Punkte. Mehrere Modi, sofort startklar.",,,,,,,"🧧 <b>红包游戏简介</b>
+这里可以在群里/私聊发红包、抢红包、看排行与战绩。
+支持 USDT / TON / ⭐ 积分，多种玩法一键上手！"
+welcome_full.tip_open_menu,"""👉 Send /start anytime to open the menu.""","""👉 Puedes enviar /start en cualquier momento para abrir el menú.""","""👉 Tu peux envoyer /start à tout moment pour ouvrir le menu.""","""👉 Du kannst jederzeit /start senden, um das Menü zu öffnen.""",,,,,,,"""👉 随时发送 /start 打开菜单。"""
+welcome_full.title,"""🎉 Welcome, {username}!""","""🎉 ¡Bienvenido, {username}!""","""🎉 Bienvenue, {username} !""","""🎉 Willkommen, {username}!""",,,,,,,"""🎉 欢迎，{username}！"""
+welfare.exchange.desc,"♻️ <b>Redemption</b>
+• “Points → Progress”: each 1000 points gives +1% progress
+• “Energy → Points”: convert energy to points at fixed rate
+• Rewards unlock when progress is full","♻️ <b>Canjes</b>
+• “Puntos → Progreso”: cada 1000 puntos = +1%
+• “Energía → Puntos”: conversión a tasa fija
+• Se desbloquean recompensas al completar el progreso","♻️ <b>Échanges</b>
+• “Points → Progression” : chaque 1000 points = +1%
+• “Énergie → Points” : échange à ratio fixe
+• Récompenses débloquées à progression pleine","♻️ <b>Umtausch</b>
+• „Punkte → Fortschritt“: pro 1000 Punkte = +1%
+• „Energie → Punkte“: fester Umrechnungssatz
+• Prämien werden bei vollem Fortschritt freigeschaltet",,"♻️ <b>แลกของรางวัล</b>  
+• “คะแนน → ความคืบหน้า”: ทุก 1000 คะแนน = +1%  
+• “พลังงาน → คะแนน”: แปลงตามอัตราคงที่  
+• ครบ 100% จะปลดล็อกของรางวัล","♻️ <b>Đổi thưởng</b>
+• “Điểm → Tiến độ”: mỗi 1000 điểm = +1%
+• “Năng lượng → Điểm”: quy đổi theo tỉ lệ cố định
+• Khi đạt 100% sẽ mở khóa phần thưởng tương ứng",,,,"♻️ <b>兑换说明</b>
+• “积分 → 进度”：每消耗 1000 积分，进度 +1%
+• “能量 → 积分”：将能量按固定比例兑换为积分
+• 进度满额后可解锁对应活动奖励"
+welfare.exchange.energy_to_points_btn,"""⚡ Energy → ⭐ Points""","""⚡ Energía → ⭐ Puntos""","""⚡ Énergie → ⭐ Points""","""⚡ Energie → ⭐ Punkte""",,"""⚡ พลังงาน → ⭐ คะแนน""","""⚡ Năng lượng → ⭐ Điểm""",,,,"""⚡ 能量 → ⭐ 积分"""
+welfare.exchange.not_enough,"""🚫 Not enough {resource}.""","""🚫 {resource} insuficiente.""","""🚫 {resource} insuffisant.""","""🚫 {resource} unzureichend.""",,"""🚫 {resource} ไม่เพียงพอ""","""🚫 {resource} không đủ.""",,,,"""🚫 {resource} 不足，无法兑换。"""
+welfare.exchange.success_points,"""✅ +{value} points.""","""✅ +{value} puntos.""","""✅ +{value} points.""","""✅ +{value} Punkte.""",,"""✅ +{value} คะแนน""","""✅ +{value} điểm.""",,,,"""✅ +{value} 积分。"""
+welfare.exchange.success_progress,"""✅ Progress +{value}%.""","""✅ +{value}% de progreso.""","""✅ +{value}% progression.""","""✅ +{value}% Fortschritt.""",,"""✅ +{value}% ความคืบหน้า""","""✅ +{value}% tiến độ.""",,,,"""✅ 进度 +{value}%。"""
+welfare.exchange.to_progress,"""🔼 Spend 1000 points → progress +1%""","""🔼 Gastar 1000 puntos → +1% de progreso""","""🔼 Dépenser 1000 points → +1% progression""","""🔼 1000 Punkte ausgeben → +1% Fortschritt""",,"""🔼 ใช้ 1000 คะแนน → +1% ความคืบหน้า""","""🔼 Tiêu 1000 điểm → +1% tiến độ""",,,,"""🔼 消耗 1000 积分 → 进度 +1%"""
+welfare.invite_btn,"""🎯 Invite & Earn""","""🎯 Invitaciones""","""🎯 Parrainage""","""🎯 Einladen & Belohnung""",,"""🎯 ชวนเพื่อนรับรางวัล""","""🎯 Mời bạn nhận quà""",,,,"""🎯 邀请有礼"""
+welfare.invite_compact,"Progress: {percent}%
+{bar}
+{phase_text}","Progreso: {percent}%
+{bar}
+{phase_text}","Progression : {percent}%
+{bar}
+{phase_text}","Fortschritt: {percent}%
+{bar}
+{phase_text}",,"ความคืบหน้า: {percent}%
+{bar}
+{phase_text}","Tiến độ: {percent}%
+{bar}
+{phase_text}",,,,"进度：{percent}%
+{bar}
+{phase_text}"
+welfare.invite_redeem_btn,"""♻️ Redeem""","""♻️ Canjear puntos""","""♻️ Échanger des points""","""♻️ Punkte einlösen""",,"""♻️ แลกคะแนน""","""♻️ Đổi điểm""",,,,"""♻️ 积分兑换"""
+welfare.invite_rules,"""📘 Invite & redemption rules""","""📘 Reglas de invitación y canje""","""📘 Règles de parrainage et d’échange""","""📘 Einladungs- und Umtauschregeln""",,"""📘 กติกาการเชิญและแลกของรางวัล""","""📘 Quy tắc mời và đổi thưởng""",,,,"""📘 邀请与兑换规则"""
+welfare.invite_share_btn,"""🔗 Generate share link""","""🔗 Generar enlace""","""🔗 Générer le lien""","""🔗 Link generieren""",,"""🔗 สร้างลิงก์เชิญ""","""🔗 Tạo liên kết""",,,,"""🔗 生成分享链接"""
+welfare.invite_share_link_label,"""🔗 Invite link:""","""🔗 Enlace de invitación:""","""🔗 Lien d’invitation :""","""🔗 Einladungslink:""",,"""🔗 ลิงก์เชิญ:""","""🔗 Liên kết mời:""",,,,"""🔗 邀请链接："""
+welfare.invite_share_ready,"""✅ Your invite link is ready.""","""✅ Tu enlace de invitación está listo.""","""✅ Ton lien d’invitation est prêt.""","""✅ Dein Einladungslink ist bereit.""",,"""✅ ลิงก์เชิญพร้อมใช้งาน""","""✅ Liên kết mời đã sẵn sàng.""",,,,"""✅ 你的邀请链接已生成。"""
+welfare.invite_title,"""🎯 Invite progress""","""🎯 Progreso de invitaciones""","""🎯 Progression d’invitation""","""🎯 Einladungsfortschritt""",,"""🎯 ความคืบหน้าเชิญเพื่อน""","""🎯 Tiến độ mời""",,,,"""🎯 邀请进度"""
+welfare.promo,"""📢 Announcements""","""📢 Anuncios""","""📢 Annonces""","""📢 Ankündigungen""",,"""📢 ข่าวประกาศ""","""📢 Thông báo""",,,,"""📢 活动公告"""
+welfare.promo_btn,"""📢 Announcements""","""📢 Anuncios""","""📢 Annonces""","""📢 Ankündigungen""",,"""📢 ข่าวประกาศ""","""📢 Thông báo""",,,,"""📢 活动公告"""
+welfare.rules_btn,"""📜 Rules""","""📜 Reglas""","""📜 Règles""","""📜 Regeln""",,"""📜 กติกา""","""📜 Quy tắc""",,,,"""📜 规则说明"""
+welfare.signin_already,"""⚠️ Checked in today.""","""⚠️ Ya registraste hoy.""","""⚠️ Déjà validé aujourd’hui.""","""⚠️ Heute bereits eingecheckt.""",,"""⚠️ วันนี้คุณเข้าระบบแล้ว""","""⚠️ Hôm nay bạn đã điểm danh.""",,,,"""⚠️ 今天已签到。"""
+welfare.signin_btn,"""✅ Daily check-in""","""✅ Registro diario""","""✅ Connexion quotidienne""","""✅ Täglicher Check-in""",,"""✅ เข้าระบบรายวัน""","""✅ Điểm danh hằng ngày""",,,,"""✅ 每日签到"""
+welfare.signin_ok,"""✅ Check-in success, gained {points} points.""","""✅ Completado. +{points} puntos.""","""✅ Succès. +{points} points.""","""✅ Erfolgreich. +{points} Punkte.""",,"""✅ สำเร็จ ได้รับ {points} คะแนน""","""✅ Điểm danh thành công, +{points} điểm.""",,,,"""✅ 签到成功，获得 {points} 积分。"""
+welfare.title,"""🎁 Rewards""","""🎁 Centro de beneficios""","""🎁 Centre d’avantages""","""🎁 Vorteilscenter""",,"""🎁 ศูนย์สิทธิพิเศษ""","""🎁 Trung tâm phúc lợi""",,,,"""🎁 福利中心"""
+withdraw.address.ask,"""🏦 Enter your {token} receiving address""","""🏦 Introduce tu dirección ({token})""","""🏦 Entre ton adresse ({token})""","""🏦 Bitte deine Auszahlungsadresse ({token}) eingeben""",,"""🏦 ป้อนที่อยู่รับ ({token})""","""🏦 Nhập địa chỉ nhận ({token}) của bạn""",,,,"""🏦 请输入你的收款地址（{token}）"""
+withdraw.amount.ask,"""💵 Enter withdrawal amount (decimals allowed)""","""💵 Introduce el importe (se permiten decimales)""","""💵 Entre le montant (décimal accepté)""","""💵 Bitte Betrag eingeben (Dezimal erlaubt)""",,"""💵 ป้อนจำนวนที่ต้องการถอน (รองรับทศนิยม)""","""💵 Nhập số tiền rút (cho phép thập phân)""",,,,"""💵 请输入提现金额（支持小数）"""
+withdraw.amount.fee,"""🧾 Fee: {fee} {token} (per tx)""","""🧾 Comisión: {fee} {token} (por operación)""","""🧾 Frais : {fee} {token} (par opération)""","""🧾 Gebühr: {fee} {token} (pro Vorgang)""",,"""🧾 ค่าธรรมเนียม: {fee} {token}""","""🧾 Phí: {fee} {token} (mỗi lần)""",,,,"""🧾 手续费：{fee} {token}（每笔）"""
+withdraw.amount.min,"""📉 Minimum {token}: {amount}""","""📉 Mínimo {token}: {amount}""","""📉 Min {token} : {amount}""","""📉 Mindestbetrag {token}: {amount}""",,"""📉 ขั้นต่ำ {token}: {amount}""","""📉 Tối thiểu {token}: {amount}""",,,,"""📉 {token} 最低提现额：{amount}"""
+withdraw.balance,"""💼 Balance: {balance} {token}""","""💼 Saldo: {balance} {token}""","""💼 Solde : {balance} {token}""","""💼 Guthaben: {balance} {token}""",,"""💼 ยอดคงเหลือ: {balance} {token}""","""💼 Số dư: {balance} {token}""",,,,"""💼 当前余额：{balance} {token}"""
+withdraw.cancel,"""✖️ Cancel""","""✖️ Cancelar""","""✖️ Annuler""","""✖️ Abbrechen""",,"""✖️ ยกเลิก""","""✖️ Hủy""",,,,"""✖️ 取消"""
+withdraw.cancelled,"""Cancelled.""","""Operación cancelada.""","""Opération annulée.""","""Vorgang abgebrochen.""",,"""ยกเลิกแล้ว""","""Đã hủy thao tác.""",,,,"""已取消操作。"""
+withdraw.choose_token,"""Choose a token""","""Elige la moneda""","""Choisis la devise""","""Währung wählen""",,"""เลือกสกุลเงิน""","""Chọn loại tiền""",,,,"""请选择币种"""
+withdraw.confirm,"""✅ Confirm withdrawal""","""✅ Confirmar retiro""","""✅ Confirmer le retrait""","""✅ Auszahlung bestätigen""",,"""✅ ยืนยันการถอน""","""✅ Xác nhận rút""",,,,"""✅ 确认提现"""
+withdraw.confirm_page.address,"""🏦 Address: {address}""","""🏦 Dirección: {address}""","""🏦 Adresse : {address}""","""🏦 Adresse: {address}""",,"""🏦 ที่อยู่: {address}""","""🏦 Địa chỉ: {address}""",,,,"""🏦 地址：{address}"""
+withdraw.confirm_page.amount,"""💵 Amount: {amount}""","""💵 Importe: {amount}""","""💵 Montant : {amount}""","""💵 Betrag: {amount}""",,"""💵 จำนวน: {amount}""","""💵 Số tiền: {amount}""",,,,"""💵 金额：{amount}"""
+withdraw.confirm_page.fee,"""🧾 Fee: {fee}""","""🧾 Comisión: {fee}""","""🧾 Frais : {fee}""","""🧾 Gebühr: {fee}""",,"""🧾 ค่าธรรมเนียม: {fee}""","""🧾 Phí: {fee}""",,,,"""🧾 手续费：{fee}"""
+withdraw.confirm_page.title,"""🧧 Confirm withdrawal""","""🧧 Confirma el retiro""","""🧧 Confirme le retrait""","""🧧 Auszahlung bestätigen""",,"""🧧 ยืนยันการถอน""","""🧧 Xác nhận rút tiền""",,,,"""🧧 请确认提现信息"""
+withdraw.confirm_page.token,"""🪙 Token: {token}""","""🪙 Moneda: {token}""","""🪙 Devise : {token}""","""🪙 Währung: {token}""",,"""🪙 สกุลเงิน: {token}""","""🪙 Loại tiền: {token}""",,,,"""🪙 币种：{token}"""
+withdraw.confirm_page.total,"""💳 Deducted: {total}""","""💳 Cargo total: {total}""","""💳 Débit total : {total}""","""💳 Gesamtbelastung: {total}""",,"""💳 ยอดที่หักจริง: {total}""","""💳 Khấu trừ: {total}""",,,,"""💳 实际扣除：{total}"""
+withdraw.errors.bad_address,"""❌ Invalid address.""","""❌ Dirección inválida.""","""❌ Adresse invalide.""","""❌ Ungültige Adresse.""",,"""❌ ที่อยู่ไม่ถูกต้อง""","""❌ Địa chỉ không hợp lệ.""",,,,"""❌ 地址格式不正确，请重新输入。"""
+withdraw.errors.insufficient,"""💸 Insufficient balance — reduce amount or top up.""","""💸 Saldo insuficiente. Reduce el importe o recarga.""","""💸 Solde insuffisant. Réduis le montant ou recharge.""","""💸 Unzureichendes Guthaben. Betrag senken oder aufladen.""",,"""💸 ยอดไม่พอ กรุณาเติมเงิน""","""💸 Số dư không đủ. Hãy giảm số tiền hoặc nạp thêm.""",,,,"""💸 余额不足 —— 请减少金额或先充值。"""
+withdraw.errors.invalid_amount,"""❌ Invalid amount.""","""❌ Importe inválido.""","""❌ Montant invalide.""","""❌ Ungültiger Betrag.""",,"""❌ จำนวนไม่ถูกต้อง""","""❌ Số tiền không hợp lệ.""",,,,"""❌ 金额格式不正确，请重新输入。"""
+withdraw.errors.less_than_min,"""❌ Below minimum.""","""❌ Por debajo del mínimo.""","""❌ En dessous du minimum.""","""❌ Unter dem Mindestbetrag.""",,"""❌ น้อยกว่าขั้นต่ำ""","""❌ Thấp hơn mức tối thiểu.""",,,,"""❌ 低于最低限额，请重新输入。"""
+withdraw.fail,"""❌ Submission failed.""","""❌ Error. Inténtalo de nuevo.""","""❌ Échec. Réessaie.""","""❌ Fehlgeschlagen. Später erneut versuchen.""",,"""❌ ล้มเหลว กรุณาลองใหม่""","""❌ Gửi thất bại. Vui lòng thử lại.""",,,,"""❌ 提交失败，请稍后重试。"""
+withdraw.success,"""✅ Withdrawal submitted""","""✅ Solicitud de retiro enviada.""","""✅ Demande de retrait soumise.""","""✅ Auszahlungsanfrage übermittelt.""",,"""✅ ส่งคำขอถอนเงินแล้ว""","""✅ Đã gửi yêu cầu rút.""",,,,"""✅ 提现申请已提交"""
+withdraw.success_detail,"""• Amount: {amount} {token} (fee {fee})""","""• Importe: {amount} {token} (comisión {fee})""","""• Montant : {amount} {token} (frais {fee})""","""• Betrag: {amount} {token} (Gebühr {fee})""",,"""• จำนวน: {amount} {token} (ค่าธรรมเนียม {fee})""","""• Số tiền: {amount} {token} (phí {fee})""",,,,"""• 金额：{amount} {token}（手续费 {fee}）"""
+withdraw.success_next,"""⛓ On-chain transfer will be processed ASAP.""","""⛓ La transferencia en cadena se procesará lo antes posible.""","""⛓ Le transfert on-chain sera traité dès que possible.""","""⛓ On-Chain-Transfer wird baldmöglichst verarbeitet.""",,"""⛓ จะดำเนินการโอนบนเชนโดยเร็ว""","""⛓ Sẽ xử lý chuyển on-chain sớm nhất có thể.""",,,,"""⛓ 将尽快处理链上划转，请耐心等待。"""
+withdraw.title,"""🏧 Withdrawal""","""🏧 Retiro""","""🏧 Retrait""","""🏧 Auszahlung""",,"""🏧 ถอนเงิน""","""🏧 Rút tiền""",,,,"""🏧 提现中心"""
