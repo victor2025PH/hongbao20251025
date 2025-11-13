@@ -27,4 +27,5 @@ coverage/
 *.xlsx
 *.xls
 service_account.json
+service_account*.json
 secrets/
