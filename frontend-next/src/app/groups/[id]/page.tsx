@@ -92,6 +92,25 @@ export default function GroupDetailPage() {
     )
   }
 
+  // TypeScript 类型守卫：确保 group 存在
+  if (!group) {
+    return (
+      <div className="container mx-auto space-y-8 p-6 lg:p-8">
+        <Link
+          href="/groups"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          返回群组列表
+        </Link>
+        <ErrorNotice 
+          message="找不到該群組" 
+          onRetry={() => groupQuery.refetch()} 
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="container mx-auto space-y-8 p-6 lg:p-8">
       {/* 返回按钮 */}
