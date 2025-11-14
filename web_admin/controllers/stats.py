@@ -4,7 +4,7 @@ from __future__ import annotations
 import datetime as dt
 from typing import Dict, Any
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import JSONResponse
 
 from web_admin.deps import db_session_ro as db_session, require_admin
