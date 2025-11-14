@@ -1,0 +1,29 @@
+[Unit]
+Description=Red Packet System (Docker Compose)
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/redpacket
+ExecStart=/usr/bin/docker-compose -f /opt/redpacket/docker-compose.production.yml up -d
+ExecStop=/usr/bin/docker-compose -f /opt/redpacket/docker-compose.production.yml down
+ExecReload=/usr/bin/docker-compose -f /opt/redpacket/docker-compose.production.yml restart
+TimeoutStartSec=0
+Restart=on-failure
+RestartSec=10
+
+# 环境变量（可选，如果 docker-compose.yml 中未指定）
+Environment="COMPOSE_PROJECT_NAME=redpacket"
+Environment="TZ=Asia/Manila"
+
+# 日志配置
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=redpacket
+
+[Install]
+WantedBy=multi-user.target
+
