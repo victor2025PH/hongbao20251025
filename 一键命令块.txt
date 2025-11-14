@@ -1,0 +1,45 @@
+====================================
+一键执行所有命令（可直接复制）
+====================================
+
+方法 1: 复制以下所有命令，一次性粘贴执行
+
+------------------------------------------------------------
+
+# 更新系统并安装 Docker 和 Docker Compose（一键执行）
+sudo apt-get update && \
+sudo apt-get install -y curl wget git && \
+curl -fsSL https://get.docker.com -o /tmp/get-docker.sh && \
+sudo sh /tmp/get-docker.sh && \
+sudo usermod -aG docker $USER && \
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+sudo chmod +x /usr/local/bin/docker-compose && \
+sudo systemctl start docker && \
+sudo systemctl enable docker && \
+docker --version && \
+docker-compose --version && \
+echo "✅ Docker 安装完成！" && \
+echo "⚠️  注意: 请重新登录 SSH 或执行 'newgrp docker' 以使权限生效"
+
+------------------------------------------------------------
+
+方法 2: 使用脚本文件（推荐）
+
+下载并执行脚本：
+
+curl -fsSL https://raw.githubusercontent.com/victor2025PH/hongbao20251025/master/一键安装Docker.sh | bash
+
+或者：
+
+wget https://raw.githubusercontent.com/victor2025PH/hongbao20251025/master/一键安装Docker.sh
+chmod +x 一键安装Docker.sh
+bash 一键安装Docker.sh
+
+------------------------------------------------------------
+
+方法 3: 逐行执行（如果需要交互式）
+
+如果您想看到每一步的输出，可以逐行执行。
+但通常使用方法 1 或方法 2 更方便。
+
+====================================
