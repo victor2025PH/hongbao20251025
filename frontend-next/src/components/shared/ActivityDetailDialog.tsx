@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState, type ReactElement } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { getActivityDetail, joinPublicGroup } from '../api/publicGroups'
-import type { PublicGroupActivityDetail, PublicGroupJoinResponse } from '../types/publicGroups'
+import { getActivityDetail, joinPublicGroup } from '@/api/publicGroups'
+import type { PublicGroupActivityDetail, PublicGroupJoinResponse, ActivityRuleItem } from '@/types/publicGroups'
 import LoadingSkeleton from './LoadingSkeleton'
 import ErrorNotice from './ErrorNotice'
-import { openTelegramLink } from '../utils/telegram'
+import { openTelegramLink } from '@/utils/telegram'
 
 interface Props {
   activityId: number | null
@@ -25,8 +25,15 @@ export function ActivityDetailDialog({ activityId, onClose, onParticipated }: Pr
     },
   )
 
+  // 当 activityId 变化时重置反馈信息
   useEffect(() => {
-    setFeedback(null)
+    if (activityId !== null) {
+      // 使用 setTimeout 避免在 effect 中直接调用 setState
+      const timer = setTimeout(() => {
+        setFeedback(null)
+      }, 0)
+      return () => clearTimeout(timer)
+    }
   }, [activityId])
 
   const detail = detailQuery.data
@@ -153,7 +160,7 @@ export function ActivityDetailDialog({ activityId, onClose, onParticipated }: Pr
           <section className="rounded-xl border border-white/10 bg-white/5 p-4">
             <h4 className="mb-3 text-sm font-semibold text-white/90">活動規則</h4>
             <ul className="grid gap-2 text-xs text-slate-200">
-              {detail.rules.map((rule) => {
+              {detail.rules.map((rule: ActivityRuleItem) => {
                 const label = ruleLabelMap[rule.key] ?? rule.label ?? rule.key
                 return (
                   <li key={`${rule.key}-${String(rule.value)}`} className="flex items-center justify-between gap-3">

@@ -85,8 +85,11 @@ export function AuthProvider({ children }: PropsWithChildren): ReactElement {
     }
   }, [handleSuccess, handleError])
 
+  // 初始化时执行登录
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     void runLogin()
+    // runLogin 是 useCallback，依赖项已正确处理
   }, [runLogin])
 
   const value = useMemo<AuthContextValue>(() => ({

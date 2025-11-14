@@ -213,7 +213,7 @@ export default function Home() {
 
       {!dashboardLoading && !dashboardError && statsCards.length > 0 && (
         <>
-          {dashboardData?.isMock && (
+            {dashboardData?.isMock && (
             <Card className="border-amber-300 bg-amber-50 dark:border-amber-700 dark:bg-amber-950/20">
               <CardContent className="pt-6">
                 <p className="text-sm text-amber-800 dark:text-amber-200">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, Suspense } from 'react'
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -20,7 +20,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 
-export default function TasksPage() {
+function TasksPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   
@@ -386,6 +386,14 @@ export default function TasksPage() {
         </DialogContent>
       </Dialog>
     </div>
+  )
+}
+
+export default function TasksPage() {
+  return (
+    <Suspense fallback={<LoadingSkeleton lines={10} />}>
+      <TasksPageContent />
+    </Suspense>
   )
 }
 

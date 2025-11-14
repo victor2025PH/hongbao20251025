@@ -1,33 +1,10 @@
 /**
  * Dashboard Mock 数据
+ * 注意：此文件只导出数据对象，不包含 interface/type 定义
+ * 类型定义请参考 @/lib/api.ts 中的 DashboardData
  */
 
-export interface DashboardData {
-  stats: {
-    user_count: number
-    active_envelopes: number
-    last_7d_amount: string
-    last_7d_orders: number
-    pending_recharges: number
-    success_recharges: number
-    since: string
-    until: string
-  }
-  trends: {
-    date: string
-    users: number
-    envelopes: number
-    amount: number
-  }[]
-  recent_tasks: {
-    id: string
-    task: string
-    status: 'success' | 'pending' | 'failed'
-    group: string
-    amount: string
-    time: string
-  }[]
-}
+import type { DashboardData } from '@/lib/api'
 
 export const MOCK_DASHBOARD: DashboardData = {
   stats: {
@@ -54,7 +31,7 @@ export const MOCK_DASHBOARD: DashboardData = {
     {
       id: 'T001',
       task: '群发红包',
-      status: 'success',
+      status: 'success' as const,
       group: '测试群组 A',
       amount: '¥500',
       time: '14:32:15',
@@ -62,7 +39,7 @@ export const MOCK_DASHBOARD: DashboardData = {
     {
       id: 'T002',
       task: '定时红包',
-      status: 'pending',
+      status: 'pending' as const,
       group: '测试群组 B',
       amount: '¥200',
       time: '14:28:42',
@@ -70,7 +47,7 @@ export const MOCK_DASHBOARD: DashboardData = {
     {
       id: 'T003',
       task: '个人红包',
-      status: 'success',
+      status: 'success' as const,
       group: '测试群组 C',
       amount: '¥100',
       time: '14:25:10',
@@ -78,7 +55,7 @@ export const MOCK_DASHBOARD: DashboardData = {
     {
       id: 'T004',
       task: '群发红包',
-      status: 'failed',
+      status: 'failed' as const,
       group: '测试群组 D',
       amount: '¥300',
       time: '14:20:33',
@@ -86,11 +63,14 @@ export const MOCK_DASHBOARD: DashboardData = {
     {
       id: 'T005',
       task: '定时红包',
-      status: 'success',
+      status: 'success' as const,
       group: '测试群组 E',
       amount: '¥150',
       time: '14:15:08',
     },
   ],
+  isMock: true,
 }
+
+export default MOCK_DASHBOARD
 

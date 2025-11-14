@@ -41,9 +41,14 @@ interface TelegramWindow extends Window {
   }
 }
 
-const win = window as TelegramWindow
+function getWindow(): TelegramWindow | null {
+  if (typeof window === 'undefined') return null
+  return window as TelegramWindow
+}
 
 function buildCode(): string | null {
+  const win = getWindow()
+  if (!win) return null
   const unsafe = win.Telegram?.WebApp?.initDataUnsafe
   if (!unsafe?.user || !unsafe.auth_date || !unsafe.hash) {
     return null
@@ -57,19 +62,22 @@ export function getTelegramInitData(): TelegramInitData | null {
   if (!code) {
     return null
   }
-  const raw = win.Telegram?.WebApp?.initData ?? ''
+  const win = getWindow()
+  const raw = win?.Telegram?.WebApp?.initData ?? ''
   return { code, raw }
 }
 
 export function isTelegramWebApp(): boolean {
-  return Boolean(win.Telegram?.WebApp)
+  const win = getWindow()
+  return Boolean(win?.Telegram?.WebApp)
 }
 
 export function getTelegramTheme(): {
   colorScheme?: 'light' | 'dark'
   params?: TelegramThemeParams
 } {
-  const webApp = win.Telegram?.WebApp
+  const win = getWindow()
+  const webApp = win?.Telegram?.WebApp
   return {
     colorScheme: webApp?.colorScheme,
     params: webApp?.themeParams,
@@ -77,7 +85,8 @@ export function getTelegramTheme(): {
 }
 
 export function onTelegramThemeChanged(handler: () => void): () => void {
-  const webApp = win.Telegram?.WebApp
+  const win = getWindow()
+  const webApp = win?.Telegram?.WebApp
   if (!webApp?.onEvent) {
     return () => {}
   }
@@ -92,7 +101,8 @@ export function onTelegramThemeChanged(handler: () => void): () => void {
 }
 
 export function ensureTelegramReady(): void {
-  const webApp = win.Telegram?.WebApp
+  const win = getWindow()
+  const webApp = win?.Telegram?.WebApp
   if (!webApp) {
     return
   }
@@ -108,7 +118,9 @@ export function ensureTelegramReady(): void {
 }
 
 export function openTelegramLink(url: string, options?: { tryInstantView?: boolean }): void {
-  const webApp = win.Telegram?.WebApp
+  if (typeof window === 'undefined') return
+  const win = getWindow()
+  const webApp = win?.Telegram?.WebApp
   if (!webApp) {
     window.open(url, '_blank', 'noopener')
     return

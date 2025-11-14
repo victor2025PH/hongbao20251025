@@ -55,10 +55,11 @@ export default function SettingsPage() {
       void queryClient.invalidateQueries({ queryKey: ['system-settings'] })
       setTimeout(() => setSaveMessage(null), 3000)
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
+      const apiError = error as { response?: { data?: { detail?: string } }; message?: string }
       setSaveMessage({
         type: 'error',
-        text: error?.response?.data?.detail || error?.message || '保存失败，请重试',
+        text: apiError?.response?.data?.detail || apiError?.message || '保存失败，请重试',
       })
       setTimeout(() => setSaveMessage(null), 5000)
     },

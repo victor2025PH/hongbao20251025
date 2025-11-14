@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, Suspense } from 'react'
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -15,7 +15,7 @@ import { ArrowLeft, Search, Filter, ChevronLeft, ChevronRight } from 'lucide-rea
 
 const TYPE_OPTIONS = ['RESET', 'ADJUST', 'RECHARGE', 'CLAIM', 'ENVELOPE_CLAIM', 'HONGBAO_SEND', 'HONGBAO_GRAB']
 
-export default function AuditLogsPage() {
+function AuditLogsPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   
@@ -313,6 +313,14 @@ export default function AuditLogsPage() {
         </>
       )}
     </div>
+  )
+}
+
+export default function AuditLogsPage() {
+  return (
+    <Suspense fallback={<LoadingSkeleton lines={10} />}>
+      <AuditLogsPageContent />
+    </Suspense>
   )
 }
 

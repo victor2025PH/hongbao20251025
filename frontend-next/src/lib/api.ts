@@ -5,6 +5,17 @@ import { MOCK_LOGS } from '@/mock/logs'
 import { MOCK_RED_PACKET_STATS } from '@/mock/stats'
 import { MOCK_USER } from '@/mock/user'
 
+// 错误类型辅助
+interface ApiError {
+  response?: {
+    status?: number
+    data?: {
+      detail?: string
+    }
+  }
+  message?: string
+}
+
 export interface DashboardStats {
   user_count: number
   active_envelopes: number
@@ -16,12 +27,12 @@ export interface DashboardStats {
   until: string
 }
 
-export interface DashboardTrends {
+export type DashboardTrends = Array<{
   date: string
   users: number
   envelopes: number
   amount: number
-}[]
+}>
 
 export interface DashboardData {
   stats: DashboardStats
@@ -34,6 +45,7 @@ export interface DashboardData {
     amount: string
     time: string
   }[]
+  isMock?: boolean  // 标识是否使用 mock 数据
 }
 
 export interface AuditLogItem {
@@ -87,14 +99,15 @@ async function apiCallWithMock<T>(
 ): Promise<T> {
   try {
     return await apiCall()
-  } catch (error: any) {
+  } catch (error: unknown) {
     // 如果是 404 或 500，使用 mock 数据
-    if (error?.response?.status === 404 || error?.response?.status === 500 || !error?.response) {
-      console.warn(`[${apiName}] 接口不可用，使用 mock 数据:`, error?.message)
+    const apiError = error as ApiError
+    if (apiError?.response?.status === 404 || apiError?.response?.status === 500 || !apiError?.response) {
+      console.warn(`[${apiName}] 接口不可用，使用 mock 数据:`, apiError?.message)
       return mockData
     }
     // 其他错误也使用 mock 数据
-    console.warn(`[${apiName}] 请求失败，使用 mock 数据:`, error?.message)
+    console.warn(`[${apiName}] 请求失败，使用 mock 数据:`, apiError?.message)
     return mockData
   }
 }
@@ -117,9 +130,10 @@ export async function getStatsTrends(days: number = 7): Promise<DashboardTrends>
       params: { days },
     })
     return data.trends
-  } catch (error: any) {
-    console.warn('[Stats] 无法从后端获取趋势数据，使用 mock 数据:', error?.message)
-    return MOCK_DASHBOARD.trends
+  } catch (error: unknown) {
+    const apiError = error as ApiError
+    console.warn('[Stats] 无法从后端获取趋势数据，使用 mock 数据:', apiError?.message)
+    return MOCK_DASHBOARD.trends ?? []
   }
 }
 
@@ -133,11 +147,12 @@ export async function getDashboard(): Promise<DashboardData & { isMock?: boolean
     const { data: statsData } = await adminApiClient.get<DashboardStats>('/admin/api/v1/dashboard')
     
     // 尝试获取趋势数据
-    let trendsData: DashboardTrends = MOCK_DASHBOARD.trends
+    let trendsData: DashboardTrends = MOCK_DASHBOARD.trends ?? []
     try {
       trendsData = await getStatsTrends(7)
-    } catch (trendsError: any) {
-      console.warn('[Dashboard] 无法获取趋势数据，使用 mock:', trendsError?.message)
+    } catch (trendsError: unknown) {
+      const apiError = trendsError as ApiError
+      console.warn('[Dashboard] 无法获取趋势数据，使用 mock:', apiError?.message)
     }
     
     // 返回真实数据（trends 使用真实接口，tasks 暂时用 mock）
@@ -147,17 +162,19 @@ export async function getDashboard(): Promise<DashboardData & { isMock?: boolean
       recent_tasks: MOCK_DASHBOARD.recent_tasks,
       isMock: false,
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     // 如果失败，尝试公开接口
-    if (error?.response?.status === 401 || error?.response?.status === 403) {
+    const apiError = error as ApiError
+    if (apiError?.response?.status === 401 || apiError?.response?.status === 403) {
       try {
         const { data: statsData } = await adminApiClient.get<DashboardStats>('/admin/api/v1/dashboard/public')
         // 尝试获取趋势数据
-        let trendsData: DashboardTrends = MOCK_DASHBOARD.trends
+        let trendsData: DashboardTrends = MOCK_DASHBOARD.trends ?? []
         try {
           trendsData = await getStatsTrends(7)
-        } catch (trendsError: any) {
-          console.warn('[Dashboard] 无法获取趋势数据，使用 mock:', trendsError?.message)
+        } catch (trendsError: unknown) {
+          const apiError = trendsError as ApiError
+          console.warn('[Dashboard] 无法获取趋势数据，使用 mock:', apiError?.message)
         }
         return {
           stats: statsData,
@@ -165,8 +182,9 @@ export async function getDashboard(): Promise<DashboardData & { isMock?: boolean
           recent_tasks: MOCK_DASHBOARD.recent_tasks,
           isMock: false,
         }
-      } catch (publicError: any) {
-        console.warn('[Dashboard] 无法从后端获取数据，使用 mock 数据:', publicError?.message)
+      } catch (publicError: unknown) {
+        const apiError = publicError as ApiError
+        console.warn('[Dashboard] 无法从后端获取数据，使用 mock 数据:', apiError?.message)
         return {
           stats: MOCK_DASHBOARD.stats,
           trends: MOCK_DASHBOARD.trends,
@@ -176,15 +194,16 @@ export async function getDashboard(): Promise<DashboardData & { isMock?: boolean
       }
     }
     // 如果是 404 或其他网络错误，尝试公开接口
-    if (error?.response?.status === 404 || !error?.response) {
+    if (apiError?.response?.status === 404 || !apiError?.response) {
       try {
         const { data: statsData } = await adminApiClient.get<DashboardStats>('/admin/api/v1/dashboard/public')
         // 尝试获取趋势数据
-        let trendsData: DashboardTrends = MOCK_DASHBOARD.trends
+        let trendsData: DashboardTrends = MOCK_DASHBOARD.trends ?? []
         try {
           trendsData = await getStatsTrends(7)
-        } catch (trendsError: any) {
-          console.warn('[Dashboard] 无法获取趋势数据，使用 mock:', trendsError?.message)
+        } catch (trendsError: unknown) {
+          const apiError = trendsError as ApiError
+          console.warn('[Dashboard] 无法获取趋势数据，使用 mock:', apiError?.message)
         }
         return {
           stats: statsData,
@@ -192,8 +211,9 @@ export async function getDashboard(): Promise<DashboardData & { isMock?: boolean
           recent_tasks: MOCK_DASHBOARD.recent_tasks,
           isMock: false,
         }
-      } catch (publicError: any) {
-        console.warn('[Dashboard] 无法从后端获取数据，使用 mock 数据:', publicError?.message)
+      } catch (publicError: unknown) {
+        const apiError = publicError as ApiError
+        console.warn('[Dashboard] 无法从后端获取数据，使用 mock 数据:', apiError?.message)
         return {
           stats: MOCK_DASHBOARD.stats,
           trends: MOCK_DASHBOARD.trends,
@@ -203,7 +223,7 @@ export async function getDashboard(): Promise<DashboardData & { isMock?: boolean
       }
     }
     // 其他错误也使用 mock 数据
-    console.warn('[Dashboard] 后端请求失败，使用 mock 数据:', error?.message)
+    console.warn('[Dashboard] 后端请求失败，使用 mock 数据:', apiError?.message)
     return {
       stats: MOCK_DASHBOARD.stats,
       trends: MOCK_DASHBOARD.trends,
@@ -231,20 +251,24 @@ export async function getAuditLogs(params: AuditLogsParams = {}): Promise<AuditL
       return data
     },
     {
-      items: MOCK_LOGS.items.map((log) => ({
-        id: log.id,
-        created_at: log.timestamp,
-        type: log.level.toUpperCase(),
-        token: 'USDT',
-        amount: 0,
-        note: log.message,
-        tg_id: log.extra?.user_id || null,
-        username: null,
-        user_id: log.extra?.user_id || null,
-        envelope_id: null,
-        order_id: null,
-        operator_id: null,
-      })),
+      items: MOCK_LOGS.items.map((log) => {
+        const userId = log.extra?.user_id
+        const numericUserId = typeof userId === 'number' ? userId : null
+        return {
+          id: log.id,
+          created_at: log.timestamp,
+          type: log.level.toUpperCase(),
+          token: 'USDT',
+          amount: 0,
+          note: log.message,
+          tg_id: numericUserId,
+          username: null,
+          user_id: numericUserId,
+          envelope_id: null,
+          order_id: null,
+          operator_id: null,
+        }
+      }),
       pagination: MOCK_LOGS.pagination,
       sum_amount: 0,
     },
@@ -318,7 +342,7 @@ export interface LogItem {
   message: string
   timestamp: string
   module: string
-  extra?: Record<string, any>
+  extra?: Record<string, unknown>
 }
 
 export interface LogListResponse {
@@ -530,7 +554,7 @@ export interface SystemSettings {
     notify_on_failure: boolean
     notify_on_critical: boolean
   }
-  feature_flags: Record<string, any>
+  feature_flags: Record<string, unknown>
 }
 
 export async function getSettings(): Promise<SystemSettings> {

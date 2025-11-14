@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, Suspense } from 'react'
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -12,7 +12,7 @@ import LoadingSkeleton from '@/components/shared/LoadingSkeleton'
 import ErrorNotice from '@/components/shared/ErrorNotice'
 import { ArrowLeft, Search, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
 
-export default function GroupsPage() {
+function GroupsPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   
@@ -268,5 +268,13 @@ export default function GroupsPage() {
         </>
       )}
     </div>
+  )
+}
+
+export default function GroupsPage() {
+  return (
+    <Suspense fallback={<LoadingSkeleton lines={10} />}>
+      <GroupsPageContent />
+    </Suspense>
   )
 }

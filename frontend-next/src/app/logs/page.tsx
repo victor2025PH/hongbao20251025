@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, Suspense } from 'react'
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -13,7 +13,7 @@ import LoadingSkeleton from '@/components/shared/LoadingSkeleton'
 import ErrorNotice from '@/components/shared/ErrorNotice'
 import { ArrowLeft, Search, ChevronLeft, ChevronRight, FileSearch } from 'lucide-react'
 
-export default function LogsPage() {
+function LogsPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   
@@ -281,5 +281,13 @@ export default function LogsPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function LogsPage() {
+  return (
+    <Suspense fallback={<LoadingSkeleton lines={10} />}>
+      <LogsPageContent />
+    </Suspense>
   )
 }

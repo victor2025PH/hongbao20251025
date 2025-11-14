@@ -8,7 +8,7 @@ export interface LogItem {
   message: string
   timestamp: string
   module: string
-  extra?: Record<string, any>
+  extra?: Record<string, unknown>
 }
 
 export interface LogListResponse {
@@ -24,7 +24,7 @@ export interface LogListResponse {
 export const MOCK_LOGS: LogListResponse = {
   items: Array.from({ length: 50 }, (_, i) => ({
     id: i + 1,
-    level: ['info', 'warn', 'error'][Math.floor(Math.random() * 3)] as any,
+    level: (['info', 'warn', 'error'][Math.floor(Math.random() * 3)] || 'info') as 'info' | 'warn' | 'error',
     message: [
       '红包发送成功',
       '用户登录',

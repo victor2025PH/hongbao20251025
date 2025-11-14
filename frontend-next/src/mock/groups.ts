@@ -35,7 +35,7 @@ export const MOCK_GROUPS: GroupListResponse = {
     members_count: Math.floor(Math.random() * 1000) + 100,
     tags: ['测试', '红包', '活动'].slice(0, Math.floor(Math.random() * 3) + 1),
     language: ['zh', 'en'][Math.floor(Math.random() * 2)],
-    status: ['active', 'paused', 'review'][Math.floor(Math.random() * 3)] as any,
+    status: (['active', 'paused', 'review'][Math.floor(Math.random() * 3)] || 'active') as 'active' | 'paused' | 'review',
     invite_link: `https://t.me/test_group_${i + 1}`,
     entry_reward_enabled: Math.random() > 0.5,
     entry_reward_points: Math.floor(Math.random() * 10) + 5,
