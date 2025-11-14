@@ -103,7 +103,7 @@ services:
         condition: service_healthy
     command: uvicorn web_admin.main:app --host 0.0.0.0 --port 8000 --workers 2
     ports:
-      - "127.0.0.1:8000:8000"  # 仅本地访问，通过 Nginx 反向代理
+      - "0.0.0.0:8000:8000"  # 允许外部访问
     volumes:
       - ./static:/app/static
       - ./exports:/app/exports
@@ -137,7 +137,7 @@ services:
         condition: service_healthy
     command: uvicorn miniapp.main:app --host 0.0.0.0 --port 8080 --workers 2
     ports:
-      - "127.0.0.1:8080:8080"  # 仅本地访问，通过 Nginx 反向代理
+      - "0.0.0.0:8080:8080"  # 允许外部访问
     volumes:
       - ./secrets:/app/secrets:ro
     healthcheck:
