@@ -44,7 +44,14 @@ services:
     image: redis:7-alpine
     container_name: redpacket_redis
     restart: always
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
+    command: >
+      sh -c "
+      if [ -n \"$$REDIS_PASSWORD\" ]; then
+        redis-server --appendonly yes --requirepass \"$$REDIS_PASSWORD\"
+      else
+        redis-server --appendonly yes
+      fi
+      "
     volumes:
       - redis_data:/data
     ports:
