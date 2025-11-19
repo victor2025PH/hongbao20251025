@@ -50,6 +50,24 @@ _engine_kwargs = {
 # SQLite 在多线程（例如 aiogram webhook / polling）下需要关闭同线程检查
 if _is_sqlite:
     _engine_kwargs["connect_args"] = {"check_same_thread": False}
+    # ✅ 确保 SQLite 数据库文件目录存在
+    # 解析数据库路径：sqlite:///./data.sqlite 或 sqlite:////app/data/data.sqlite
+    db_path = DATABASE_URL.replace("sqlite:///", "").replace("sqlite://", "")
+    # 处理相对路径（./data.sqlite）和绝对路径（/app/data/data.sqlite）
+    if db_path.startswith("./"):
+        db_path = os.path.join(os.getcwd(), db_path[2:])
+    elif not os.path.isabs(db_path):
+        # 相对路径
+        db_path = os.path.join(os.getcwd(), db_path)
+    
+    # 获取目录路径
+    db_dir = os.path.dirname(db_path)
+    if db_dir and not os.path.exists(db_dir):
+        try:
+            os.makedirs(db_dir, exist_ok=True)
+            log.info(f"Created database directory: {db_dir}")
+        except Exception as e:
+            log.warning(f"Failed to create database directory {db_dir}: {e}")
 
 engine = create_engine(DATABASE_URL, **_engine_kwargs)
 
