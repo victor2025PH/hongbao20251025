@@ -84,11 +84,27 @@ def require_admin(req: Request):
       - session 里存在 admin_user（auth.py 写入）
       - 用户名匹配 ADMIN_WEB_USER
     你要更复杂的多租户/RBAC，这里再扩展。
+    
+    注意：FastAPI 会自动注入 Request 对象，不需要显式声明 Depends
     """
     u = req.session.get(SESSION_USER_KEY)
     if not u:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="login required")
     expected = _env_admin_user()
+    # 如果 session 中有 tg_id，也允许通过（Telegram 登录）
+    if isinstance(u, dict) and u.get("tg_id"):
+        # Telegram 登录：检查是否在 SUPER_ADMINS 列表中，或者允许所有 Telegram 登录
+        sa = _env_super_admins()
+        if sa:
+            try:
+                tg_id = int(u.get("tg_id") or 0)
+            except Exception:
+                tg_id = 0
+            if tg_id not in sa:
+                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="not in super admins")
+        # 如果 SUPER_ADMINS 为空，允许所有 Telegram 登录（开发环境）
+        return u
+    # 传统用户名密码登录：检查用户名是否匹配
     if not isinstance(u, dict) or u.get("username") != expected:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="forbidden")
     # 可选：如配置 SUPER_ADMINS，则若提供 tg_id 也做白名单限制

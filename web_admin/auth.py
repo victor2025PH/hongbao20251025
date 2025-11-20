@@ -10,7 +10,7 @@ import base64
 import struct
 from typing import Optional, Tuple, Dict
 
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates  # 用于模板
 
@@ -527,18 +527,106 @@ def get_auth_status(req: Request):
     })
 
 
+# -------- REST API: 验证 Telegram 登录信息 --------
+def _verify_telegram_code_for_admin(code: str) -> Dict[str, Optional[str]]:
+    """
+    验证 Telegram code（格式：tg_id.username.auth_date.hash）
+    与 miniapp/auth.py 中的逻辑一致
+    """
+    import hashlib
+    import hmac
+    import time
+    
+    try:
+        tg_id_s, username, ts_s, signature = code.split(".", 3)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="invalid_telegram_code")
+    
+    # 获取 Bot Token
+    bot_token = _env_bot_token()
+    if not bot_token:
+        raise HTTPException(status_code=500, detail="bot_token_not_configured")
+    
+    # 验证签名
+    message = f"{tg_id_s}.{username}.{ts_s}"
+    expected = hmac.new(
+        bot_token.encode("utf-8"),
+        message.encode("utf-8"),
+        hashlib.sha256,
+    ).hexdigest()
+    if not hmac.compare_digest(expected, signature):
+        raise HTTPException(status_code=401, detail="telegram_verification_failed")
+    
+    # 验证时间戳（允许 5 分钟误差）
+    try:
+        tg_id = int(tg_id_s)
+        ts = int(ts_s)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="invalid_telegram_code")
+    
+    if abs(int(time.time()) - ts) > 300:  # 5 分钟
+        raise HTTPException(status_code=401, detail="telegram_code_expired")
+    
+    normalized_username = username.strip() or None
+    return {"tg_id": tg_id, "username": normalized_username}
+
+
 # -------- REST API: 登录接口（JSON 格式） --------
 @router.post("/api/v1/auth/login", response_class=JSONResponse)
 def api_login(
     req: Request,
     username: str = Form(""),
     password: str = Form(""),
+    telegram_code: Optional[str] = Form(None),
 ):
     """
     API 登录接口（JSON 格式，供前端调用）
-    注意：此接口与 HTML 登录接口共享相同的认证逻辑
-    使用模块内已有的函数（已在文件顶部定义）
+    支持两种登录方式：
+    1. 用户名密码登录（username + password）
+    2. Telegram 登录（telegram_code）
+    
+    如果提供了 telegram_code，优先使用 Telegram 登录
     """
+    
+    # 优先尝试 Telegram 登录
+    if telegram_code:
+        try:
+            payload = _verify_telegram_code_for_admin(telegram_code)
+            tg_id = int(payload["tg_id"])
+            username_from_tg = payload.get("username")
+            
+            # Telegram 登录成功：写会话
+            req.session[SESSION_USER_KEY] = {
+                "username": username_from_tg or f"user_{tg_id}",
+                "tg_id": tg_id,
+            }
+            req.session[TWOFA_PASSED_KEY] = True
+            
+            _audit("auth.login_ok", True, req, note="telegram")
+            
+            return JSONResponse({
+                "ok": True,
+                "message": "Login successful (Telegram)",
+                "user": {
+                    "username": username_from_tg or f"user_{tg_id}",
+                    "tg_id": tg_id,
+                }
+            })
+        except HTTPException:
+            raise
+        except Exception as e:
+            _audit("auth.login_failed", False, req, note=f"telegram_error: {str(e)}")
+            return JSONResponse(
+                {"ok": False, "message": f"Telegram verification failed: {str(e)}"},
+                status_code=401
+            )
+    
+    # 回退到用户名密码登录
+    if not username or not password:
+        return JSONResponse(
+            {"ok": False, "message": "username/password or telegram_code required"},
+            status_code=400
+        )
     
     # 登录节流检查
     allowed, reason = _rate_check_and_bump(req, username)

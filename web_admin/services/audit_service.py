@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Any, Dict, List, Optional
 
 
@@ -49,7 +49,7 @@ def record_audit(action: str, operator: int, payload: Optional[Dict[str, Any]] =
         seq=_AUDIT_SEQ,
         action=action,
         operator=operator,
-        timestamp=datetime.utcnow(),
+        timestamp=datetime.now(UTC),
         payload=payload or {},
     )
     _AUDIT_LOG.append(entry)

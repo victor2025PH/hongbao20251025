@@ -352,7 +352,7 @@ export default function SettingsPage() {
       {/* 操作按钮 */}
       <div className="flex items-center justify-end gap-3">
         <a
-          href="http://localhost:8000/admin/dashboard"
+          href={`${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL || 'http://localhost:8001'}/admin/dashboard`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent"

@@ -4,7 +4,7 @@ from __future__ import annotations
 import csv
 import io
 import json
-from datetime import datetime
+from datetime import datetime, UTC
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
@@ -558,7 +558,7 @@ def _parse_datetime(value: str, field: str) -> datetime:
 
 
 def _default_range(days: int) -> tuple[datetime, datetime]:
-    end = datetime.utcnow().replace(hour=23, minute=59, second=59, microsecond=0)
+    end = datetime.now(UTC).replace(hour=23, minute=59, second=59, microsecond=0)
     start = (end - timedelta(days=days - 1)).replace(hour=0, minute=0, second=0, microsecond=0)
     return start, end
 
@@ -784,7 +784,7 @@ def public_group_activity_report(
     db=Depends(db_session_ro),
     sess=Depends(require_admin),
 ):
-    now = datetime.utcnow()
+    now = datetime.now(UTC)
     default_start = now - timedelta(days=7)
     start_dt = _parse_report_date(start, default_start)
     end_dt = _parse_report_date(end, now)
@@ -910,6 +910,7 @@ def public_group_activity_report(
 # -------- REST API: 群组列表 --------
 @api_router.get("/group-list", response_class=JSONResponse)
 def get_group_list_api(
+    req: Request,
     db: Session = Depends(db_session_ro),
     sess=Depends(require_admin),
     page: int = Query(1, ge=1),
@@ -928,7 +929,8 @@ def get_group_list_api(
         # 状态筛选
         if status:
             try:
-                status_enum = PublicGroupStatus(status.upper())
+                # PublicGroupStatus 枚举值是小写的，需要转换为小写
+                status_enum = PublicGroupStatus(status.lower())
                 query = query.filter(PublicGroup.status == status_enum)
             except ValueError:
                 pass  # 无效状态值，忽略
@@ -941,11 +943,14 @@ def get_group_list_api(
                 PublicGroup.description.ilike(f"%{q}%")
             )
         
-        # 标签筛选（如果支持数组字段）
+        # 标签筛选（使用 tags_raw JSON 字符串查询）
         if tags:
             for tag in tags:
-                # PostgreSQL 数组字段查询
-                query = query.filter(PublicGroup.tags.contains([tag]))
+                normalized = str(tag).strip().lower()
+                if not normalized:
+                    continue
+                # 查询 JSON 字符串字段，使用 ilike 匹配包含标签的 JSON
+                query = query.filter(PublicGroup.tags_raw.ilike(f'%"{normalized}"%'))
         
         # 排序
         query = query.order_by(PublicGroup.created_at.desc())
@@ -957,15 +962,30 @@ def get_group_list_api(
         # 转换为字典
         items = []
         for group in groups:
+            # 尝试从 invite_link 解析 chat_id（如果可能）
+            # Telegram invite link 格式：https://t.me/joinchat/xxx 或 https://t.me/+xxx
+            # 对于公开群组，格式可能是：https://t.me/groupname
+            # 无法直接从 invite_link 获取 chat_id，需要通过 Bot API 获取
+            # 这里暂时返回 None，前端需要用户手动输入或通过其他方式获取
+            chat_id = None
+            try:
+                # 尝试从 invite_link 中提取群组信息（如果格式包含 chat_id）
+                invite_link = group.invite_link or ""
+                # 如果 invite_link 是 https://t.me/joinchat/xxx，需要通过 Bot API 获取 chat_id
+                # 暂时留空，后续可以通过 Bot API getChat 方法获取
+            except Exception:
+                pass
+            
             items.append({
                 "id": group.id,
                 "name": group.name or "",
                 "description": group.description or "",
                 "members_count": getattr(group, "members_count", 0),
                 "tags": group.tags or [],
-                "language": group.lang or "zh",
-                "status": group.status.value if hasattr(group.status, "value") else str(group.status),
+                "language": group.language or "zh",
+                "status": group.status.value.upper() if hasattr(group.status, "value") else str(group.status).upper(),
                 "invite_link": group.invite_link or "",
+                "chat_id": chat_id,  # 暂时为 None，需要通过 Bot API 获取
                 "entry_reward_enabled": getattr(group, "entry_reward_enabled", False),
                 "entry_reward_points": getattr(group, "entry_reward_points", 0),
                 "is_bookmarked": False,  # TODO: 需要根据用户判断

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from pathlib import Path
 
 import pytest
@@ -230,7 +230,7 @@ def test_join_group_with_activity_bonus() -> None:
         create_activity(
             session,
             name="Daily Bonus",
-            start_at=datetime.utcnow() - timedelta(days=1),
+            start_at=datetime.now(UTC) - timedelta(days=1),
             end_at=None,
             reward_points=7,
             daily_cap=10,

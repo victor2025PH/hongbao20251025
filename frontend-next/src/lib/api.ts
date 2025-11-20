@@ -12,8 +12,14 @@ interface ApiError {
     data?: {
       detail?: string
     }
+    config?: {
+      url?: string
+    }
   }
   message?: string
+  config?: {
+    url?: string
+  }
 }
 
 export interface DashboardStats {
@@ -142,88 +148,70 @@ export async function getStatsTrends(days: number = 7): Promise<DashboardTrends>
  * 优先使用 /admin/api/v1/dashboard 接口（字段名与前端一致）
  */
 export async function getDashboard(): Promise<DashboardData & { isMock?: boolean }> {
+  // 优先使用公开接口（无需认证），确保前端能够获取真实数据
   try {
-    // 先尝试获取统计数据（主接口，字段名与前端一致）
-    const { data: statsData } = await adminApiClient.get<DashboardStats>('/admin/api/v1/dashboard')
+    console.log('[Dashboard] 尝试从后端获取真实数据...')
     
-    // 尝试获取趋势数据
-    let trendsData: DashboardTrends = MOCK_DASHBOARD.trends ?? []
+    // 首先尝试公开接口（无需认证，优先使用）
     try {
-      trendsData = await getStatsTrends(7)
-    } catch (trendsError: unknown) {
-      const apiError = trendsError as ApiError
-      console.warn('[Dashboard] 无法获取趋势数据，使用 mock:', apiError?.message)
-    }
-    
-    // 返回真实数据（trends 使用真实接口，tasks 暂时用 mock）
-    return {
-      stats: statsData,
-      trends: trendsData,
-      recent_tasks: MOCK_DASHBOARD.recent_tasks,
-      isMock: false,
+      const { data: statsData } = await adminApiClient.get<DashboardStats>('/admin/api/v1/dashboard/public')
+      console.log('[Dashboard] ✅ 成功从公开接口获取真实数据:', statsData)
+      
+      // 尝试获取趋势数据
+      let trendsData: DashboardTrends = MOCK_DASHBOARD.trends ?? []
+      try {
+        trendsData = await getStatsTrends(7)
+        console.log('[Dashboard] ✅ 成功获取趋势数据')
+      } catch (trendsError: unknown) {
+        const apiError = trendsError as ApiError
+        console.warn('[Dashboard] ⚠️ 无法获取趋势数据，使用 mock:', apiError?.message)
+      }
+      
+      // 返回真实数据
+      return {
+        stats: statsData,
+        trends: trendsData,
+        recent_tasks: MOCK_DASHBOARD.recent_tasks,
+        isMock: false,
+      }
+    } catch (publicError: unknown) {
+      const apiError = publicError as ApiError
+      console.warn('[Dashboard] ⚠️ 公开接口请求失败，尝试认证接口:', apiError?.message, apiError?.response?.status)
+      
+      // 如果公开接口失败，尝试需要认证的接口
+      try {
+        const { data: statsData } = await adminApiClient.get<DashboardStats>('/admin/api/v1/dashboard')
+        console.log('[Dashboard] ✅ 成功从认证接口获取真实数据:', statsData)
+        
+        // 尝试获取趋势数据
+        let trendsData: DashboardTrends = MOCK_DASHBOARD.trends ?? []
+        try {
+          trendsData = await getStatsTrends(7)
+        } catch (trendsError: unknown) {
+          const apiError = trendsError as ApiError
+          console.warn('[Dashboard] ⚠️ 无法获取趋势数据，使用 mock:', apiError?.message)
+        }
+        
+        return {
+          stats: statsData,
+          trends: trendsData,
+          recent_tasks: MOCK_DASHBOARD.recent_tasks,
+          isMock: false,
+        }
+      } catch (authError: unknown) {
+        const authApiError = authError as ApiError
+        console.error('[Dashboard] ❌ 认证接口也失败:', authApiError?.message, authApiError?.response?.status)
+        throw authApiError // 抛出错误，使用下面的 fallback
+      }
     }
   } catch (error: unknown) {
-    // 如果失败，尝试公开接口
+    // 所有接口都失败，使用 mock 数据
     const apiError = error as ApiError
-    if (apiError?.response?.status === 401 || apiError?.response?.status === 403) {
-      try {
-        const { data: statsData } = await adminApiClient.get<DashboardStats>('/admin/api/v1/dashboard/public')
-        // 尝试获取趋势数据
-        let trendsData: DashboardTrends = MOCK_DASHBOARD.trends ?? []
-        try {
-          trendsData = await getStatsTrends(7)
-        } catch (trendsError: unknown) {
-          const apiError = trendsError as ApiError
-          console.warn('[Dashboard] 无法获取趋势数据，使用 mock:', apiError?.message)
-        }
-        return {
-          stats: statsData,
-          trends: trendsData,
-          recent_tasks: MOCK_DASHBOARD.recent_tasks,
-          isMock: false,
-        }
-      } catch (publicError: unknown) {
-        const apiError = publicError as ApiError
-        console.warn('[Dashboard] 无法从后端获取数据，使用 mock 数据:', apiError?.message)
-        return {
-          stats: MOCK_DASHBOARD.stats,
-          trends: MOCK_DASHBOARD.trends,
-          recent_tasks: MOCK_DASHBOARD.recent_tasks,
-          isMock: true,
-        }
-      }
-    }
-    // 如果是 404 或其他网络错误，尝试公开接口
-    if (apiError?.response?.status === 404 || !apiError?.response) {
-      try {
-        const { data: statsData } = await adminApiClient.get<DashboardStats>('/admin/api/v1/dashboard/public')
-        // 尝试获取趋势数据
-        let trendsData: DashboardTrends = MOCK_DASHBOARD.trends ?? []
-        try {
-          trendsData = await getStatsTrends(7)
-        } catch (trendsError: unknown) {
-          const apiError = trendsError as ApiError
-          console.warn('[Dashboard] 无法获取趋势数据，使用 mock:', apiError?.message)
-        }
-        return {
-          stats: statsData,
-          trends: trendsData,
-          recent_tasks: MOCK_DASHBOARD.recent_tasks,
-          isMock: false,
-        }
-      } catch (publicError: unknown) {
-        const apiError = publicError as ApiError
-        console.warn('[Dashboard] 无法从后端获取数据，使用 mock 数据:', apiError?.message)
-        return {
-          stats: MOCK_DASHBOARD.stats,
-          trends: MOCK_DASHBOARD.trends,
-          recent_tasks: MOCK_DASHBOARD.recent_tasks,
-          isMock: true,
-        }
-      }
-    }
-    // 其他错误也使用 mock 数据
-    console.warn('[Dashboard] 后端请求失败，使用 mock 数据:', apiError?.message)
+    console.error('[Dashboard] ❌ 所有接口请求失败，使用 mock 数据:', {
+      message: apiError?.message,
+      status: apiError?.response?.status,
+      url: apiError?.response?.config?.url || apiError?.config?.url || 'unknown',
+    })
     return {
       stats: MOCK_DASHBOARD.stats,
       trends: MOCK_DASHBOARD.trends,
@@ -290,16 +278,17 @@ export interface GroupListParams {
 export interface GroupItem {
   id: number
   name: string
-  description: string
+  description?: string
   members_count: number
   tags: string[]
-  language: string
+  language?: string
   status: string
   invite_link: string
+  chat_id?: number | null  // Telegram 群组的 chat_id（如果可用）
   entry_reward_enabled: boolean
   entry_reward_points: number
   is_bookmarked: boolean
-  created_at: string
+  created_at?: string
 }
 
 export interface GroupListResponse {
@@ -313,14 +302,18 @@ export interface GroupListResponse {
 }
 
 export async function getGroupList(params: GroupListParams = {}): Promise<GroupListResponse> {
-  return apiCallWithMock(
-    async () => {
-      const { data } = await adminApiClient.get<GroupListResponse>('/admin/api/v1/group-list', { params })
-      return data
-    },
-    MOCK_GROUPS,
-    'GroupList'
-  )
+  const searchParams = new URLSearchParams()
+  if (params.page) searchParams.append('page', String(params.page))
+  if (params.per_page) searchParams.append('per_page', String(params.per_page))
+  if (params.q) searchParams.append('q', params.q)
+  if (params.status) searchParams.append('status', params.status)
+  if (params.tags) {
+    params.tags.forEach(tag => searchParams.append('tags', tag))
+  }
+  
+  const url = `/admin/api/v1/group-list${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
+  const { data } = await adminApiClient.get<GroupListResponse>(url)
+  return data
 }
 
 /**
@@ -425,6 +418,7 @@ export async function getUserInfo(): Promise<UserInfo> {
     'UserInfo'
   )
 }
+
 
 /**
  * 获取红包任务列表

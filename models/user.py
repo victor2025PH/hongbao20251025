@@ -20,7 +20,7 @@
 """
 
 from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, UTC
 from decimal import Decimal, ROUND_DOWN
 from typing import Optional, Dict, Union, Tuple, Any
 
@@ -79,7 +79,7 @@ class User(Base):
     created = synonym("created_at")
 
     def touch(self) -> None:
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)
 
 
 # ---------- 内部工具 ----------
@@ -461,7 +461,7 @@ def upsert_user_from_tg(tg_user) -> 'User':
     - 若你的 users 表暂时没有这些列，代码会自动跳过对应赋值，不会报错
     """
     tg_id = int(getattr(tg_user, "id"))
-    now = datetime.utcnow()
+    now = datetime.now(UTC)
 
     # 预取字段（若 tg_user 没有该属性，统一用 None）
     username: Optional[str]   = getattr(tg_user, "username", None)

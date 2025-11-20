@@ -53,12 +53,40 @@ def _split_users(raw: str) -> List[str]:
 
 
 def _resolve_single(db, token: str) -> User | None:
+    """
+    解析单个用户标识符（支持 tg_id 或 @username）
+    - 纯数字（至少4位）：当作 tg_id 查找
+    - 其他：当作 username 查找（不区分大小写，支持 @ 前缀）
+    """
+    token = token.strip()
+    if not token:
+        return None
+    
     # 纯数字当作 tg_id
     if re.fullmatch(r"\d{4,}", token):
-        return db.query(User).filter(User.tg_id == int(token)).first()
+        try:
+            tg_id = int(token)
+            user = db.query(User).filter(User.tg_id == tg_id).first()
+            return user
+        except (ValueError, TypeError) as e:
+            # 如果转换失败，继续尝试作为用户名查找
+            pass
+    
     # 去掉前缀 @，统一小写做不区分大小写匹配
-    uname = token.lstrip("@").lower()
-    return db.query(User).filter(func.lower(User.username) == uname).first()
+    uname = token.lstrip("@").strip().lower()
+    if not uname:
+        return None
+    
+    # 注意：如果 username 为 None，func.lower() 会返回 None，需要处理 NULL 值
+    # 使用 func.lower() 并确保 username IS NOT NULL
+    from sqlalchemy import and_
+    user = db.query(User).filter(
+        and_(
+            User.username.isnot(None),  # 确保 username 不为 NULL
+            func.lower(User.username) == uname
+        )
+    ).first()
+    return user
 
 
 def _resolve_users(db, tokens: List[str]) -> Tuple[List[User], List[str]]:
@@ -206,6 +234,14 @@ def adjust_do(
                 fail += 1
                 continue
             # 记账与更新（写入 ledger）
+            # 如果需要记录操作人信息，将其追加到 note 中
+            operator_note = note[:120] if note else ""
+            if sess.get("tg_id"):
+                operator_info = f"操作人: {sess.get('tg_id')}"
+                if operator_note:
+                    operator_note = f"{operator_note} | {operator_info}"
+                else:
+                    operator_note = operator_info
             update_balance(
                 db,
                 u.tg_id,
@@ -213,14 +249,28 @@ def adjust_do(
                 delta,
                 write_ledger=True,
                 ltype=LedgerType.ADJUSTMENT,
-                note=note[:120] if note else None,
-                operator_id=sess.get("tg_id"),  # 操作人
+                note=operator_note if operator_note else None,
             )
             ok += 1
             results.append({"u": u, "ok": True, "msg": t("admin.toast.done") or "OK"})
         except Exception as e:
             fail += 1
-            results.append({"u": u, "ok": False, "msg": str(e)})
+            # 将错误信息转换为中文友好提示
+            error_msg = str(e)
+            if "operator_id" in error_msg.lower():
+                error_msg = "系统错误：函数参数配置错误。请联系技术支持。"
+            elif "INSUFFICIENT_BALANCE" in error_msg:
+                error_msg = "余额不足：无法扣减，用户余额不足以完成此次操作。"
+            elif "no such table" in error_msg.lower():
+                error_msg = "数据库错误：数据表不存在。请联系系统管理员检查数据库配置。"
+            elif "connection" in error_msg.lower() and "refused" in error_msg.lower():
+                error_msg = "数据库连接错误：无法连接到数据库。请检查数据库服务状态。"
+            elif "UNIQUE constraint failed" in error_msg or "duplicate" in error_msg.lower():
+                error_msg = "数据冲突：记录已存在，无法重复创建。"
+            else:
+                # 保留原始错误信息，但添加中文说明
+                error_msg = f"操作失败：{error_msg}"
+            results.append({"u": u, "ok": False, "msg": error_msg})
 
     db.commit()
 

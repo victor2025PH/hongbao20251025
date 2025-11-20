@@ -2,12 +2,15 @@
 from __future__ import annotations
 
 import time
-import datetime as dt
+from datetime import datetime, UTC
+import logging
 from typing import Dict, Any
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from sqlalchemy import func, case, and_
+from sqlalchemy.exc import OperationalError as SQLAlchemyOperationalError
+import sqlite3
 
 from core.i18n.i18n import t
 # 读写分离：如未配置只读连接，deps 内部会回落到读写连接
@@ -18,6 +21,8 @@ from models.user import User
 from models.envelope import Envelope
 from models.ledger import Ledger
 from models.recharge import RechargeOrder, OrderStatus  # ← 修正类名
+
+logger = logging.getLogger("web_admin.controllers.dashboard")
 
 router = APIRouter(prefix="/admin", tags=["admin-dashboard"])
 
@@ -43,7 +48,7 @@ def _stats_query(db) -> Dict[str, Any]:
       - ledger(created_at), ledger(type, created_at)
       - recharge_orders(status), recharge_orders(status, created_at)
     """
-    seven_days_ago = dt.datetime.utcnow().replace(tzinfo=None) - dt.timedelta(days=7)
+    seven_days_ago = dt.datetime.now(UTC).replace(tzinfo=None) - dt.timedelta(days=7)
 
     # ---- Users ----
     users_total = 0
@@ -60,64 +65,110 @@ def _stats_query(db) -> Dict[str, Any]:
 
     # ---- Envelopes（活跃中）----
     # 有 status 就按 OPEN 认定"活跃"；否则按 remain_count>0 且未关闭
-    E_STATUS = _col(Envelope, "status")
-    E_CLOSED = _col(Envelope, "closed_at", "finished_at", "ended_at", "is_finished")
-    E_REMAIN = _col(Envelope, "remain_count", "left_count", "rest_count", "left", "left_shares")
+    envelopes_active = 0
+    try:
+        E_STATUS = _col(Envelope, "status")
+        E_CLOSED = _col(Envelope, "closed_at", "finished_at", "ended_at", "is_finished")
+        E_REMAIN = _col(Envelope, "remain_count", "left_count", "rest_count", "left", "left_shares")
 
-    q_env = db.query(func.count(1)).select_from(Envelope)
-    if E_STATUS is not None:
-        q_env = q_env.filter(E_STATUS.in_(["OPEN", "ACTIVE", "ONGOING"]))
-    else:
-        conds = []
-        if E_REMAIN is not None:
-            conds.append(E_REMAIN > 0)
-        if E_CLOSED is not None:
-            # 支持字段为布尔/时间的情况
-            try:
-                conds.append(and_(E_CLOSED.is_(None)))
-            except Exception:
-                pass
-        if conds:
-            q_env = q_env.filter(and_(*conds))
-    envelopes_active = q_env.scalar() or 0
+        q_env = db.query(func.count(1)).select_from(Envelope)
+        if E_STATUS is not None:
+            q_env = q_env.filter(E_STATUS.in_(["OPEN", "ACTIVE", "ONGOING"]))
+        else:
+            conds = []
+            if E_REMAIN is not None:
+                conds.append(E_REMAIN > 0)
+            if E_CLOSED is not None:
+                # 支持字段为布尔/时间的情况
+                try:
+                    conds.append(and_(E_CLOSED.is_(None)))
+                except Exception:
+                    pass
+            if conds:
+                q_env = q_env.filter(and_(*conds))
+        envelopes_active = q_env.scalar() or 0
+    except (SQLAlchemyOperationalError, sqlite3.OperationalError) as e:
+        # 优雅降级：如果 envelopes 表不存在，使用零统计值
+        # 这提升了开发/新部署环境下的稳定性，生产环境应通过迁移/初始化确保表存在
+        error_msg = str(e).lower()
+        if "no such table" in error_msg and "envelopes" in error_msg:
+            logger.warning("envelopes table not found, using zero stats")
+            envelopes_active = 0
+        else:
+            # 其他类型的数据库错误（如连接失败、权限问题等），重新抛出
+            raise
+    except Exception:
+        # 其他类型的异常，重新抛出
+        raise
 
     # ---- Ledger（近 7 天 Σ 金额与条数，只算核心类型）----
-    L_AMOUNT = _col(Ledger, "amount", "delta", "value")
-    L_CREATED = _col(Ledger, "created_at", "created", "ts")
-    L_TYPE = _col(Ledger, "type", "ltype")
-    # 用你模型里的规范类型名
-    FOCUS_TYPES = ("RECHARGE", "HONGBAO_SEND", "HONGBAO_GRAB", "ADJUSTMENT")
+    ledger_7d_amount = 0
+    ledger_7d_count = 0
+    try:
+        L_AMOUNT = _col(Ledger, "amount", "delta", "value")
+        L_CREATED = _col(Ledger, "created_at", "created", "ts")
+        L_TYPE = _col(Ledger, "type", "ltype")
+        # 用你模型里的规范类型名
+        FOCUS_TYPES = ("RECHARGE", "HONGBAO_SEND", "HONGBAO_GRAB", "ADJUSTMENT")
 
-    if L_AMOUNT is not None:
-        q_ledger = db.query(
-            func.coalesce(func.sum(L_AMOUNT), 0).label("sum_amt"),
-            func.count(1).label("cnt"),
-        ).select_from(Ledger)
-    else:
-        q_ledger = db.query(func.count(1).label("cnt")).select_from(Ledger)
+        if L_AMOUNT is not None:
+            q_ledger = db.query(
+                func.coalesce(func.sum(L_AMOUNT), 0).label("sum_amt"),
+                func.count(1).label("cnt"),
+            ).select_from(Ledger)
+        else:
+            q_ledger = db.query(func.count(1).label("cnt")).select_from(Ledger)
 
-    if L_CREATED is not None:
-        q_ledger = q_ledger.filter(L_CREATED >= seven_days_ago)
-    if L_TYPE is not None:
-        q_ledger = q_ledger.filter(L_TYPE.in_(FOCUS_TYPES))
+        if L_CREATED is not None:
+            q_ledger = q_ledger.filter(L_CREATED >= seven_days_ago)
+        if L_TYPE is not None:
+            q_ledger = q_ledger.filter(L_TYPE.in_(FOCUS_TYPES))
 
-    rec = q_ledger.first()
-    ledger_7d_amount = ((rec.sum_amt if rec else 0) or 0) if L_AMOUNT is not None else 0
-    ledger_7d_count = (rec.cnt if rec else 0) or 0
+        rec = q_ledger.first()
+        ledger_7d_amount = ((rec.sum_amt if rec else 0) or 0) if L_AMOUNT is not None else 0
+        ledger_7d_count = (rec.cnt if rec else 0) or 0
+    except (SQLAlchemyOperationalError, sqlite3.OperationalError) as e:
+        # 优雅降级：如果 ledger 表不存在，使用零统计值
+        error_msg = str(e).lower()
+        if "no such table" in error_msg and "ledger" in error_msg:
+            logger.warning("ledger table not found, using zero stats")
+            ledger_7d_amount = 0
+            ledger_7d_count = 0
+        else:
+            # 其他类型的数据库错误，重新抛出
+            raise
+    except Exception:
+        # 其他类型的异常，重新抛出
+        raise
 
     # ---- Recharge（PENDING / SUCCESS 数量）----
     # 你的模型字段：RechargeOrder.status 是 Enum(OrderStatus)
-    R_STATUS = _col(RechargeOrder, "status")
-    recharge_pending = recharge_success = 0
-    if R_STATUS is not None:
-        # SQLAlchemy Enum 列直接与枚举值比较最稳妥
-        q_re = db.query(
-            func.sum(case((R_STATUS == OrderStatus.PENDING, 1), else_=0)).label("p"),
-            func.sum(case((R_STATUS == OrderStatus.SUCCESS, 1), else_=0)).label("s"),
-        ).select_from(RechargeOrder)
-        row = q_re.first()
-        recharge_pending = int((row.p if row else 0) or 0)
-        recharge_success = int((row.s if row else 0) or 0)
+    recharge_pending = 0
+    recharge_success = 0
+    try:
+        R_STATUS = _col(RechargeOrder, "status")
+        if R_STATUS is not None:
+            # SQLAlchemy Enum 列直接与枚举值比较最稳妥
+            q_re = db.query(
+                func.sum(case((R_STATUS == OrderStatus.PENDING, 1), else_=0)).label("p"),
+                func.sum(case((R_STATUS == OrderStatus.SUCCESS, 1), else_=0)).label("s"),
+            ).select_from(RechargeOrder)
+            row = q_re.first()
+            recharge_pending = int((row.p if row else 0) or 0)
+            recharge_success = int((row.s if row else 0) or 0)
+    except (SQLAlchemyOperationalError, sqlite3.OperationalError) as e:
+        # 优雅降级：如果 recharge_orders 表不存在，使用零统计值
+        error_msg = str(e).lower()
+        if "no such table" in error_msg and ("recharge" in error_msg or "recharge_order" in error_msg):
+            logger.warning("recharge_orders table not found, using zero stats")
+            recharge_pending = 0
+            recharge_success = 0
+        else:
+            # 其他类型的数据库错误，重新抛出
+            raise
+    except Exception:
+        # 其他类型的异常，重新抛出
+        raise
 
     return {
         "users_total": int(users_total or 0),
@@ -128,7 +179,7 @@ def _stats_query(db) -> Dict[str, Any]:
         "recharge_success": int(recharge_success or 0),
         # 返回 ISO 格式字符串，供前端和模板使用
         "since": seven_days_ago.isoformat(),
-        "until": dt.datetime.utcnow().replace(tzinfo=None).isoformat(),
+        "until": dt.datetime.now(UTC).replace(tzinfo=None).isoformat(),
     }
 
 
@@ -202,8 +253,8 @@ def get_dashboard_stats_public(db=Depends(db_session)):
             "ledger_7d_count": 890,
             "recharge_pending": 12,
             "recharge_success": 345,
-            "since": (dt.datetime.utcnow() - dt.timedelta(days=7)).isoformat(),
-            "until": dt.datetime.utcnow().isoformat(),
+            "since": (dt.datetime.now(UTC) - dt.timedelta(days=7)).isoformat(),
+            "until": dt.datetime.now(UTC).isoformat(),
         }
         return JSONResponse(mock_data)
 
@@ -246,8 +297,8 @@ def get_dashboard(db=Depends(db_session), sess=Depends(require_admin)):
             "last_7d_orders": 890,
             "pending_recharges": 12,
             "success_recharges": 345,
-            "since": (dt.datetime.utcnow() - dt.timedelta(days=7)).isoformat(),
-            "until": dt.datetime.utcnow().isoformat(),
+            "since": (dt.datetime.now(UTC) - dt.timedelta(days=7)).isoformat(),
+            "until": dt.datetime.now(UTC).isoformat(),
         }
         return JSONResponse(mock_data)
 
@@ -290,7 +341,7 @@ def get_dashboard_public(db=Depends(db_session)):
             "last_7d_orders": 890,
             "pending_recharges": 12,
             "success_recharges": 345,
-            "since": (dt.datetime.utcnow() - dt.timedelta(days=7)).isoformat(),
-            "until": dt.datetime.utcnow().isoformat(),
+            "since": (dt.datetime.now(UTC) - dt.timedelta(days=7)).isoformat(),
+            "until": dt.datetime.now(UTC).isoformat(),
         }
         return JSONResponse(mock_data)

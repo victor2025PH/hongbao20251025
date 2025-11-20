@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import re
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from pathlib import Path
 from datetime import datetime, timedelta
 
@@ -74,8 +74,8 @@ def setup_module() -> None:
         activity = create_activity(
             session,
             name="Launch Bonus",
-            start_at=datetime.utcnow() - timedelta(hours=1),
-            end_at=datetime.utcnow() + timedelta(days=1),
+            start_at=datetime.now(UTC) - timedelta(hours=1),
+            end_at=datetime.now(UTC) + timedelta(days=1),
             reward_points=2,
             bonus_points=3,
             highlight_slots=1,
@@ -139,8 +139,8 @@ def _extract_csrf(path: str) -> str:
 
 def test_public_groups_activity_management() -> None:
     token = _extract_csrf("/admin/public-groups/activities")
-    start_at = (datetime.utcnow() - timedelta(minutes=5)).strftime("%Y-%m-%dT%H:%M")
-    end_at = (datetime.utcnow() + timedelta(days=7)).strftime("%Y-%m-%dT%H:%M")
+    start_at = (datetime.now(UTC) - timedelta(minutes=5)).strftime("%Y-%m-%dT%H:%M")
+    end_at = (datetime.now(UTC) + timedelta(days=7)).strftime("%Y-%m-%dT%H:%M")
     create_resp = client.post(
         "/admin/public-groups/activities",
         data={

@@ -1,0 +1,65 @@
+{
+  "timestamp": "2025-11-18T10:12:05.697911",
+  "summary": {
+    "services_running": 2,
+    "services_total": 2,
+    "tests_passed": 2,
+    "tests_failed": 0,
+    "api_endpoints_tested": 3,
+    "api_endpoints_ok": 2
+  },
+  "services": [
+    {
+      "service": "Web Admin",
+      "port": 8001,
+      "status": "running",
+      "health_check": "passed",
+      "response": "{\"ok\":true,\"ts\":\"2025-11-18T02:11:48.882749\"}"
+    },
+    {
+      "service": "MiniApp API",
+      "port": 8080,
+      "status": "running",
+      "health_check": "passed",
+      "response": "{\"ok\":true}"
+    }
+  ],
+  "tests": [
+    {
+      "file": "tests/test_regression_features.py",
+      "status": "passed",
+      "output": "\\Programs\\Python\\Python313\\Lib\\site-packages\\sqlalchemy\\sql\\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n======================= 11 passed, 16 warnings in 3.16s =======================\n"
+    },
+    {
+      "file": "tests/test_public_group_service.py",
+      "status": "passed",
+      "output": "\\Programs\\Python\\Python313\\Lib\\site-packages\\sqlalchemy\\sql\\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n======================= 7 passed, 39 warnings in 0.59s ========================\n"
+    },
+    {
+      "file": "tests/test_api_public_groups.py",
+      "status": "failed",
+      "output": "dpoint\nFAILED tests/test_api_public_groups.py::test_public_group_activity_detail_endpoint\nFAILED tests/test_api_public_groups.py::test_public_group_bookmarks_flow - Ty...\nFAILED tests/test_api_public_groups.py::test_public_group_history_endpoint - ...\nFAILED tests/test_api_public_groups.py::test_public_group_report_endpoint_creates_case\nFAILED tests/test_api_public_groups.py::test_public_group_activity_webhook_admin\n======================= 8 failed, 27 warnings in 2.71s ========================\n",
+      "error": null
+    }
+  ],
+  "api_endpoints": [
+    {
+      "endpoint": "Web Admin - Readyz",
+      "url": "http://localhost:8001/readyz",
+      "status": "ok",
+      "status_code": 200
+    },
+    {
+      "endpoint": "Web Admin - Metrics",
+      "url": "http://localhost:8001/metrics",
+      "status": "ok",
+      "status_code": 200
+    },
+    {
+      "endpoint": "MiniApp API - Groups",
+      "url": "http://localhost:8080/v1/groups/public",
+      "status": "warning",
+      "status_code": 503
+    }
+  ]
+}

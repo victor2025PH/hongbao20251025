@@ -30,7 +30,7 @@ import os
 import re
 import enum
 from typing import Optional, Iterable, List, Dict, Any, Union, Tuple, Generator, Sequence
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from decimal import Decimal
 
 from sqlalchemy import func
@@ -305,7 +305,7 @@ def _write_dataframe(
     enable_filter: bool = True,
 ) -> str:
     _ensure_export_dir()
-    ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    ts = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
 
     if fmt.lower() == "csv":
         path = os.path.join(EXPORT_DIR, f"{basename}_{ts}.csv")
@@ -522,7 +522,7 @@ def export_all_users_detail(fmt: str = "xlsx") -> Optional[str]:
 # ---------------------------------------
 
 def _collect_last7d_stats(uid_tg: int) -> Dict[str, Any]:
-    since = datetime.utcnow() - timedelta(days=7)
+    since = datetime.now(UTC) - timedelta(days=7)
     with get_session() as s:
         q = s.query(Ledger).filter(
             (Ledger.user_tg_id == uid_tg) if hasattr(Ledger, "user_tg_id") else (Ledger.user_id == uid_tg),
@@ -613,7 +613,7 @@ def export_one_user_full(
 
     # 写工作簿
     _ensure_export_dir()
-    ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    ts = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
     path = os.path.join(EXPORT_DIR, f"user_{getattr(user, 'tg_id', 'unknown')}_{ts}.xlsx")
 
     wb = Workbook()
@@ -787,7 +787,7 @@ def export_all_users_and_ledger(
     ]
 
     _ensure_export_dir()
-    ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    ts = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
     path = os.path.join(EXPORT_DIR, f"export_all_{ts}.xlsx")
 
     # last_seen_map（全量）
@@ -889,7 +889,7 @@ def export_users_full(
     ]
 
     _ensure_export_dir()
-    ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    ts = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
     path = os.path.join(EXPORT_DIR, f"export_users_{ts}.xlsx")
 
     wb = Workbook()

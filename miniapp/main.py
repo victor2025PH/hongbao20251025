@@ -10,7 +10,6 @@ Bearer token (JWT) issued by `/api/auth/login`; legacy `X-TG-USER-ID` header wil
 
 from __future__ import annotations
 
-import logging
 from typing import Any, Dict, List, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response, status
@@ -21,6 +20,13 @@ from sqlalchemy.orm import Session
 from config.load_env import load_env
 
 load_env()
+
+# 设置统一 JSON 日志系统
+from config.logging_config import setup_logging
+setup_logging()
+
+import logging
+logger = logging.getLogger("backend.miniapp")
 
 from config.feature_flags import flags_obj  # noqa: E402
 from config.settings import is_admin  # noqa: E402
@@ -61,8 +67,6 @@ from services.public_group_tracking import (  # noqa: E402
 )
 from miniapp.auth import router as auth_router  # noqa: E402
 from miniapp.middleware import JWTAuthMiddleware  # noqa: E402
-
-log = logging.getLogger("miniapp.api")
 
 app = FastAPI(
     title="MiniApp Public Group API",
@@ -349,7 +353,7 @@ def _startup() -> None:
     try:
         init_db()
     except Exception as exc:  # pragma: no cover - best effort logging
-        log.exception("init_db failed during startup: %s", exc)
+        logger.exception("init_db failed during startup: %s", exc)
 
 
 # ---------------------------------------------------------------------------
@@ -471,7 +475,7 @@ def api_create_activity_webhook(
         return _to_webhook_response(webhook)
     except Exception:
         db.rollback()
-        log.exception("activity_webhook.upsert_failed activity_id=%s", activity_id)
+        logger.exception("activity_webhook.upsert_failed activity_id=%s", activity_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="webhook_upsert_failed")
 
 
@@ -494,7 +498,7 @@ def api_delete_activity_webhook(
         db.commit()
     except Exception:
         db.rollback()
-        log.exception("activity_webhook.delete_failed webhook_id=%s", webhook_id)
+        logger.exception("activity_webhook.delete_failed webhook_id=%s", webhook_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="webhook_delete_failed")
     if not removed:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="webhook_not_found")
@@ -600,7 +604,7 @@ def api_create_public_group(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=exc.args[0] if exc.args else "invalid")
     except Exception:
         db.rollback()
-        log.exception("create_group unexpected user=%s", user.tg_id)
+        logger.exception("create_group unexpected user=%s", user.tg_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="internal_error")
 
     return PublicGroupCreateResponse(group=_to_summary(group), risk=RiskPayload.from_result(risk))
@@ -628,7 +632,7 @@ def api_join_public_group(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=exc.args[0] if exc.args else "invalid")
     except Exception:
         db.rollback()
-        log.exception("join_group unexpected group=%s user=%s", group_id, user.tg_id)
+        logger.exception("join_group unexpected group=%s user=%s", group_id, user.tg_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="internal_error")
 
     return PublicGroupJoinResponse(**result)
@@ -654,7 +658,7 @@ def api_bookmark_public_group(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=exc.args[0] if exc.args else "invalid")
     except Exception:
         db.rollback()
-        log.exception("bookmark_group unexpected group=%s user=%s", group_id, user.tg_id)
+        logger.exception("bookmark_group unexpected group=%s user=%s", group_id, user.tg_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="internal_error")
     return BookmarkStatusResponse(bookmarked=True)
 
@@ -675,7 +679,7 @@ def api_unbookmark_public_group(
         db.commit()
     except Exception:
         db.rollback()
-        log.exception("unbookmark_group unexpected group=%s user=%s", group_id, user.tg_id)
+        logger.exception("unbookmark_group unexpected group=%s user=%s", group_id, user.tg_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="internal_error")
     response.status_code = status.HTTP_200_OK if removed else status.HTTP_200_OK
     return BookmarkStatusResponse(bookmarked=False)
@@ -703,7 +707,7 @@ def api_pin_public_group(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=exc.args[0] if exc.args else "invalid")
     except Exception:
         db.rollback()
-        log.exception("pin_group unexpected group=%s operator=%s", group_id, user.tg_id)
+        logger.exception("pin_group unexpected group=%s operator=%s", group_id, user.tg_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="internal_error")
     return _to_summary(group)
 
@@ -726,7 +730,7 @@ def api_unpin_public_group(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=exc.args[0] if exc.args else "invalid")
     except Exception:
         db.rollback()
-        log.exception("unpin_group unexpected group=%s operator=%s", group_id, user.tg_id)
+        logger.exception("unpin_group unexpected group=%s operator=%s", group_id, user.tg_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="internal_error")
     return _to_summary(group)
 
@@ -770,7 +774,7 @@ def api_update_public_group(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=exc.args[0] if exc.args else "invalid")
     except Exception:
         db.rollback()
-        log.exception("update_group unexpected group=%s user=%s", group_id, user.tg_id)
+        logger.exception("update_group unexpected group=%s user=%s", group_id, user.tg_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="internal_error")
     return _to_summary(group)
 
@@ -801,7 +805,7 @@ def api_report_public_group(
         db.commit()
     except Exception:
         db.rollback()
-        log.exception("public_group.report.create_failed group=%s reporter=%s", group_id, user.tg_id)
+        logger.exception("public_group.report.create_failed group=%s reporter=%s", group_id, user.tg_id)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="internal_error")
     return {"ok": True}
 
@@ -838,7 +842,7 @@ def api_track_public_group_event(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="invalid_event_type")
     except Exception:
         db.rollback()
-        log.exception("record_event unexpected group=%s type=%s", group_id, event_type)
+        logger.exception("record_event unexpected group=%s type=%s", group_id, event_type)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="internal_error")
 
     return {

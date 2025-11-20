@@ -1,0 +1,62 @@
+# ============================================
+# Docker Compose 本地开发覆盖配置示例
+# ============================================
+# 复制此文件为 docker-compose.override.yml，用于本地开发环境
+# docker-compose.override.yml 会被自动加载，无需使用 -f 参数
+
+version: "3.9"
+
+# 本地开发环境特定配置
+services:
+  # Web Admin API - 本地开发配置
+  web_admin:
+    volumes:
+      # 挂载代码目录，支持热重载（如果使用 --reload）
+      - .:/app:cached
+    environment:
+      # 本地开发启用调试
+      DEBUG: "true"
+    # 本地开发可以使用单 worker
+    command: uvicorn web_admin.main:app --host 0.0.0.0 --port 8001 --reload
+    ports:
+      # 本地开发允许外部访问（方便调试）
+      - "0.0.0.0:8001:8001"
+
+  # MiniApp API - 本地开发配置
+  miniapp_api:
+    volumes:
+      # 挂载代码目录，支持热重载
+      - .:/app:cached
+    environment:
+      # 本地开发启用调试
+      DEBUG: "true"
+    # 本地开发可以使用单 worker
+    command: uvicorn miniapp.main:app --host 0.0.0.0 --port 8080 --reload
+    ports:
+      # 本地开发允许外部访问（方便调试）
+      - "0.0.0.0:8080:8080"
+
+  # Frontend - 本地开发配置
+  frontend:
+    volumes:
+      # 挂载代码目录，支持热重载
+      - ./frontend-next:/app:cached
+      - /app/node_modules  # 排除 node_modules，使用容器内的
+    environment:
+      # 本地开发启用开发工具
+      NEXT_PUBLIC_ENABLE_DEVTOOLS: "true"
+    # 本地开发可以使用 dev 模式（如果配置了）
+    # command: npm run dev
+
+  # 数据库 - 本地开发配置
+  db:
+    ports:
+      # 本地开发允许外部访问数据库（方便使用数据库工具）
+      - "0.0.0.0:5432:5432"
+
+  # Redis - 本地开发配置
+  redis:
+    ports:
+      # 本地开发允许外部访问 Redis（方便使用 Redis 工具）
+      - "0.0.0.0:6379:6379"
+

@@ -1,0 +1,47 @@
+====================================
+修复 Docker 安装错误并完成安装
+====================================
+
+问题：/etc/apt/sources.list.d/ 目录不存在
+
+解决方案：在服务器上执行以下命令
+
+------------------------------------------------------------
+
+方法 1: 一键修复（推荐，复制所有命令执行）
+
+sudo mkdir -p /etc/apt/sources.list.d && \
+sudo mkdir -p /etc/apt/keyrings && \
+curl -fsSL https://get.docker.com -o /tmp/get-docker.sh && \
+sudo sh /tmp/get-docker.sh && \
+sudo usermod -aG docker $USER && \
+docker --version && \
+docker-compose --version && \
+echo "✅ Docker 安装完成！"
+
+------------------------------------------------------------
+
+方法 2: 如果 Docker Compose 未安装，单独安装
+
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+sudo chmod +x /usr/local/bin/docker-compose && \
+docker-compose --version
+
+------------------------------------------------------------
+
+方法 3: 启动 Docker 服务并设置开机自启
+
+sudo systemctl start docker && \
+sudo systemctl enable docker && \
+sudo systemctl status docker
+
+------------------------------------------------------------
+
+完成后的验证命令：
+
+docker --version
+docker-compose --version
+docker ps
+docker run hello-world
+
+====================================

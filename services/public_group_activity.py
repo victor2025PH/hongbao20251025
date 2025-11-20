@@ -5,7 +5,7 @@ import logging
 import os
 import hashlib
 import hmac
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Dict, List, Optional, Sequence, Tuple
 
 import httpx
@@ -312,7 +312,12 @@ def bulk_update_activities(
     return summary
 
 def _active_join_activities(session: Session, now: Optional[datetime] = None) -> Sequence[PublicGroupActivity]:
-    now = now or datetime.utcnow()
+    from datetime import timezone
+    if now is None:
+        now = datetime.now(UTC)
+    elif now.tzinfo is None:
+        # 如果传入的是 naive datetime，转换为 UTC aware
+        now = now.replace(tzinfo=timezone.utc)
     stmt = select(PublicGroupActivity).where(
         PublicGroupActivity.activity_type == JOIN_BONUS_TYPE,
         PublicGroupActivity.status == PublicGroupActivityStatus.ACTIVE,
@@ -323,7 +328,7 @@ def _active_join_activities(session: Session, now: Optional[datetime] = None) ->
 
 
 def _today_key(now: Optional[datetime] = None) -> str:
-    now = now or datetime.utcnow()
+    now = now or datetime.now(UTC)
     return now.date().isoformat()
 
 
@@ -343,7 +348,7 @@ def apply_join_bonus(
     user_tg_id: int,
     now: Optional[datetime] = None,
 ) -> Tuple[int, List[Dict[str, object]]]:
-    now = now or datetime.utcnow()
+    now = now or datetime.now(UTC)
     today_key = _today_key(now)
     total_bonus = 0
     bonuses: List[Dict[str, object]] = []
@@ -449,7 +454,7 @@ def get_active_campaign_summaries(
     user_tg_id: Optional[int] = None,
     now: Optional[datetime] = None,
 ) -> List[Dict[str, object]]:
-    now = now or datetime.utcnow()
+    now = now or datetime.now(UTC)
     activities = _active_join_activities(session, now)
     summaries: List[Dict[str, object]] = []
     for activity in activities:
@@ -461,7 +466,17 @@ def get_active_campaign_summaries(
         )
         time_left_seconds = None
         if activity.end_at:
-            time_left_seconds = int((activity.end_at - now).total_seconds())
+            # 确保两个 datetime 都是 aware 或都是 naive
+            end_at = activity.end_at
+            if end_at.tzinfo is None and now.tzinfo is not None:
+                # 如果 end_at 是 naive，假设它是 UTC
+                from datetime import timezone
+                end_at = end_at.replace(tzinfo=timezone.utc)
+            elif end_at.tzinfo is not None and now.tzinfo is None:
+                # 如果 now 是 naive，假设它是 UTC
+                from datetime import timezone
+                now = now.replace(tzinfo=timezone.utc)
+            time_left_seconds = int((end_at - now).total_seconds())
             if time_left_seconds < 0:
                 time_left_seconds = 0
         front_card = _build_front_card(
@@ -526,7 +541,7 @@ def get_active_campaign_detail(
     user_tg_id: Optional[int] = None,
     now: Optional[datetime] = None,
 ) -> Optional[Dict[str, object]]:
-    now = now or datetime.utcnow()
+    now = now or datetime.now(UTC)
     activity = session.get(PublicGroupActivity, int(activity_id))
     if not activity:
         return None
@@ -534,10 +549,24 @@ def get_active_campaign_detail(
         return None
 
     in_time_window = True
-    if activity.start_at and activity.start_at > now:
-        in_time_window = False
-    if activity.end_at and activity.end_at < now:
-        in_time_window = False
+    # 确保 datetime 比较时区一致
+    from datetime import timezone
+    start_at = activity.start_at
+    end_at = activity.end_at
+    if start_at:
+        if start_at.tzinfo is None and now.tzinfo is not None:
+            start_at = start_at.replace(tzinfo=timezone.utc)
+        elif start_at.tzinfo is not None and now.tzinfo is None:
+            now = now.replace(tzinfo=timezone.utc)
+        if start_at > now:
+            in_time_window = False
+    if end_at:
+        if end_at.tzinfo is None and now.tzinfo is not None:
+            end_at = end_at.replace(tzinfo=timezone.utc)
+        elif end_at.tzinfo is not None and now.tzinfo is None:
+            now = now.replace(tzinfo=timezone.utc)
+        if end_at < now:
+            in_time_window = False
 
     daily_remaining, total_remaining, participated = _remaining_cap_for_activity(
         session,
@@ -547,7 +576,17 @@ def get_active_campaign_detail(
     )
     time_left_seconds = None
     if activity.end_at:
-        time_left_seconds = int((activity.end_at - now).total_seconds())
+        # 确保两个 datetime 都是 aware 或都是 naive
+        end_at = activity.end_at
+        if end_at.tzinfo is None and now.tzinfo is not None:
+            # 如果 end_at 是 naive，假设它是 UTC
+            from datetime import timezone
+            end_at = end_at.replace(tzinfo=timezone.utc)
+        elif end_at.tzinfo is not None and now.tzinfo is None:
+            # 如果 now 是 naive，假设它是 UTC
+            from datetime import timezone
+            now = now.replace(tzinfo=timezone.utc)
+        time_left_seconds = int((end_at - now).total_seconds())
         if time_left_seconds < 0:
             time_left_seconds = 0
     front_card = _build_front_card(
@@ -652,8 +691,8 @@ def summarize_activity_performance(
     start_date: Optional[datetime] = None,
     end_date: Optional[datetime] = None,
 ) -> Dict[str, object]:
-    start = start_date or datetime.utcnow() - timedelta(days=7)
-    end = end_date or datetime.utcnow()
+    start = start_date or datetime.now(UTC) - timedelta(days=7)
+    end = end_date or datetime.now(UTC)
 
     stmt = (
         select(
@@ -852,7 +891,7 @@ def deactivate_webhook(
     stmt = (
         update(PublicGroupActivityWebhook)
         .where(PublicGroupActivityWebhook.id == int(webhook_id))
-        .values(is_active=False, updated_at=datetime.utcnow())
+        .values(is_active=False, updated_at=datetime.now(UTC))
     )
     result = session.execute(stmt)
     return result.rowcount > 0
@@ -901,7 +940,7 @@ def emit_activity_conversion(
         },
         "user": {"tg_id": int(user_tg_id)},
         "points": int(points),
-        "triggered_at": datetime.utcnow().isoformat() + "Z",
+        "triggered_at": datetime.now(UTC).isoformat() + "Z",
     }
     if metadata:
         payload["metadata"] = metadata

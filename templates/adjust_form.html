@@ -13,10 +13,10 @@
     <p class="mt-1 text-xs text-gray-400">{{ t("admin.common.hint") or "" }}</p>
   </div>
 
-  <div class="grid md:grid-cols-3 gap-4">
-    <div>
+  <div class="grid grid-cols-3 gap-4 items-end">
+    <div class="flex flex-col">
       <label class="block text-sm text-gray-600 mb-1">{{ t("admin.adjust.asset") }}</label>
-      <select name="asset" class="w-full border rounded-md p-2">
+      <select name="asset" class="w-full border rounded-md p-2 h-10">
         <option value="USDT">USDT</option>
         <option value="TON">TON</option>
         <option value="POINT">POINT</option>
@@ -24,20 +24,20 @@
       </select>
     </div>
 
-    <div>
+    <div class="flex flex-col">
       <label class="block text-sm text-gray-600 mb-1">{{ t("admin.adjust.amount") }}</label>
       <!-- 正数加，负数减；POINT/ENERGY 收敛为整数，其他资产最多 6 位小数 -->
-      <input name="amount" class="w-full border rounded-md p-2" placeholder="+10 或 -10" required />
+      <input name="amount" type="text" class="w-full border rounded-md p-2 h-10" placeholder="+10 或 -10" required />
     </div>
 
-    <div>
+    <div class="flex flex-col">
       <label class="block text-sm text-gray-600 mb-1">{{ t("admin.adjust.note") }}</label>
-      <input name="note" class="w-full border rounded-md p-2" maxlength="120" />
+      <input name="note" type="text" class="w-full border rounded-md p-2 h-10" maxlength="120" />
     </div>
   </div>
 
   <div class="flex items-center gap-3">
-    <button id="btn-preview" class="px-4 py-2 bg-black text-white rounded-md">{{ t("admin.adjust.preview") }}</button>
+    <button id="btn-preview" type="submit" class="px-4 py-2 bg-black text-white rounded-md">{{ t("admin.adjust.confirm") or "确定" }}</button>
     <a href="/admin" class="text-sm text-gray-700 underline">{{ t("admin.common.back") or 'Back' }}</a>
   </div>
 </form>
@@ -48,10 +48,38 @@
     const form = document.getElementById('adjust-form');
     const btn = document.getElementById('btn-preview');
     if (!form || !btn) return;
-    form.addEventListener('submit', function () {
+    
+    // 保存原始按钮文本
+    const originalText = btn.textContent;
+    
+    form.addEventListener('submit', function (e) {
+      // 验证表单
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      
       btn.disabled = true;
       btn.textContent = '{{ (t("admin.common.processing") or "处理中…")|e }}';
-      // 如果你希望更激进：也可以给整个表单控件加 disabled，这里先保持按钮级别即可
+      
+      // 如果提交失败（网络错误等），恢复按钮状态
+      // 注意：如果服务器返回了错误页面，页面会重新加载，按钮会自动恢复
+      setTimeout(function() {
+        // 5秒后如果还没有跳转（可能提交失败），恢复按钮
+        if (document.getElementById('adjust-form')) {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      }, 5000);
+    });
+    
+    // 页面加载时恢复按钮状态（防止页面回退后按钮仍被禁用）
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+        // 页面从缓存恢复（回退）
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
     });
   })();
 </script>

@@ -121,21 +121,30 @@
    pip install -r requirements.txt
    ```
 2. **初始化数据库（如首次部署或模型更新）**
+   
+   方式一：手动执行初始化脚本（推荐）
+   ```bash
+   python init_db.py
+   ```
+   
+   方式二：通过 Python 命令初始化
    ```bash
    python -c "from models.db import init_db; init_db()"
    ```
+   
+   > **注意**：Web Admin 和 MiniApp API 启动时会自动调用 `init_db()` 初始化数据库表结构，开发环境通常无需手动执行。生产环境建议使用 Alembic 迁移管理数据库变更。
 3. **启动 Bot / Web Admin / MiniApp**
    ```bash
    python app.py
-   uvicorn web_admin.main:app --host 0.0.0.0 --port 8000
+   uvicorn web_admin.main:app --host 0.0.0.0 --port 8001
    uvicorn miniapp.main:app --host 0.0.0.0 --port 8080
    ```
    > 若需启用 MiniApp Token 登录，请参考下方《MiniApp Token 认证设计》并在 `.env` 配置相关秘钥。
 4. **快速健康检查**
    ```bash
-   curl http://127.0.0.1:8000/healthz
-   curl http://127.0.0.1:8000/readyz
-   curl http://127.0.0.1:8000/metrics
+   curl http://127.0.0.1:8001/healthz
+   curl http://127.0.0.1:8001/readyz
+   curl http://127.0.0.1:8001/metrics
    ```
 5. **测试与自检（可选）**
    ```bash
@@ -146,38 +155,150 @@
 
 ---
 
-## 🚀 容器化部署样板
+## 🚀 快速启动指南
+
+### 一键启动所有服务
+
+1. **检查并释放端口冲突（如遇到端口 8001 被占用）**
+   
+   Windows PowerShell:
+   ```powershell
+   .\scripts\release-port-8001.ps1
+   ```
+   
+   或手动检查：
+   ```powershell
+   netstat -ano | Select-String -Pattern ":8001.*LISTENING"
+   ```
+
+2. **准备环境变量**
+   
+   复制 `.env.example` 为 `.env`，并填入必要的配置：
+   ```bash
+   # Windows
+   copy .env.example .env
+   
+   # Linux/macOS
+   cp .env.example .env
+   ```
+   
+   必须配置的环境变量：
+   - `BOT_TOKEN`：Telegram Bot Token（从 @BotFather 获取）
+   - `ADMIN_WEB_USER`：Web 管理后台用户名（默认：admin）
+   - `ADMIN_WEB_PASSWORD`：Web 管理后台密码
+   - `DATABASE_URL`：数据库连接串（开发环境默认使用 SQLite：`sqlite:////app/data/data.sqlite`）
+   - `FLAG_ENABLE_PUBLIC_GROUPS`：是否启用公开群功能（1=启用，0=禁用）
+
+3. **构建 Docker 镜像**
+   ```bash
+   docker compose build
+   ```
+
+4. **启动所有服务**
+   ```bash
+   docker compose up -d
+   ```
+   
+   这会启动以下服务：
+   - **bot**：Telegram 机器人（使用 aiogram 3.x）
+   - **web_admin**：Web 管理后台 API（端口 8001）
+   - **frontend**：Next.js 前端控制台（端口 3001）
+   - **miniapp_api**：MiniApp API（端口 8080）
+   - **db**：PostgreSQL 数据库（端口 15432，仅本地访问）
+   - **redis**：Redis 缓存（端口 6380，仅本地访问）
+
+5. **验证服务状态**
+   ```bash
+   docker compose ps
+   ```
+   
+   所有服务应显示为 `Up (healthy)` 或 `Up`
+
+6. **访问服务**
+   - **前端控制台**：http://localhost:3001
+   - **Web Admin API**：http://localhost:8001
+   - **MiniApp API**：http://localhost:8080
+   - **健康检查**：
+     ```bash
+     curl http://localhost:8001/healthz
+     curl http://localhost:8080/healthz
+     ```
+
+### 服务端口映射
+
+| 服务 | 容器端口 | 宿主机端口 | 说明 |
+|------|---------|-----------|------|
+| frontend | 3001 | 3001 | Next.js 前端控制台 |
+| web_admin | 8001 | 8001 | FastAPI Web 管理后台 |
+| miniapp_api | 8080 | 8080 | FastAPI MiniApp API |
+| db | 5432 | 15432 | PostgreSQL 数据库（仅本地） |
+| redis | 6379 | 6380 | Redis 缓存（仅本地） |
+
+### Telegram Bot 启动说明
+
+Bot 服务需要以下环境变量才能正常启动：
+
+- `BOT_TOKEN`：**必需**，Telegram Bot Token（从 @BotFather 获取）
+- `DATABASE_URL`：数据库连接串（如果未设置，使用默认 SQLite）
+- `ADMIN_IDS` 或 `SUPER_ADMINS`：管理员用户 ID（逗号分隔，可选）
+- `FLAG_ENABLE_PUBLIC_GROUPS`：是否启用公开群功能（1=启用，0=禁用）
+
+启动后，Bot 会自动开始 polling 接收消息。可以通过以下命令查看 Bot 日志：
+
+```bash
+docker compose logs -f bot
+```
+
+### 常见问题
+
+1. **端口 8001 被占用**
+   - 运行 `.\scripts\release-port-8001.ps1`（Windows）或手动停止占用进程
+   - 检查是否有其他 Docker 容器或应用占用该端口
+
+2. **Bot 服务无法启动**
+   - 确认 `BOT_TOKEN` 已正确配置
+   - 检查日志：`docker compose logs bot`
+   - 确认依赖已安装（`aiogram` 应在 requirements.txt 中）
+
+3. **前端无法连接后端 API**
+   - 确认 `NEXT_PUBLIC_ADMIN_API_BASE_URL` 环境变量正确（默认：http://localhost:8001）
+   - 检查后端服务是否正常运行：`docker compose ps web_admin`
+
+### 日志与维护
+
+查看服务日志：
+```bash
+docker compose logs -f bot          # Bot 日志
+docker compose logs -f web_admin    # Web Admin 日志
+docker compose logs -f frontend     # 前端日志
+docker compose logs -f              # 所有服务日志
+```
+
+停止所有服务：
+```bash
+docker compose down
+```
+
+重启特定服务：
+```bash
+docker compose restart bot
+docker compose restart web_admin
+```
+
+---
+
+## 🚀 容器化部署样板（详细说明）
 
 > 适用于本地联调 / 预生产环境，以单一镜像运行 Bot、Web Admin 与 MiniApp API。生产部署请结合自身的日志、监控与密钥管理策略拓展。
 
-1. **构建镜像**
-   ```bash
-   docker compose build  # 基于根目录 Dockerfile 构建 redpacket/app:latest
-   ```
-2. **准备环境变量**  
-   默认读取 `.env`，如需与本地开发隔离，可复制为 `.env.docker` 并在 `docker-compose.yml` 中引用。务必填入：
-   - `BOT_TOKEN`、`ADMIN_WEB_USER`、`ADMIN_WEB_PASSWORD`
-   - `DATABASE_URL=postgresql+psycopg2://redpacket:redpacket@db:5432/redpacket`（或你自己的连接串）
-   - `FLAG_ENABLE_PUBLIC_GROUPS=1`（如需启用公开群）
-3. **启动服务栈**
-   ```bash
-   docker compose up -d bot web_admin miniapp_api db redis
-   ```
-   - `bot`：运行 `python app.py`
-   - `web_admin`：通过 `uvicorn web_admin.main:app` 暴露后台（默认端口 8000）
-   - `miniapp_api`：通过 `uvicorn miniapp.main:app` 暴露 MiniApp REST（默认端口 8080）
-   - `db` / `redis`：可按需保留或移除（如接入托管数据库）
-4. **健康检查**
-   ```bash
-   curl http://127.0.0.1:8000/healthz
-   curl http://127.0.0.1:8080/healthz
-   ```
-5. **日志与维护**
-   ```bash
-   docker compose logs -f bot
-   docker compose exec db psql -U redpacket -d redpacket
-   docker compose down    # 关闭所有容器
-   ```
+### 服务说明
+
+- **bot**：运行 `python app.py`，Telegram 机器人主程序
+   - **web_admin**：通过 `uvicorn web_admin.main:app` 暴露后台（默认端口 8001）
+- **frontend**：Next.js 前端应用（端口 3001）
+- **miniapp_api**：通过 `uvicorn miniapp.main:app` 暴露 MiniApp REST（默认端口 8080）
+- **db**：PostgreSQL 数据库（可按需移除，改用托管数据库）
+- **redis**：Redis 缓存（可按需移除）
 
 ---
 
@@ -211,7 +332,7 @@
 ---
 
 ## 🔐 后台登录、二次确认与审计
-- 登录入口：`http://<host>:8000/admin/login`
+- 登录入口：`http://<host>:8001/admin/login`
 - 支持账号密码 + OTP/TOTP 双因子；超过失败次数自动锁定。
 - 余额清零、导出等敏感操作需二次确认并记录审计日志（`web_admin/services/audit_service.py`）。
 - 审计日志支持去重、查询与序列化，后续可扩展 Slack/Email 通知。

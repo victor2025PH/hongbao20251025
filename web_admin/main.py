@@ -4,11 +4,12 @@ from __future__ import annotations
 print("[boot] web_admin.main loaded from:", __file__)
 
 import os
-from datetime import datetime
+from datetime import datetime, UTC
 
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse, PlainTextResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.gzip import GZipMiddleware
@@ -16,6 +17,13 @@ from starlette.types import ASGIApp, Receive, Scope, Send
 
 from config.load_env import load_env
 load_env()
+
+# 设置统一 JSON 日志系统
+from config.logging_config import setup_logging
+setup_logging()
+
+import logging
+logger = logging.getLogger("backend.web_admin")
 
 
 # i18n
@@ -47,14 +55,19 @@ from web_admin.controllers.ledger import router as ledger_router
 from web_admin.controllers.ipn import router as ipn_router
 from web_admin.controllers.sheet_users import router as sheet_users_router
 from web_admin.controllers.tags import router as tags_router
+from web_admin.controllers.redpacket import router as redpacket_api_router
 
 # 仅保留 FastAPI 版本的 StaticFiles
 from fastapi.staticfiles import StaticFiles
 from monitoring.metrics import render_prometheus
 
+# 数据库初始化
+from models.db import init_db
+
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="Admin Console", docs_url=None, redoc_url=None)
+    # 创建 FastAPI 应用实例
+    fastapi_app = FastAPI(title="Admin Console", docs_url=None, redoc_url=None)
 
     # -----------------------------
     # 静态目录
@@ -62,7 +75,7 @@ def create_app() -> FastAPI:
     static_dir = os.getenv("STATIC_DIR", "static")
     os.makedirs(static_dir, exist_ok=True)
     os.makedirs(os.path.join(static_dir, "uploads"), exist_ok=True)
-    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    fastapi_app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
     # 文件下载/导出目录（若 .env 未给 FILES_DIR，就回退到 static/uploads）
     FILES_DIR = os.getenv("FILES_DIR")
@@ -70,7 +83,7 @@ def create_app() -> FastAPI:
         FILES_DIR = os.path.join(static_dir, "uploads")
     os.makedirs(FILES_DIR, exist_ok=True)
     # 同时把它挂到 app.state 上，后续其他模块要用可从这里取
-    app.state.FILES_DIR = FILES_DIR
+    fastapi_app.state.FILES_DIR = FILES_DIR
 
     # -----------------------------
     # 模板
@@ -92,21 +105,36 @@ def create_app() -> FastAPI:
             if isinstance(obj, dict):
                 return obj.get(name, default)
             return getattr(obj, name, default)
-        except Exception:
+        except (AttributeError, KeyError, TypeError):
             return default
 
     templates.env.filters["attribute"] = _jinja_attribute
     templates.env.filters["attr"] = _jinja_attribute  # 兼容别名
     # === /新增结束 ===
 
-    app.state.templates = templates
+    fastapi_app.state.templates = templates
     inject_templates(templates)  # 给 auth 模块
+
+    # -----------------------------
+    # CORS 中间件（允许前端跨域请求）
+    # -----------------------------
+    fastapi_app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            "http://localhost:3001",
+            "http://127.0.0.1:3001",
+            os.getenv("FRONTEND_URL", "http://localhost:3001"),
+        ],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     # -----------------------------
     # 会话中间件
     # -----------------------------
     session_secret = os.getenv("ADMIN_SESSION_SECRET", "dev_secret")
-    app.add_middleware(
+    fastapi_app.add_middleware(
         SessionMiddleware,
         secret_key=session_secret,
         same_site="lax",
@@ -118,15 +146,16 @@ def create_app() -> FastAPI:
     # 压缩中间件（节省带宽）
     # -----------------------------
     gzip_min_size = int(os.getenv("GZIP_MIN_SIZE", "1024") or "1024")
-    app.add_middleware(GZipMiddleware, minimum_size=gzip_min_size)
+    fastapi_app.add_middleware(GZipMiddleware, minimum_size=gzip_min_size)
 
     # -----------------------------
     # 安全响应头中间件（CSP、XFO、XCTO、RP 等）
     # 可通过环境变量覆写 CSP，默认兼容现有页面（允许内联脚本/样式）
     # -----------------------------
     class SecurityHeadersMiddleware:
-        def __init__(self, app: ASGIApp) -> None:
-            self.app = app
+        def __init__(self, app: ASGIApp, **kwargs) -> None:  # pylint: disable=redefined-outer-name
+            # 注意：这里使用 app 参数名是为了符合 Starlette 中间件接口规范
+            self.asgi_app = app
             # 默认较宽松，便于逐步收紧
             default_csp = (
                 "default-src 'self'; "
@@ -148,7 +177,7 @@ def create_app() -> FastAPI:
 
         async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
             if scope["type"] != "http":
-                await self.app(scope, receive, send)
+                await self.asgi_app(scope, receive, send)
                 return
 
             async def send_wrapper(message):
@@ -166,28 +195,28 @@ def create_app() -> FastAPI:
                         _set_header("strict-transport-security", "max-age=63072000; includeSubDomains; preload")
                 await send(message)
 
-            await self.app(scope, receive, send_wrapper)
+            await self.asgi_app(scope, receive, send_wrapper)
 
-    app.add_middleware(SecurityHeadersMiddleware)
+    fastapi_app.add_middleware(SecurityHeadersMiddleware)
 
     # -----------------------------
     # 首页跳转：把 / 落到 Dashboard
     # -----------------------------
-    @app.get("/", include_in_schema=False)
+    @fastapi_app.get("/", include_in_schema=False)
     def root():
         return RedirectResponse("/admin")
 
     # -----------------------------
     # 健康/就绪检查
     # -----------------------------
-    app.state.start_time = datetime.utcnow()
+    fastapi_app.state.start_time = datetime.now(UTC)
 
-    @app.get("/healthz", include_in_schema=False)
+    @fastapi_app.get("/healthz", include_in_schema=False)
     def healthz():
         # 简单返回；可扩展：DB 连接、外部服务连通性等
-        return JSONResponse({"ok": True, "ts": datetime.utcnow().isoformat()})
+        return JSONResponse({"ok": True, "ts": datetime.now(UTC).isoformat()})
 
-    @app.get("/readyz", include_in_schema=False)
+    @fastapi_app.get("/readyz", include_in_schema=False)
     def readyz():
         checks = {}
 
@@ -201,16 +230,19 @@ def create_app() -> FastAPI:
             with engine.connect() as conn:
                 conn.execute("SELECT 1")
             checks["database"] = True
-        except Exception:
+        except Exception as db_error:  # pylint: disable=broad-exception-caught
+            # 数据库连接可能抛出多种异常（ImportError, ConnectionError, OperationalError 等）
+            # 这里统一捕获以确保健康检查不会因数据库问题而崩溃
+            logger.debug("Database check failed: %s", db_error)
             checks["database"] = False
 
         ready = all(checks.values())
         return JSONResponse({"ready": ready, "checks": checks})
 
-    @app.get("/metrics", include_in_schema=False)
+    @fastapi_app.get("/metrics", include_in_schema=False)
     def metrics():
-        start_time = getattr(app.state, "start_time", datetime.utcnow())
-        uptime_seconds = (datetime.utcnow() - start_time).total_seconds()
+        start_time = getattr(fastapi_app.state, "start_time", datetime.now(UTC))
+        uptime_seconds = (datetime.now(UTC) - start_time).total_seconds()
         lines = [
             "# HELP app_uptime_seconds Application uptime in seconds.",
             "# TYPE app_uptime_seconds counter",
@@ -228,54 +260,109 @@ def create_app() -> FastAPI:
     # -----------------------------
     # 路由注册（顺序基本不敏感）
     # -----------------------------
-    app.include_router(auth_router)
-    app.include_router(dashboard_router)
-    app.include_router(covers_router)
-    app.include_router(export_router)
-    app.include_router(adjust_router)
-    app.include_router(reset_router)
-    app.include_router(envelopes_router)
-    app.include_router(envelopes_api_router)  # REST API for tasks
-    app.include_router(recharge_router)
-    app.include_router(settings_router)
-    app.include_router(settings_api_router)  # REST API for settings
-    app.include_router(audit_router)
-    app.include_router(stats_api_router)  # REST API for stats (overview, tasks, groups)
-    app.include_router(logs_api_router)  # REST API for logs
-    app.include_router(approvals_router)
-    app.include_router(queue_router)
-    app.include_router(invites_router)
-    app.include_router(users_router)
-    app.include_router(tags_router)
-    app.include_router(public_groups_router)
-    app.include_router(public_groups_api_router)  # REST API for groups
-    app.include_router(public_group_reports_router)
-    app.include_router(a11y_router)
-    app.include_router(ledger_router)
-    app.include_router(ipn_router)
-    app.include_router(sheet_users_router)  # /admin/sheet-users
+    fastapi_app.include_router(auth_router)
+    fastapi_app.include_router(dashboard_router)
+    fastapi_app.include_router(covers_router)
+    fastapi_app.include_router(export_router)
+    fastapi_app.include_router(adjust_router)
+    fastapi_app.include_router(reset_router)
+    fastapi_app.include_router(envelopes_router)
+    fastapi_app.include_router(envelopes_api_router)  # REST API for tasks
+    fastapi_app.include_router(recharge_router)
+    fastapi_app.include_router(settings_router)
+    fastapi_app.include_router(settings_api_router)  # REST API for settings
+    fastapi_app.include_router(audit_router)
+    fastapi_app.include_router(stats_api_router)  # REST API for stats (overview, tasks, groups)
+    fastapi_app.include_router(logs_api_router)  # REST API for logs
+    fastapi_app.include_router(approvals_router)
+    fastapi_app.include_router(queue_router)
+    fastapi_app.include_router(invites_router)
+    fastapi_app.include_router(users_router)
+    fastapi_app.include_router(tags_router)
+    fastapi_app.include_router(public_groups_router)
+    fastapi_app.include_router(public_groups_api_router)  # REST API for groups
+    fastapi_app.include_router(public_group_reports_router)
+    fastapi_app.include_router(a11y_router)
+    fastapi_app.include_router(ledger_router)
+    fastapi_app.include_router(ipn_router)
+    fastapi_app.include_router(sheet_users_router)  # /admin/sheet-users
+    fastapi_app.include_router(redpacket_api_router)  # REST API for red packet (send, grab, query, history)
 
     # /files 静态挂载（用于下载导出文件、临时文件等）
-    app.mount("/files", StaticFiles(directory=FILES_DIR), name="files")
+    fastapi_app.mount("/files", StaticFiles(directory=FILES_DIR), name="files")
+
+    # -----------------------------
+    # 数据库初始化（启动时自动建表）
+    # -----------------------------
+    @fastapi_app.on_event("startup")
+    def startup_init_db() -> None:
+        """
+        应用启动时自动初始化数据库表结构。
+        
+        此函数在应用启动时被调用，确保所有数据表（envelopes、users、ledger 等）都已创建。
+        - SQLite（开发环境）：自动创建所有表
+        - PostgreSQL/MySQL（生产环境）：表已存在则跳过，不会报错（幂等性）
+        
+        注意：在生产环境建议使用 Alembic 迁移，此函数主要用于开发环境快速启动。
+        """
+        logger.info("Starting database initialization during application startup...")
+        try:
+            init_db()
+            logger.info("Database tables initialized successfully during startup")
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            # 数据库初始化可能抛出多种异常（ImportError, ConnectionError, OperationalError 等）
+            # 这里统一捕获以确保应用启动不会因数据库问题而完全失败（best effort 策略）
+            logger.exception("init_db failed during startup: %s", exc)
+            # 注意：某些情况下可能希望应用启动失败，这里采用宽松策略
+            # 如果需要严格模式，可以取消注释下面的 raise
+            # raise
 
     # -----------------------------
     # 统一异常处理
     # -----------------------------
-    @app.exception_handler(StarletteHTTPException)
+    @fastapi_app.exception_handler(StarletteHTTPException)
     async def http_exc_handler(request: Request, exc: StarletteHTTPException):
-        # 401 未登录：发回登录页
+        # 检查是否是 API 请求（Accept: application/json 或路径包含 /api/）
+        is_api_request = (
+            request.url.path.startswith("/admin/api/") or
+            request.headers.get("accept", "").startswith("application/json") or
+            "application/json" in request.headers.get("content-type", "")
+        )
+        
+        # 401 未登录
         if exc.status_code == 401:
+            if is_api_request:
+                # API 请求返回 JSON
+                return JSONResponse(
+                    {"detail": exc.detail or "login required", "error": "unauthorized"},
+                    status_code=401
+                )
+            # 非 API 请求重定向到登录页
             return RedirectResponse("/admin/login?error=login+required", status_code=303)
-        # 403：只有明确 detail 指 2FA 才跳二次校验页
+        
+        # 403 禁止访问
         if exc.status_code == 403:
             detail = (exc.detail or "") if isinstance(exc.detail, str) else ""
+            if is_api_request:
+                # API 请求返回 JSON
+                return JSONResponse(
+                    {"detail": exc.detail or "forbidden", "error": "forbidden"},
+                    status_code=403
+                )
+            # 非 API 请求重定向
             if "2FA required" in detail:
                 return RedirectResponse("/admin/twofactor?error=2FA+required", status_code=303)
             return RedirectResponse("/admin/login?error=forbidden", status_code=303)
-        # 其他
+        
+        # 其他状态码
+        if is_api_request:
+            return JSONResponse(
+                {"detail": str(exc.detail), "error": "http_error"},
+                status_code=exc.status_code
+            )
         return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
 
-    return app
+    return fastapi_app
 
 
 # ---- 关键导出：给 uvicorn 找到 ASGI 实例 ----

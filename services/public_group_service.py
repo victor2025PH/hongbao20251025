@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from time import perf_counter
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
@@ -141,7 +141,7 @@ def evaluate_group_risk(
         score += 5
 
     # 创建频率
-    cutoff = datetime.utcnow() - timedelta(minutes=RECENT_CREATE_MINUTES)
+    cutoff = datetime.now(UTC) - timedelta(minutes=RECENT_CREATE_MINUTES)
     recent_count = session.execute(
         select(func.count())
         .select_from(PublicGroup)
@@ -327,7 +327,7 @@ def join_group(
             group.joins_today += 1
             session.flush()
 
-        membership.last_active_at = datetime.utcnow()
+        membership.last_active_at = datetime.now(UTC)
 
         reward_claimed = False
         reward_points = 0
@@ -467,7 +467,7 @@ def pin_group(
         if not group:
             raise PublicGroupError("group_not_found")
 
-        now = datetime.utcnow()
+        now = datetime.now(UTC)
         duration = duration_hours or DEFAULT_PIN_DURATION_HOURS
         if duration <= 0:
             raise PublicGroupError("pin_duration_invalid")

@@ -41,7 +41,7 @@ services:
 
   # Redis（可选，用于缓存和会话存储）
   redis:
-    image: redis:7-alpine
+    image: redis:7.2-alpine
     container_name: redpacket_redis
     restart: always
     command: >
@@ -89,7 +89,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # Web Admin (端口 8000)
+  # Web Admin (端口 8001)
   web_admin:
     build:
       context: .
@@ -101,16 +101,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: uvicorn web_admin.main:app --host 0.0.0.0 --port 8000 --workers 2
+    command: uvicorn web_admin.main:app --host 0.0.0.0 --port 8001 --workers 2
     ports:
-      - "0.0.0.0:8000:8000"  # 允许外部访问
+      - "0.0.0.0:8001:8001"  # 允许外部访问
     volumes:
       - ./static:/app/static
       - ./exports:/app/exports
       - ./templates:/app/templates:ro
       - ./secrets:/app/secrets:ro
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/healthz"]
+      test: ["CMD", "curl", "-f", "http://localhost:8001/healthz"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -159,13 +159,18 @@ services:
     build:
       context: ./frontend-next
       dockerfile: Dockerfile
+      args:
+        # 构建时传入环境变量（前端 API 地址）
+        NEXT_PUBLIC_ADMIN_API_BASE_URL: ${NEXT_PUBLIC_ADMIN_API_BASE_URL:-http://165.154.233.55:8001}
+        NEXT_PUBLIC_MINIAPP_API_BASE_URL: ${NEXT_PUBLIC_MINIAPP_API_BASE_URL:-http://165.154.233.55:8080}
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://165.154.233.55:8001/api}
+        NEXT_PUBLIC_DEFAULT_LANG: ${NEXT_PUBLIC_DEFAULT_LANG:-zh}
+        NEXT_PUBLIC_ENABLE_DEVTOOLS: ${NEXT_PUBLIC_ENABLE_DEVTOOLS:-false}
     image: redpacket/frontend:latest
     container_name: redpacket_frontend
     restart: always
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_ADMIN_API_BASE_URL: ${NEXT_PUBLIC_ADMIN_API_BASE_URL:-http://localhost:8000}
-      NEXT_PUBLIC_MINIAPP_API_BASE_URL: ${NEXT_PUBLIC_MINIAPP_API_BASE_URL:-http://localhost:8080}
     ports:
       - "127.0.0.1:3001:3001"  # 仅本地访问，通过 Nginx 反向代理
     depends_on:

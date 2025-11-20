@@ -241,6 +241,14 @@ def reset_do_selected(
                 results.append({"u": u, "ok": True, "msg": t("common.skip") or "SKIP"})
                 continue
             delta = -bal
+            # 如果需要记录操作人信息，将其追加到 note 中
+            operator_note = note[:120] if note else ""
+            if sess.get("tg_id"):
+                operator_info = f"操作人: {sess.get('tg_id')}"
+                if operator_note:
+                    operator_note = f"{operator_note} | {operator_info}"
+                else:
+                    operator_note = operator_info
             update_balance(
                 db,
                 u.tg_id,
@@ -248,14 +256,25 @@ def reset_do_selected(
                 delta,
                 write_ledger=True,
                 ltype=LedgerType.RESET,
-                note=note[:120],
-                operator_id=sess.get("tg_id"),
+                note=operator_note if operator_note else None,
             )
             ok += 1
             results.append({"u": u, "ok": True, "msg": t("admin.toast.done") or "OK"})
         except Exception as e:
             fail += 1
-            results.append({"u": u, "ok": False, "msg": str(e)})
+            # 将错误信息转换为中文友好提示
+            error_msg = str(e)
+            if "operator_id" in error_msg.lower():
+                error_msg = "系统错误：函数参数配置错误。请联系技术支持。"
+            elif "INSUFFICIENT_BALANCE" in error_msg:
+                error_msg = "余额不足：无法扣减，用户余额不足以完成此次操作。"
+            elif "no such table" in error_msg.lower():
+                error_msg = "数据库错误：数据表不存在。请联系系统管理员检查数据库配置。"
+            elif "connection" in error_msg.lower() and "refused" in error_msg.lower():
+                error_msg = "数据库连接错误：无法连接到数据库。请检查数据库服务状态。"
+            else:
+                error_msg = f"操作失败：{error_msg}"
+            results.append({"u": u, "ok": False, "msg": error_msg})
     db.commit()
 
     csrf_token = issue_csrf(req)  # ✅ 结果页也发一个新的 Token
@@ -340,6 +359,14 @@ def reset_do_all(
                 if not bal or bal == 0:
                     continue
                 delta = -bal
+                # 如果需要记录操作人信息，将其追加到 note 中
+                operator_note = note[:120] if note else ""
+                if sess.get("tg_id"):
+                    operator_info = f"操作人: {sess.get('tg_id')}"
+                    if operator_note:
+                        operator_note = f"{operator_note} | {operator_info}"
+                    else:
+                        operator_note = operator_info
                 update_balance(
                     db,
                     tg_id,
@@ -347,8 +374,7 @@ def reset_do_all(
                     delta,
                     write_ledger=True,
                     ltype=LedgerType.RESET,
-                    note=note[:120],
-                    operator_id=sess.get("tg_id"),
+                    note=operator_note if operator_note else None,
                 )
                 ok += 1
                 total_deduct += (bal if bal > 0 else -bal)
@@ -357,8 +383,20 @@ def reset_do_all(
                     results_sample.append({"u": {"tg_id": tg_id}, "ok": True, "msg": t("admin.toast.done") or "OK"})
             except Exception as e:
                 fail += 1
+                # 将错误信息转换为中文友好提示
+                error_msg = str(e)
+                if "operator_id" in error_msg.lower():
+                    error_msg = "系统错误：函数参数配置错误。请联系技术支持。"
+                elif "INSUFFICIENT_BALANCE" in error_msg:
+                    error_msg = "余额不足：无法扣减，用户余额不足以完成此次操作。"
+                elif "no such table" in error_msg.lower():
+                    error_msg = "数据库错误：数据表不存在。请联系系统管理员检查数据库配置。"
+                elif "connection" in error_msg.lower() and "refused" in error_msg.lower():
+                    error_msg = "数据库连接错误：无法连接到数据库。请检查数据库服务状态。"
+                else:
+                    error_msg = f"操作失败：{error_msg}"
                 if len(results_sample) < 20:
-                    results_sample.append({"u": {"tg_id": tg_id}, "ok": False, "msg": str(e)})
+                    results_sample.append({"u": {"tg_id": tg_id}, "ok": False, "msg": error_msg})
         db.commit()
         offset += BATCH_SIZE
 

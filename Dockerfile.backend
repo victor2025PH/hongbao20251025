@@ -26,8 +26,9 @@ COPY . .
 RUN mkdir -p /app/static/uploads /app/exports /app/secrets
 
 # 健康检查
+# TODO: 这个健康检查主要用于 web_admin 服务，端口已在 docker-compose 中指定为 8001
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8000/healthz || exit 1
+    CMD curl -f http://localhost:8001/healthz || exit 1
 
 # 默认命令（可以通过 docker-compose 覆盖）
 CMD ["python", "app.py"]

@@ -25,7 +25,7 @@
 from __future__ import annotations
 
 import enum
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from decimal import Decimal, ROUND_DOWN, InvalidOperation
 from typing import Optional, Dict, Any, List, Union
 
@@ -159,8 +159,8 @@ def create_order(
             token=tok,
             amount=str(amt_dec),  # 以字符串持久化
             status=OrderStatus.PENDING,
-            created_at=datetime.utcnow(),
-            expire_at=datetime.utcnow() + timedelta(
+            created_at=datetime.now(UTC),
+            expire_at=datetime.now(UTC) + timedelta(
                 minutes=int(getattr(settings, "RECHARGE_EXPIRE_MINUTES", 60) or 60)
             ),
             note=note or "",
@@ -252,17 +252,16 @@ def mark_success(order_id: int, tx_hash: Optional[str] = None) -> bool:
 
         # 1) 状态更新
         o.status = OrderStatus.SUCCESS
-        o.finished_at = datetime.utcnow()
+        o.finished_at = datetime.now(UTC)
         if tx_hash:
             o.tx_hash = tx_hash
         s.add(o)
 
         # 2) 用户余额入账（只增加，不会出现负数）
-        u = s.query(User).filter_by(tg_id=o.user_tg_id).first()
-        if not u:
-            u = User(tg_id=o.user_tg_id)
-            s.add(u)
-            s.flush()
+        # 使用 get_or_create_user 确保用户存在，如果订单中有用户信息也会同步更新
+        from .user import get_or_create_user
+        u = get_or_create_user(s, tg_id=o.user_tg_id)
+        # 注意：update_balance 的第一个参数可以是 User 对象或 tg_id
         update_balance(
             s, u, tok,
             int(amt_dec) if tok == "POINT" else Decimal(amt_dec)
@@ -291,7 +290,7 @@ def mark_failed(order_id: int, note: Optional[str] = None) -> bool:
         if not o or o.status != OrderStatus.PENDING:
             return False
         o.status = OrderStatus.FAILED
-        o.finished_at = datetime.utcnow()
+        o.finished_at = datetime.now(UTC)
         if note:
             o.note = note
         s.add(o)
@@ -308,7 +307,7 @@ def set_expired(order_id: int) -> bool:
         if o.status in (OrderStatus.SUCCESS, OrderStatus.FAILED, OrderStatus.EXPIRED):
             return True
         o.status = OrderStatus.EXPIRED
-        o.finished_at = datetime.utcnow()
+        o.finished_at = datetime.now(UTC)
         s.add(o)
         s.commit()
         return True
@@ -319,7 +318,7 @@ def expire_orders() -> int:
     将过期未支付订单批量置为 EXPIRED，返回影响行数。
     """
     with get_session() as s:
-        now = datetime.utcnow()
+        now = datetime.now(UTC)
         rows: List[RechargeOrder] = (
             s.query(RechargeOrder)
             .filter(RechargeOrder.status == OrderStatus.PENDING)
@@ -329,7 +328,7 @@ def expire_orders() -> int:
         cnt = 0
         for o in rows:
             o.status = OrderStatus.EXPIRED
-            o.finished_at = datetime.utcnow()
+            o.finished_at = datetime.now(UTC)
             s.add(o)
             cnt += 1
         if cnt:

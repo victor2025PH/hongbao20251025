@@ -75,11 +75,13 @@ def _resolve_targets_to_tg_ids(tokens: List[str]) -> List[int]:
     # 开会话查库
     s = get_session()
     try:
-        # 用户名 → tg_id
+        # 用户名 → tg_id（注意处理 NULL 值）
         if names:
             lower_names = list(names)
+            # 确保 username 不为 NULL，然后进行大小写不敏感匹配
             rows = (
                 s.query(User.tg_id)
+                .filter(User.username.isnot(None))
                 .filter(func.lower(User.username).in_(lower_names))
                 .all()
             )
@@ -163,37 +165,75 @@ def export_selected_users(
       - merged  -> 多用户合并到一个 Excel（Users + Ledger 两个工作表）
       - split   -> 为每个用户各导出一个 Excel，然后跳回页面（ZIP/队列以后再做）
     """
-    tokens = _split_users(users)
-    if not tokens:
-        raise HTTPException(status_code=400, detail=t("admin.errors.validation"))
+    import logging
+    logger = logging.getLogger("web_admin.export")
+    
+    try:
+        tokens = _split_users(users)
+        if not tokens:
+            raise HTTPException(status_code=400, detail=t("admin.errors.validation"))
 
-    tg_ids = _resolve_targets_to_tg_ids(tokens)
-    if not tg_ids:
-        raise HTTPException(status_code=404, detail=t("admin.errors.not_found"))
+        tg_ids = _resolve_targets_to_tg_ids(tokens)
+        if not tg_ids:
+            # 返回更详细的错误信息，说明哪些用户没找到
+            raise HTTPException(
+                status_code=404,
+                detail=t("admin.errors.not_found") + f" (输入的用户标识: {', '.join(tokens)})"
+            )
 
-    if mode == "merged":
-        # 我们的 export_service 接口支持多种实参名称，这里显式传 tg_ids
-        path = es.export_some_users_and_ledger(tg_ids=tg_ids, fmt="xlsx")
-        if not path:
-            raise HTTPException(status_code=404, detail=t("admin.errors.not_found"))
-        abs_path = Path(path).resolve()
-        if not abs_path.exists():
-            raise HTTPException(status_code=404, detail=t("admin.errors.not_found"))
-        return FileResponse(
-            abs_path,
-            filename=abs_path.name,
-            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        if mode == "merged":
+            # 我们的 export_service 接口支持多种实参名称，这里显式传 tg_ids
+            try:
+                path = es.export_some_users_and_ledger(tg_ids=tg_ids, fmt="xlsx")
+                if not path:
+                    logger.error(f"export_some_users_and_ledger returned None for tg_ids={tg_ids}")
+                    raise HTTPException(status_code=500, detail="导出服务返回空路径")
+                
+                abs_path = Path(path).resolve()
+                if not abs_path.exists():
+                    logger.error(f"导出文件不存在: {abs_path}")
+                    raise HTTPException(status_code=500, detail=f"导出文件不存在: {abs_path}")
+                
+                return FileResponse(
+                    abs_path,
+                    filename=abs_path.name,
+                    media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                )
+            except Exception as e:
+                logger.exception(f"导出失败: tg_ids={tg_ids}, error={e}")
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"导出失败: {str(e)}"
+                )
+
+        elif mode == "split":
+            # 逐个导出，页面提示去 exports 目录拿；真正打包 ZIP 我们后续交给 queue 做异步
+            count = 0
+            errors = []
+            for uid in tg_ids:
+                try:
+                    p = es.export_one_user_full(uid, fmt="xlsx")
+                    if p:
+                        count += 1
+                except Exception as e:
+                    logger.error(f"导出用户 {uid} 失败: {e}")
+                    errors.append(f"用户 {uid}: {str(e)}")
+            
+            if errors:
+                # 如果部分用户导出失败，记录错误但仍然返回成功计数
+                logger.warning(f"部分用户导出失败: {errors}")
+            
+            # 回到页面，给"完成"提示
+            return RedirectResponse(url="/admin/export?done=1&n=%d" % count, status_code=303)
+
+        else:
+            raise HTTPException(status_code=400, detail=t("admin.errors.validation"))
+    except HTTPException:
+        # 重新抛出 HTTPException
+        raise
+    except Exception as e:
+        logger.exception(f"导出请求处理失败: users={users}, mode={mode}, error={e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"导出请求处理失败: {str(e)}"
         )
-
-    elif mode == "split":
-        # 逐个导出，页面提示去 exports 目录拿；真正打包 ZIP 我们后续交给 queue 做异步
-        count = 0
-        for uid in tg_ids:
-            p = es.export_one_user_full(uid, fmt="xlsx")
-            if p:
-                count += 1
-        # 回到页面，给“完成”提示
-        return RedirectResponse(url="/admin/export?done=1&n=%d" % count, status_code=303)
-
-    else:
-        raise HTTPException(status_code=400, detail=t("admin.errors.validation"))

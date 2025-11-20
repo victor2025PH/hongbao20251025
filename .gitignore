@@ -1,31 +1,92 @@
-# Python venv & caches
+# Python
 .venv/
-venv/
 __pycache__/
-*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+.Python
 *.so
+*.egg
 *.egg-info/
-.python-version
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.cache/
-.ipynb_checkpoints/
-
-# Node/Build/IDE
-node_modules/
 dist/
 build/
-coverage/
-.DS_Store
-.idea/
-.vscode/
 
-# Logs/Artifacts
+# Testing
+.pytest_cache/
+admin-backend/.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 运行数据和备份
+backup/
+data/*.db
+data/*.xlsx
+downloads/
+voices/
+logs/
+sessions/
+admin-backend/sessions/
+
+# 日志和会话文件
 *.log
+*.session
+*.session.bak
+
+# 临时脚本和文件
+tmp_*.py
+analysis_output.json
+project_tree.txt
+工程树.txt
+tmp_test.wav
+
+# Node.js (已在子项目中配置，这里作为全局补充)
+node_modules/
+.npm
+.eslintcache
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 构建输出
+dist/
+out/
+.next/
+build/
+
+# 其他
+*.bak
+*.tmp
+
+# 已归档的无用文件
+无用文件/
+
+# 顶层数据库 / 表格（如果将来再出现）
+*.db
 *.sqlite
+*.sqlite3
 *.xlsx
-*.xls
+
+# 敏感信息文件
 service_account.json
 service_account*.json
 secrets/
+*.json
+!package.json
+!tsconfig.json
+!package-lock.json
+完整的.env.production模板.txt

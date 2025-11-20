@@ -7,7 +7,7 @@ Public group models:
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, Iterable, List, Optional, Sequence
 import json
 import enum
@@ -126,7 +126,7 @@ class PublicGroup(Base):
         self.risk_flags_raw = _dump_json(value)
 
     def touch(self) -> None:
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)
 
 
 class PublicGroupMember(Base):
@@ -244,7 +244,7 @@ class PublicGroupActivity(Base):
             self.config_raw = json.dumps(value, ensure_ascii=False)
 
     def touch(self) -> None:
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)
 
 
 class PublicGroupActivityLog(Base):
@@ -293,7 +293,7 @@ class PublicGroupActivityWebhook(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     def touch(self) -> None:
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)
 
 
 class PublicGroupActivityConversionLog(Base):

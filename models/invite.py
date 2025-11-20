@@ -13,7 +13,7 @@
 """
 
 from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import List, Dict
 
 from sqlalchemy import (
@@ -127,7 +127,7 @@ def add_invite(inviter_id: int, invitee_id: int) -> bool:
             step_cfg = float(getattr(flags, "INVITE_PROGRESS_PER_PERSON", 1.0) or 1.0)
             step = int(step_cfg) if step_cfg >= 1.0 else (1 if step_cfg > 0 else 0)
             prog.progress_percent = _clamp_percent(int(prog.progress_percent or 0) + step)
-            prog.updated_at = datetime.utcnow()
+            prog.updated_at = datetime.now(UTC)
 
             # 显式提交
             s.commit()
@@ -178,7 +178,7 @@ def update_progress(inviter_id: int, delta_points: int = 0, delta_energy: int = 
 
         prog.points_earned = int(prog.points_earned or 0) + delta_points
         prog.energy_earned = int(prog.energy_earned or 0) + delta_energy
-        prog.updated_at = datetime.utcnow()
+        prog.updated_at = datetime.now(UTC)
 
         s.add(prog)
         s.commit()

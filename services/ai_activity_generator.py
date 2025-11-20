@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Any, Dict, List, Optional, Tuple
 
 from sqlalchemy import select
@@ -86,7 +86,7 @@ def _sanitize_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
 
     front_card = raw.get("front_card") or {}
     duration_hours = _as_int(raw.get("duration_hours"), default=48)
-    now = datetime.utcnow()
+    now = datetime.now(UTC)
     end_at = now + timedelta(hours=max(duration_hours or 24, 12))
 
     highlight_enabled = bool(front_card.get("highlight_enabled", raw.get("highlight_enabled", True)))
@@ -217,7 +217,7 @@ def load_history_draft(
     payload = history.payload or {}
     if not payload:
         raise ValueError("history_payload_missing")
-    history.applied_at = datetime.utcnow()
+    history.applied_at = datetime.now(UTC)
     session.add(history)
     return {
         "history_id": history.id,

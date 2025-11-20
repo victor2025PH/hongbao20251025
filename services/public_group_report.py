@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, List, Optional, Sequence
 
 from sqlalchemy import func, or_, select
@@ -184,7 +184,7 @@ def update_report_case(
             raise PublicGroupReportError("status_invalid") from exc
         report.status = status_enum
         if status_enum in {PublicGroupReportStatus.RESOLVED, PublicGroupReportStatus.DISMISSED}:
-            report.resolved_at = datetime.utcnow()
+            report.resolved_at = datetime.now(UTC)
         else:
             report.resolved_at = None
 
@@ -199,7 +199,7 @@ def update_report_case(
         note = resolution_note.strip()
         report.resolution_note = note or None
 
-    report.updated_at = datetime.utcnow()
+    report.updated_at = datetime.now(UTC)
     session.add(report)
     log.info(
         "public_group.report.updated id=%s operator=%s status=%s assign=%s",
@@ -229,7 +229,7 @@ def add_report_note(
         operator_tg_id=int(operator_tg_id),
         content=note,
     )
-    report.updated_at = datetime.utcnow()
+    report.updated_at = datetime.now(UTC)
     session.add(entry)
     session.add(report)
     session.flush()

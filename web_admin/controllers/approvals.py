@@ -107,6 +107,14 @@ def _exec_adjust_batch(db, payload: Dict[str, Any], operator_id: int) -> Dict[st
     fail = 0
     for uid in users:
         try:
+            # 如果需要记录操作人信息，将其追加到 note 中
+            operator_note = note if note else ""
+            if operator_id:
+                operator_info = f"操作人: {operator_id}"
+                if operator_note:
+                    operator_note = f"{operator_note} | {operator_info}"
+                else:
+                    operator_note = operator_info
             update_balance(
                 db,
                 int(uid),
@@ -114,12 +122,15 @@ def _exec_adjust_batch(db, payload: Dict[str, Any], operator_id: int) -> Dict[st
                 amount,
                 write_ledger=True,
                 ltype=LedgerType.ADJUSTMENT,
-                note=note,
-                operator_id=operator_id,
+                note=operator_note if operator_note else None,
             )
             ok += 1
-        except Exception:
+        except Exception as e:
             fail += 1
+            # 记录错误日志（但不影响整体流程）
+            import logging
+            logger = logging.getLogger("web_admin.approvals")
+            logger.error(f"余额调整失败: uid={uid}, asset={asset}, amount={amount}, error={e}")
     db.commit()
     return {"ok": ok, "fail": fail, "count": len(users)}
 
@@ -139,6 +150,14 @@ def _exec_reset_selected(db, payload: Dict[str, Any], operator_id: int) -> Dict[
             if not bal or bal == 0:
                 continue
             delta = -bal
+            # 如果需要记录操作人信息，将其追加到 note 中
+            operator_note = note if note else ""
+            if operator_id:
+                operator_info = f"操作人: {operator_id}"
+                if operator_note:
+                    operator_note = f"{operator_note} | {operator_info}"
+                else:
+                    operator_note = operator_info
             update_balance(
                 db,
                 int(uid),
@@ -146,13 +165,16 @@ def _exec_reset_selected(db, payload: Dict[str, Any], operator_id: int) -> Dict[
                 delta,
                 write_ledger=True,
                 ltype=LedgerType.RESET,
-                note=note,
-                operator_id=operator_id,
+                note=operator_note if operator_note else None,
             )
             ok += 1
             total += abs(bal)
-        except Exception:
+        except Exception as e:
             fail += 1
+            # 记录错误日志（但不影响整体流程）
+            import logging
+            logger = logging.getLogger("web_admin.approvals")
+            logger.error(f"余额清零失败: uid={uid}, asset={asset}, error={e}")
     db.commit()
     return {"ok": ok, "fail": fail, "total_deduct": str(total), "count": len(users)}
 

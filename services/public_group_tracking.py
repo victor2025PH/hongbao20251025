@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Dict, List, Optional
 
 from sqlalchemy import and_, case, func, select
@@ -65,7 +65,7 @@ def fetch_conversion_summary(
     limit: int = 10,
 ) -> Dict[str, object]:
     window = _period_to_timedelta(period)
-    utc_now = datetime.utcnow()
+    utc_now = datetime.now(UTC)
     since = utc_now - window
 
     totals_stmt = (
@@ -139,7 +139,7 @@ def fetch_dashboard_metrics(
 ) -> Dict[str, object]:
     if days <= 0:
         raise ValueError("invalid_days")
-    utc_now = datetime.utcnow()
+    utc_now = datetime.now(UTC)
     since = utc_now - timedelta(days=days)
 
     event_rows = session.execute(

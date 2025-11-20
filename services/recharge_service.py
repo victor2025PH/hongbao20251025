@@ -281,7 +281,7 @@ class _MockProvider(_ProviderBase):
         return (f"INV-{order.id}", f"PAY-{order.id}", url, addr, extra)
 
     def poll_status(self, order: RechargeOrder):
-        now = datetime.utcnow().replace(tzinfo=timezone.utc)
+        now = datetime.now(UTC).replace(tzinfo=timezone.utc)
         if order.expire_at and now >= order.expire_at.replace(tzinfo=timezone.utc):
             return (OrderStatus.EXPIRED, "expired")
         return (OrderStatus.PENDING, "pending")
@@ -499,7 +499,7 @@ class _NowPaymentsProvider(_ProviderBase):
         return (None, pay_id, pay_url, addr, extra)
 
     def poll_status(self, order: RechargeOrder) -> Tuple[Optional[OrderStatus], Optional[str]]:
-        now = datetime.utcnow().replace(tzinfo=timezone.utc)
+        now = datetime.now(UTC).replace(tzinfo=timezone.utc)
         if order.expire_at and now >= order.expire_at.replace(tzinfo=timezone.utc):
             return (OrderStatus.EXPIRED, "expired")
         try:
@@ -644,7 +644,7 @@ def mark_order_expired(order_id: int) -> bool:
         if o.status in (OrderStatus.SUCCESS, OrderStatus.FAILED, OrderStatus.EXPIRED):
             return True
         o.status = OrderStatus.EXPIRED
-        o.finished_at = datetime.utcnow()
+        o.finished_at = datetime.now(UTC)
         s.add(o)
         s.commit()
     return True
@@ -662,7 +662,7 @@ def _refresh_status_if_needed_core(order_or_id: Union[int, RechargeOrder]) -> Op
     if order.status in (OrderStatus.SUCCESS, OrderStatus.FAILED, OrderStatus.EXPIRED):
         return order
 
-    now_utc = datetime.utcnow().replace(tzinfo=timezone.utc)
+    now_utc = datetime.now(UTC).replace(tzinfo=timezone.utc)
     if order.expire_at:
         exp = order.expire_at.replace(tzinfo=timezone.utc)
         if now_utc >= exp and order.status == OrderStatus.PENDING:
@@ -729,7 +729,7 @@ def _write_status_if_changed(order_id: int, mapped: OrderStatus) -> None:
                 logger.exception("mark_success failed in _write_status_if_changed: %s", e)
         elif mapped == OrderStatus.EXPIRED:
             o.status = OrderStatus.EXPIRED
-            o.finished_at = datetime.utcnow()
+            o.finished_at = datetime.now(UTC)
             s.add(o)
             s.commit()
         elif mapped == OrderStatus.FAILED:
@@ -738,7 +738,7 @@ def _write_status_if_changed(order_id: int, mapped: OrderStatus) -> None:
                     _mark_failed(o.id, reason="provider_failed")  # type: ignore[misc]
                 else:
                     o.status = OrderStatus.EXPIRED
-                    o.finished_at = datetime.utcnow()
+                    o.finished_at = datetime.now(UTC)
                     s.add(o)
                     s.commit()
             except Exception as e:

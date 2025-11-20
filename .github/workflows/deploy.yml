@@ -1,0 +1,217 @@
+name: 自动部署到生产服务器
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+  workflow_dispatch:  # 允许手动触发
+    inputs:
+      environment:
+        description: '部署环境'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+env:
+  DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+  DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+  DEPLOY_PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+  DEPLOY_PATH: ${{ secrets.DEPLOY_PATH || '/opt/redpacket' }}
+
+jobs:
+  deploy:
+    name: 部署到服务器
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 📥 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔐 配置 SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p ${{ env.DEPLOY_PORT }} -H ${{ env.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+
+      - name: 🔍 检查服务器连接
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -p ${{ env.DEPLOY_PORT }} \
+            -o StrictHostKeyChecking=no \
+            ${{ env.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} \
+            "echo 'SSH 连接成功' && uname -a"
+
+      - name: 📊 获取部署信息
+        id: deploy_info
+        run: |
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          BRANCH=$(git branch --show-current)
+          echo "sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+          echo "msg=$COMMIT_MSG" >> $GITHUB_OUTPUT
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      - name: 🚀 执行部署
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -p ${{ env.DEPLOY_PORT }} \
+            -o StrictHostKeyChecking=no \
+            ${{ env.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} \
+            "bash -s" << 'DEPLOY_SCRIPT'
+          set -e
+          
+          echo "===================================="
+          echo "🚀 开始自动部署"
+          echo "===================================="
+          echo ""
+          echo "部署信息:"
+          echo "  分支: ${{ steps.deploy_info.outputs.branch }}"
+          echo "  提交: ${{ steps.deploy_info.outputs.sha }}"
+          echo "  消息: ${{ steps.deploy_info.outputs.msg }}"
+          echo "  时间: $(date '+%Y-%m-%d %H:%M:%S')"
+          echo ""
+          
+          # 进入项目目录
+          cd ${{ env.DEPLOY_PATH }} || {
+            echo "❌ 错误: 项目目录不存在！"
+            exit 1
+          }
+          
+          # 备份当前版本
+          CURRENT_COMMIT=$(git rev-parse HEAD 2>/dev/null || echo "unknown")
+          echo "📦 备份当前版本: $CURRENT_COMMIT"
+          git tag -f "backup-$(date +%Y%m%d-%H%M%S)" || true
+          
+          # 拉取最新代码
+          echo ""
+          echo "📥 拉取最新代码..."
+          git fetch origin
+          git reset --hard origin/master
+          git clean -fd
+          
+          NEW_COMMIT=$(git rev-parse HEAD)
+          echo "✅ 代码已更新: $CURRENT_COMMIT -> $NEW_COMMIT"
+          echo ""
+          
+          # 检查环境变量
+          if [ ! -f .env.production ]; then
+            echo "❌ 错误: .env.production 文件不存在！"
+            exit 1
+          fi
+          
+          # 停止现有服务
+          echo "🛑 停止现有服务..."
+          docker compose -f docker-compose.production.yml down --timeout 30 || true
+          
+          # 清理旧镜像
+          echo ""
+          echo "🗑️  清理旧镜像..."
+          docker images | grep "redpacket" | awk '{print $3}' | xargs -r docker rmi -f || true
+          docker system prune -f || true
+          
+          # 构建镜像
+          echo ""
+          echo "🔨 构建 Docker 镜像（这可能需要 5-10 分钟）..."
+          docker compose --env-file .env.production \
+            -f docker-compose.production.yml \
+            build --no-cache web_admin frontend || {
+            echo "⚠️  构建失败，尝试使用缓存..."
+            docker compose --env-file .env.production \
+              -f docker-compose.production.yml \
+              build web_admin frontend
+          }
+          
+          # 启动服务
+          echo ""
+          echo "🚀 启动所有服务..."
+          docker compose --env-file .env.production \
+            -f docker-compose.production.yml \
+            up -d
+          
+          # 等待服务启动
+          echo ""
+          echo "⏳ 等待服务启动（60秒）..."
+          sleep 60
+          
+          # 健康检查
+          echo ""
+          echo "🏥 执行健康检查..."
+          FAILED=0
+          
+          if curl -f -s http://127.0.0.1:8000/healthz > /dev/null; then
+            echo "✅ Web Admin (8000) 健康检查通过"
+          else
+            echo "❌ Web Admin (8000) 健康检查失败"
+            FAILED=1
+          fi
+          
+          if curl -f -s http://127.0.0.1:8080/healthz > /dev/null; then
+            echo "✅ MiniApp API (8080) 健康检查通过"
+          else
+            echo "❌ MiniApp API (8080) 健康检查失败"
+            FAILED=1
+          fi
+          
+          if curl -f -s http://127.0.0.1:3001 > /dev/null; then
+            echo "✅ Frontend (3001) 健康检查通过"
+          else
+            echo "❌ Frontend (3001) 健康检查失败"
+            FAILED=1
+          fi
+          
+          # 显示服务状态
+          echo ""
+          echo "📊 服务状态:"
+          docker compose -f docker-compose.production.yml ps
+          
+          if [ $FAILED -eq 1 ]; then
+            echo ""
+            echo "⚠️  部分服务健康检查失败，尝试回滚..."
+            git checkout HEAD~1
+            docker compose --env-file .env.production \
+              -f docker-compose.production.yml \
+              up -d
+            exit 1
+          fi
+          
+          echo ""
+          echo "===================================="
+          echo "✅ 部署成功！"
+          echo "===================================="
+          echo ""
+          echo "部署信息:"
+          echo "  版本: $NEW_COMMIT"
+          echo "  时间: $(date '+%Y-%m-%d %H:%M:%S')"
+          echo "  服务:"
+          echo "    - Web Admin: http://127.0.0.1:8000"
+          echo "    - MiniApp API: http://127.0.0.1:8080"
+          echo "    - Frontend: http://127.0.0.1:3001"
+          echo ""
+          DEPLOY_SCRIPT
+
+      - name: 📝 记录部署日志
+        if: always()
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -p ${{ env.DEPLOY_PORT }} \
+            -o StrictHostKeyChecking=no \
+            ${{ env.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} \
+            "echo '$(date): ${{ steps.deploy_info.outputs.sha }} - ${{ steps.deploy_info.outputs.msg }}' >> ${{ env.DEPLOY_PATH }}/logs/deploy.log"
+
+      - name: 🔔 发送通知（可选）
+        if: failure()
+        run: |
+          echo "⚠️ 部署失败，请检查日志"
+          # 在这里可以添加通知逻辑，例如发送邮件、Slack、企业微信等
+

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, UTC
 from pathlib import Path
 
 import pytest
@@ -38,8 +38,8 @@ def setup_module() -> None:
 
 def teardown_module() -> None:
     try:
-        TEST_DB.unlink()
-    except PermissionError:
+        TEST_DB.unlink(missing_ok=True)
+    except (PermissionError, FileNotFoundError):
         pass
 
 
@@ -63,8 +63,8 @@ def _seed_logs() -> None:
             name="Test Campaign",
             reward_points=5,
             bonus_points=3,
-            start_at=datetime.utcnow() - timedelta(days=2),
-            end_at=datetime.utcnow() + timedelta(days=1),
+            start_at=datetime.now(UTC) - timedelta(days=2),
+            end_at=datetime.now(UTC) + timedelta(days=1),
             is_highlight_enabled=True,
         )
         activity.status = PublicGroupActivityStatus.ACTIVE

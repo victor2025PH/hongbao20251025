@@ -1,7 +1,7 @@
 # web_admin/controllers/stats.py
 from __future__ import annotations
 
-import datetime as dt
+from datetime import datetime, UTC, timedelta
 from typing import Dict, Any
 
 from fastapi import APIRouter, Depends, Query
@@ -31,7 +31,7 @@ def get_stats_trends(
         import datetime as dt
         
         # 计算日期范围
-        end_date = dt.datetime.utcnow().replace(tzinfo=None)
+        end_date = dt.datetime.now(UTC).replace(tzinfo=None)
         start_date = end_date - dt.timedelta(days=days)
         
         # 查询每日用户数（按创建时间）
@@ -97,7 +97,7 @@ def get_stats_trends(
         import datetime as dt
         mock_trends = [
             {
-                "date": (dt.datetime.utcnow() - dt.timedelta(days=days - 1 - i)).strftime("%Y-%m-%d"),
+                "date": (dt.datetime.now(UTC) - dt.timedelta(days=days - 1 - i)).strftime("%Y-%m-%d"),
                 "users": 100 + i * 10,
                 "envelopes": 40 + i * 5,
                 "amount": 10000.0 + i * 500.0,
@@ -108,8 +108,8 @@ def get_stats_trends(
             "trends": mock_trends,
             "period": {
                 "days": days,
-                "start": (dt.datetime.utcnow() - dt.timedelta(days=days)).isoformat(),
-                "end": dt.datetime.utcnow().isoformat(),
+                "start": (dt.datetime.now(UTC) - dt.timedelta(days=days)).isoformat(),
+                "end": dt.datetime.now(UTC).isoformat(),
             },
         })
 
@@ -166,7 +166,7 @@ def get_stats_tasks(db=Depends(db_session), sess=Depends(require_admin)):
         },
         "recent_7_days": [
             {
-                "date": (dt.datetime.utcnow() - dt.timedelta(days=i)).strftime("%Y-%m-%d"),
+                "date": (datetime.now(UTC) - timedelta(days=i)).strftime("%Y-%m-%d"),
                 "count": 100 + i * 10,
                 "success": 95 + i * 10,
                 "failed": 5,
@@ -221,7 +221,7 @@ def get_stats_groups(db=Depends(db_session), sess=Depends(require_admin)):
         ],
         "recent_7_days_activity": [
             {
-                "date": (dt.datetime.utcnow() - dt.timedelta(days=i)).strftime("%Y-%m-%d"),
+                "date": (datetime.now(UTC) - timedelta(days=i)).strftime("%Y-%m-%d"),
                 "new_groups": 2 + i,
                 "new_members": 50 + i * 10,
                 "envelopes_sent": 20 + i * 5,

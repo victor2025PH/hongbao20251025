@@ -106,11 +106,11 @@ async def cmd_groups(msg: Message):
                 lines.append(f"   {countdown_text}")
 
         rules = detail.get("rules") or []
-            if rules:
-                for item in rules[:3]:
-                    label = item.get("label") or item.get("key")
-                    value = item.get("value")
-                    remaining = item.get("remaining")
+        if rules:
+            for item in rules[:3]:
+                label = item.get("label") or item.get("key")
+                value = item.get("value")
+                remaining = item.get("remaining")
                 if value is None and remaining is None:
                     continue
                 parts = []
@@ -121,10 +121,10 @@ async def cmd_groups(msg: Message):
                 if parts:
                     lines.append("   " + " / ".join(str(p) for p in parts))
 
-            cta_label = card.get("cta_label")
-            cta_link = card.get("cta_link")
-            if cta_label and cta_link:
-                lines.append(f"   {cta_label}: {cta_link}")
+        cta_label = card.get("cta_label")
+        cta_link = card.get("cta_link")
+        if cta_label and cta_link:
+            lines.append(f"   {cta_label}: {cta_link}")
         lines.append("")
     for idx, group in enumerate(groups, start=1):
         lines.append(f"{idx}. {_format_group_brief(group)}")

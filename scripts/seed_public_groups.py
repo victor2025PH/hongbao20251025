@@ -10,7 +10,7 @@ The script uses service layers so validations remain consistent with production.
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from typing import List
 
 from models.db import get_session
@@ -19,7 +19,7 @@ from services.public_group_activity import create_activity
 
 
 def _generate_groups(prefix: str, count: int) -> List[dict]:
-    today = datetime.utcnow().strftime("%Y%m%d")
+    today = datetime.now(UTC).strftime("%Y%m%d")
     groups: List[dict] = []
     for idx in range(1, count + 1):
         name = f"{prefix}{today} #{idx:02d}"
@@ -40,7 +40,7 @@ def _generate_groups(prefix: str, count: int) -> List[dict]:
 
 
 def _generate_activities(prefix: str, count: int) -> List[dict]:
-    base_start = datetime.utcnow()
+    base_start = datetime.now(UTC)
     activities: List[dict] = []
     for idx in range(1, count + 1):
         name = f"{prefix}星星加碼 #{idx:02d}"

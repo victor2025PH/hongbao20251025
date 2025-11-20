@@ -195,12 +195,12 @@ export default function Home() {
             <p className="mt-4 text-xs text-muted-foreground">
               提示：如果后端需要认证，请先访问{' '}
               <a
-                href="http://localhost:8000/admin/login"
+                href={`${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL || 'http://localhost:8001'}/admin/login`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:underline"
               >
-                http://localhost:8000/admin/login
+                {process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL || 'http://localhost:8001'}/admin/login
               </a>{' '}
               登录后再刷新此页面
             </p>
@@ -388,7 +388,7 @@ export default function Home() {
               </div>
             </Link>
             <a
-              href="http://localhost:8000/admin/dashboard"
+              href={`${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL || 'http://localhost:8001'}/admin/dashboard`}
             target="_blank"
             rel="noopener noreferrer"
               className="flex items-center gap-3 rounded-lg border border-border bg-background p-4 transition-colors hover:bg-accent"

@@ -5,7 +5,7 @@ from __future__ import annotations
 import json  # ✅ 用于 cover_meta 的序列化
 import logging
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, UTC
 from decimal import Decimal, ROUND_DOWN
 from enum import Enum
 from time import perf_counter
@@ -224,7 +224,7 @@ def create_envelope(
         shares=int(shares),
         note=note or "",
         status="active" if activate else "pending",
-        activated_at=datetime.utcnow() if activate else None,
+        activated_at=datetime.now(UTC) if activate else None,
         # ✅ 封面字段透传
         cover_channel_id=int(cover_channel_id) if cover_channel_id is not None else None,
         cover_message_id=int(cover_message_id) if cover_message_id is not None else None,

@@ -1,0 +1,49 @@
+{
+  "timestamp": "2025-11-18T09:57:14.125993",
+  "test_results": [
+    {
+      "service": "Web Admin",
+      "port": 8001,
+      "status": "FAIL",
+      "error": "HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /healthz (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EB455BCE20>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。'))"
+    },
+    {
+      "service": "MiniApp API",
+      "port": 8080,
+      "status": "FAIL",
+      "error": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /healthz (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EB455BD040>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。'))"
+    }
+  ],
+  "errors_found": [
+    {
+      "service": "Web Admin",
+      "error": "ImportError: cannot import name 'PYDANTIC_VERSION' from 'fastapi._compat' (C:\\Users\\zan\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\fastapi\\_compat\\__init__.py)",
+      "time": "2025-11-18T09:57:06.515793"
+    },
+    {
+      "service": "MiniApp API",
+      "error": "from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response, status",
+      "time": "2025-11-18T09:57:06.516037"
+    },
+    {
+      "service": "MiniApp API",
+      "error": "ImportError: cannot import name 'PYDANTIC_VERSION' from 'fastapi._compat' (C:\\Users\\zan\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\fastapi\\_compat\\__init__.py)",
+      "time": "2025-11-18T09:57:06.516055"
+    }
+  ],
+  "fixes_applied": [],
+  "services": [
+    {
+      "name": "Web Admin",
+      "port": 8001,
+      "pid": 16312,
+      "status": "stopped"
+    },
+    {
+      "name": "MiniApp API",
+      "port": 8080,
+      "pid": 15628,
+      "status": "stopped"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 import logging
-from datetime import datetime
+from datetime import datetime, UTC
 
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
@@ -42,7 +42,7 @@ def _user_lang(user_id: int, fallback_user) -> str:
     return _canon_lang(getattr(fallback_user, "language_code", None))
 
 def _has_signed_today(user_id: int) -> bool:
-    today_utc = datetime.utcnow().date()
+    today_utc = datetime.now(UTC).date()
     with get_session() as s:
         row = (
             s.query(Ledger)
@@ -84,7 +84,7 @@ async def wf_signin(cb: CallbackQuery):
             .order_by(Ledger.created_at.desc())
             .first()
         )
-        if last and last.created_at.date() == datetime.utcnow().date():
+        if last and last.created_at.date() == datetime.now(UTC).date():
             text = t("welfare.signin_already", lang) or "ℹ️ You have already checked in today."
             try:
                 await cb.message.edit_text(text, parse_mode="HTML", reply_markup=welfare_menu(lang))

@@ -28,7 +28,7 @@ from models.user import User, get_balance_summary
 from models.ledger import Ledger, LedgerType
 
 # ==== 新增：服务实现所需 ====
-from datetime import datetime
+from datetime import datetime, UTC
 from time import perf_counter
 from decimal import Decimal, InvalidOperation
 from sqlalchemy import func, and_
@@ -337,7 +337,7 @@ def _ledger_type_reset() -> LedgerType:
 
 
 def _mk_batch_id(prefix: str, operator_id: int) -> str:
-    now = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
+    now = datetime.now(UTC).strftime("%Y%m%d-%H%M%S")
     return f"{prefix}#{now}-{operator_id}"
 
 

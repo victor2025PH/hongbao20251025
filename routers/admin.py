@@ -13,7 +13,7 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from sqlalchemy import func, and_, or_
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 
 from models.cover import list_covers, add_cover, delete_cover, get_cover_by_id
 from config.settings import settings
@@ -735,7 +735,7 @@ async def admin_stats(cb: CallbackQuery, state: FSMContext):
 
     active_today = 0
     try:
-        start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+        start = datetime.now(UTC).replace(hour=0, minute=0, second=0, microsecond=0)
         end = start + timedelta(days=1)
         with get_session() as s:
             active_today = (

@@ -1,0 +1,64 @@
+{
+  "timestamp": "2025-11-18T10:05:28.812515",
+  "summary": {
+    "services_running": 2,
+    "services_total": 2,
+    "tests_passed": 3,
+    "tests_failed": 0,
+    "api_endpoints_tested": 3,
+    "api_endpoints_ok": 2
+  },
+  "services": [
+    {
+      "service": "Web Admin",
+      "port": 8001,
+      "status": "running",
+      "health_check": "passed",
+      "response": "{\"ok\":true,\"ts\":\"2025-11-18T02:05:12.955608\"}"
+    },
+    {
+      "service": "MiniApp API",
+      "port": 8080,
+      "status": "running",
+      "health_check": "passed",
+      "response": "{\"ok\":true}"
+    }
+  ],
+  "tests": [
+    {
+      "file": "tests/test_regression_features.py",
+      "status": "passed",
+      "output": "_regression_features.py::test_audit_service_idempotent\n  C:\\037重新开发新功能\\web_admin\\services\\audit_service.py:52: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n    timestamp=datetime.utcnow(),\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n======================= 11 passed, 30 warnings in 3.13s =======================\n"
+    },
+    {
+      "file": "tests/test_public_group_service.py",
+      "status": "passed",
+      "output": "_join_group_with_activity_bonus\n  C:\\037重新开发新功能\\services\\public_group_activity.py:904: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n    \"triggered_at\": datetime.utcnow().isoformat() + \"Z\",\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n======================= 7 passed, 96 warnings in 0.59s ========================\n"
+    },
+    {
+      "file": "tests/test_api_public_groups.py",
+      "status": "passed",
+      "output": "groups.py::test_public_group_activity_detail_endpoint\n  C:\\037重新开发新功能\\services\\public_group_activity.py:529: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n    now = now or datetime.utcnow()\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n======================= 8 passed, 254 warnings in 1.69s =======================\n"
+    }
+  ],
+  "api_endpoints": [
+    {
+      "endpoint": "Web Admin - Readyz",
+      "url": "http://localhost:8001/readyz",
+      "status": "ok",
+      "status_code": 200
+    },
+    {
+      "endpoint": "Web Admin - Metrics",
+      "url": "http://localhost:8001/metrics",
+      "status": "ok",
+      "status_code": 200
+    },
+    {
+      "endpoint": "MiniApp API - Groups",
+      "url": "http://localhost:8080/v1/groups/public",
+      "status": "warning",
+      "status_code": 503
+    }
+  ]
+}

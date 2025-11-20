@@ -377,8 +377,36 @@ def add_cover(
     管理员直接新增一条封面素材。
     - 会对 slug 做唯一化处理（若提供）
     - media_type 建议：photo/animation/video
+    - 如果 (channel_id, message_id) 已存在，则更新现有记录
     """
     with get_session() as s:
+        # 检查是否已存在相同的 (channel_id, message_id)
+        existing = (
+            s.query(Cover)
+            .filter(Cover.channel_id == int(channel_id), Cover.message_id == int(message_id))
+            .first()
+        )
+        if existing:
+            # 更新现有记录
+            if file_id is not None:
+                existing.file_id = file_id or None
+            if media_type is not None:
+                existing.media_type = (media_type or None)
+            if slug is not None:
+                existing.slug = ensure_unique_slug(slug) if slug else None
+            if title is not None:
+                existing.title = (title or None)
+            if tags is not None:
+                existing.tags = (tags or None)
+            existing.enabled = True
+            if creator_tg_id is not None and not existing.creator_tg_id:
+                existing.creator_tg_id = int(creator_tg_id)
+            s.commit()
+            s.refresh(existing)
+            s.expunge(existing)
+            return existing
+        
+        # 创建新记录
         row = Cover(
             channel_id=int(channel_id),
             message_id=int(message_id),

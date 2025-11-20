@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from pathlib import Path
 from typing import List
 from uuid import uuid4
@@ -66,8 +66,8 @@ def test_emit_activity_conversion_dispatches_webhook(monkeypatch: pytest.MonkeyP
             name="Webhook Bonus",
             reward_points=5,
             bonus_points=5,
-            start_at=datetime.utcnow() - timedelta(hours=1),
-            end_at=datetime.utcnow() + timedelta(hours=1),
+            start_at=datetime.now(UTC) - timedelta(hours=1),
+            end_at=datetime.now(UTC) + timedelta(hours=1),
             is_highlight_enabled=True,
         )
         session.flush()

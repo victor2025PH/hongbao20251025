@@ -1,5 +1,17 @@
 # 启动机器人
 python app.py
+# 启动机器人
+pwsh .\docs\deployment\dev-start-all.ps1
+
+运行错误日志脚本：
+pwsh .\docs\deployment\tail-logs.ps1 -OnlyError
+
+地址栏输入：
+http://localhost:3001/
+
+地址栏输入：
+http://localhost:8000/admin/dashboard
+
 
 进入虚拟环境
 .\.venv\Scripts\Activate.ps1
@@ -18,6 +30,9 @@ ssh ubuntu@165.154.233.55
 ssh ubuntu@165.154.254.99
 用户名
 ubuntu
+
+https://usdt2026.cc/webhook
+https://usdt2026.cc/grafana
 第二步：密码
 Along2025!!!
 第三步：进入虚拟venv

@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 import time
 from threading import RLock
 from typing import Any, Dict, Iterable, Optional, Tuple
@@ -20,7 +20,7 @@ _LOCK = RLock()
 
 
 def _purge_blacklist() -> None:
-    now = datetime.utcnow()
+    now = datetime.now(UTC)
     expired = [key for key, value in _BLACKLIST.items() if value <= now]
     for key in expired:
         _BLACKLIST.pop(key, None)
@@ -38,7 +38,7 @@ def is_token_blacklisted(jti: Optional[str]) -> bool:
     with _LOCK:
         _purge_blacklist()
         expiry = _BLACKLIST.get(jti)
-        return bool(expiry and expiry > datetime.utcnow())
+        return bool(expiry and expiry > datetime.now(UTC))
 
 
 def create_access_token(
@@ -52,8 +52,8 @@ def create_access_token(
     ttl = expires_seconds or settings.MINIAPP_JWT_EXPIRE_SECONDS
     now_ts = int(time.time())
     expire_ts = now_ts + max(1, ttl)
-    now = datetime.utcfromtimestamp(now_ts)
-    expire_at = datetime.utcfromtimestamp(expire_ts)
+    now = datetime.fromtimestamp(now_ts, UTC)
+    expire_at = datetime.fromtimestamp(expire_ts, UTC)
     jti = str(uuid4())
     payload: Dict[str, Any] = {
         "iss": settings.MINIAPP_JWT_ISSUER,
@@ -81,7 +81,7 @@ def decode_access_token(token: str) -> Dict[str, Any]:
 
 
 def get_expires_in(expire_at: datetime) -> int:
-    remaining = int((expire_at - datetime.utcnow()).total_seconds())
+    remaining = int((expire_at - datetime.now(UTC)).total_seconds())
     return remaining if remaining > 0 else 0
 
 

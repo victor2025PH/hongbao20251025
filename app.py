@@ -12,6 +12,12 @@ import sys
 from config.load_env import load_env
 load_env()  # 必须在导入 models/db 之前调用
 
+# 设置统一 JSON 日志系统
+from config.logging_config import setup_logging
+setup_logging()
+
+logger = logging.getLogger("backend.bot")
+
 import aiohttp
 from aiogram import Bot, Dispatcher, BaseMiddleware
 from aiogram.types import TelegramObject, Message, CallbackQuery
@@ -74,12 +80,12 @@ async def preheat_get_me(bot: Bot, max_retries: int = 3) -> None:
     for i in range(1, max_retries + 1):
         try:
             me = await bot.get_me()
-            logging.getLogger("app").info(
+            logger.info(
                 "preheat ok: @%s (%s)", getattr(me, "username", "?"), getattr(me, "id", "?")
             )
             return
         except (TelegramNetworkError, aiohttp.ClientError, asyncio.TimeoutError) as e:
-            logging.getLogger("app").warning("get_me timeout (%s/%s): %s", i, max_retries, e)
+            logger.warning("get_me timeout (%s/%s): %s", i, max_retries, e)
             if i == max_retries:
                 return
             await asyncio.sleep(delay)
@@ -145,35 +151,35 @@ async def _register_routers(dp: Dispatcher) -> None:
     """
     统一注册所有路由。
 
-    ✅ 仅修改点：把 admin 系列（能找到哪个就注册哪个）放到最前，保证“按用户导出”的文本不会被其它路由抢走。
+    ✅ 仅修改点：把 admin 系列（能找到哪个就注册哪个）放到最前，保证"按用户导出"的文本不会被其它路由抢走。
     其余路由顺序保持不变。
     """
-    log = logging.getLogger("app.routers")
+    # 使用统一的 logger
 
     # ---------- 1) 管理类路由 —— 放到最前（高优先级） ----------
     # admin_adjust（如果你的工程里没有这个模块，会告警并跳过）
     try:
         from routers import admin_adjust as r_admin_adjust
         dp.include_router(r_admin_adjust.router)
-        log.info("router loaded: admin_adjust (priority first)")
+        logger.info("router loaded: admin_adjust (priority first)")
     except Exception as e:
-        log.warning("router load failed: admin_adjust -> %s", e)
+        logger.warning("router load failed: admin_adjust -> %s", e)
 
     # admin（必须有；核心：把它放到最前）
     try:
         from routers import admin as r_admin
         dp.include_router(r_admin.router)
-        log.info("router loaded: admin (priority high)")
+        logger.info("router loaded: admin (priority high)")
     except Exception as e:
-        log.warning("router load failed: admin -> %s", e)
+        logger.warning("router load failed: admin -> %s", e)
 
     # admin_covers（如果存在就加载；没有则跳过）
     try:
         from routers.admin_covers import router as admin_covers_router
         dp.include_router(admin_covers_router)
-        log.info("router loaded: admin_covers")
+        logger.info("router loaded: admin_covers")
     except Exception as e:
-        log.warning("router load failed: admin_covers -> %s", e)
+        logger.warning("router load failed: admin_covers -> %s", e)
 
     # ---------- 2) 其它业务路由（顺序保持与你原来一致） ----------
     route_plan = [
@@ -198,13 +204,13 @@ async def _register_routers(dp: Dispatcher) -> None:
         try:
             module = __import__(f"routers.{modname}", fromlist=[attr])
             dp.include_router(getattr(module, attr))
-            log.info("router loaded: %s", modname)
+            logger.info("router loaded: %s", modname)
         except Exception as ex:
-            log.warning("router load failed: %s -> %s", modname, ex)
+            logger.warning("router load failed: %s -> %s", modname, ex)
 
     for mod, attr, gated, flagname in route_plan:
         if gated and flagname and not _flag_on(flagname, True):
-            log.info("router skipped (flag off): %s [%s]", mod, flagname)
+            logger.info("router skipped (flag off): %s [%s]", mod, flagname)
             continue
         _try_include(mod, attr)
 
@@ -217,14 +223,10 @@ async def main() -> None:
         except Exception:
             pass
 
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-    )
-    log = logging.getLogger("app")
+    # 日志已通过 setup_logging() 配置为 JSON 格式
 
     if settings.BOT_TOKEN == "PLEASE_SET_BOT_TOKEN" or not settings.BOT_TOKEN:
-        log.error("BOT_TOKEN 未设置。请在环境变量或 .env 中配置 BOT_TOKEN")
+        logger.error("BOT_TOKEN 未设置。请在环境变量或 .env 中配置 BOT_TOKEN")
         sys.exit(1)
 
     _bootstrap_compat_aliases()
@@ -232,21 +234,21 @@ async def main() -> None:
     # i18n 自检
     try:
         getattr(_i18n, "self_check", lambda: None)()
-        log.info("i18n ready.")
+        logger.info("i18n ready.")
     except Exception as e:
-        log.warning("i18n 初始化提示：%s", e)
+        logger.warning("i18n 初始化提示：%s", e)
 
     # 初始化数据库
     init_db()
-    log.info("Database initialized.")
+    logger.info("Database initialized.")
 
     # 封面表 schema 自检（若有）
     try:
         from models.cover import ensure_cover_schema
         ensure_cover_schema()
-        log.info("Cover schema ensured.")
+        logger.info("Cover schema ensured.")
     except Exception as e:
-        log.warning("ensure_cover_schema failed: %s", e)
+        logger.warning("ensure_cover_schema failed: %s", e)
 
     # Bot & Dispatcher（使用 AiohttpSession）
     session = build_bot_session()
@@ -263,7 +265,8 @@ async def main() -> None:
     # 注册路由
     await _register_routers(dp)
 
-    log.info("Bot is starting polling...")
+    logger.info("Starting Telegram Bot")
+    logger.info("Bot is starting polling...")
     try:
         await preheat_get_me(bot, max_retries=3)
         await dp.start_polling(

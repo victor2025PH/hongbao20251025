@@ -43,7 +43,7 @@ def _map_status(raw: Optional[str]) -> OrderStatus:
 @router.post("/ipn")
 async def ipn_nowpayments(
     request: Request,
-    x_nowpayments_sig: Optional[str] = Header(None, convert_underscores=False),
+    x_nowpayments_sig: Optional[str] = Header(None, alias="X-Nowpayments-Sig", convert_underscores=False),
 ):
     """
     NOWPayments IPN 回调。返回 {"ok": true} 即视为处理成功。
