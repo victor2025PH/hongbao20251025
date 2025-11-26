@@ -99,7 +99,7 @@ export default function AssetHeader() {
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="fixed top-16 left-0 right-0 z-30 px-4 pt-2 pointer-events-none"
+      className="relative mx-4 mb-4"
     >
       <div className="relative">
         {/* 背景光暈 */}

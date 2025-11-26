@@ -8,6 +8,7 @@ import { getBalance, getUserProfile } from '../utils/api'
 import { useSound } from '../hooks/useSound'
 import TelegramStar from '../components/TelegramStar'
 import PageTransition from '../components/PageTransition'
+import AssetHeader from '../components/AssetHeader'
 
 export default function WalletPage() {
   const navigate = useNavigate()
@@ -174,7 +175,11 @@ export default function WalletPage() {
 
   return (
     <PageTransition>
-      <div className="h-full w-full flex flex-col p-3 pb-24 gap-2 overflow-y-auto scrollbar-hide">
+      <div className="h-full w-full flex flex-col pb-24 gap-2 overflow-y-auto scrollbar-hide">
+        {/* 總資產頭部（僅在首頁顯示） */}
+        <AssetHeader />
+        
+        <div className="px-3 space-y-2">
         {/* 發紅包按鈕（長按充電效果） */}
         <motion.div
           animate={controls}
@@ -484,6 +489,7 @@ export default function WalletPage() {
             </div>
           </div>
         )}
+        </div>
       </div>
     </PageTransition>
   )
