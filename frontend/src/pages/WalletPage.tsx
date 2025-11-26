@@ -435,7 +435,8 @@ export default function WalletPage() {
           
           {/* 遊戲按鈕（帶特效） */}
           <div
-            className="relative flex flex-col items-center justify-center cursor-pointer group h-full"
+            className="relative flex flex-col items-center justify-center cursor-pointer group"
+            style={{ aspectRatio: '1 / 1' }}
             onPointerEnter={handleGameHover}
             onPointerLeave={handleGameLeave}
             onTouchStart={handleGameHover}
