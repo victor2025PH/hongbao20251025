@@ -493,7 +493,6 @@ export default function LuckyWheelPage() {
               <div className="absolute bottom-32 left-0 right-0 h-12 bg-gradient-to-b from-amber-300 via-amber-400 to-amber-500 border-y-2 border-amber-600/30 shadow-inner">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
               </div>
-              </div>
             </motion.div>
             
           {/* 星星按钮 - 固定在横带中心，不受红包动画影响，相对于父容器定位 */}
