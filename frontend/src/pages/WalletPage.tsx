@@ -202,7 +202,7 @@ export default function WalletPage() {
       <div className={`h-full w-full flex flex-col pb-24 gap-2 overflow-hidden transition-all duration-500 ${
         isRadarScanning ? '[&>*]:border-cyan-500/50 [&>*]:shadow-[0_0_20px_rgba(6,182,212,0.3)]' : ''
       }`}>
-        <div className="px-3 space-y-2 shrink-0">
+        <div className="px-3 flex flex-col gap-2 flex-1 min-h-0">
         {/* 總資產和邀請好友（並排） */}
         <div className="flex gap-2 shrink-0">
           {/* 總資產卡片（縮小版） */}
@@ -254,7 +254,7 @@ export default function WalletPage() {
             </button>
           </button>
         </div>
-        {/* 發紅包按鈕（長按充電效果） */}
+        {/* 發紅包按鈕（長按充電效果，可拉伸） */}
         <motion.div
           animate={controls}
           onPointerDown={startHold}
@@ -262,7 +262,7 @@ export default function WalletPage() {
           onPointerLeave={endHold}
           onContextMenu={(e) => e.preventDefault()}
           className={`
-            relative h-24 shrink-0 bg-[#1C1C1E] border rounded-3xl overflow-hidden flex flex-col items-center justify-center shadow-2xl cursor-pointer select-none touch-none
+            relative flex-1 min-h-[80px] bg-[#1C1C1E] border rounded-3xl overflow-hidden flex flex-col items-center justify-center shadow-2xl cursor-pointer select-none touch-none
             ${isHolding ? 'border-orange-400 shadow-orange-500/40' : 'border-orange-500/20 shadow-orange-900/10'} transition-colors duration-300
           `}
         >
@@ -334,7 +334,7 @@ export default function WalletPage() {
         </motion.div>
 
         {/* 操作按鈕行 */}
-        <div className="grid grid-cols-5 gap-2 shrink-0 h-14 items-center relative z-20">
+        <div className="grid grid-cols-5 gap-2 shrink-0 h-14 items-center relative z-20 mt-2">
           <ActionButton icon={Plus} label={t('recharge')} color="text-green-400" onClick={() => { playSound('click'); navigate('/recharge') }} />
           <ActionButton icon={Minus} label={t('withdraw')} color="text-white" onClick={() => { playSound('click'); navigate('/withdraw') }} />
           
@@ -399,57 +399,9 @@ export default function WalletPage() {
           <ActionButton icon={TrendingUp} label={t('exchange')} color="text-white" onClick={() => playSound('click')} />
         </div>
 
-        {/* 雷達統計信息（在雷達面板上方） */}
-        <div className="flex items-center justify-center gap-3 shrink-0">
-          {/* 在線用戶 */}
-          <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-2 py-1 rounded-full border border-emerald-500/20">
-            <motion.div
-              className={`w-1.5 h-1.5 rounded-full ${isLocked ? 'bg-white' : 'bg-emerald-500'}`}
-              animate={isRadarScanning ? {
-                scale: [1, 1.3, 1],
-                opacity: [0.7, 1, 0.7]
-              } : {}}
-              transition={{ duration: 1, repeat: Infinity }}
-            />
-            <span className="text-[9px] font-mono font-bold text-emerald-100">
-              {onlineUsers} 在線
-            </span>
-          </div>
-          
-          {/* 附近的紅包群 */}
-          <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-2 py-1 rounded-full border border-cyan-500/20">
-            <motion.div
-              className="w-1.5 h-1.5 rounded-full bg-cyan-400"
-              animate={isRadarScanning ? {
-                scale: [1, 1.3, 1],
-                opacity: [0.7, 1, 0.7]
-              } : {}}
-              transition={{ duration: 1.2, repeat: Infinity, delay: 0.3 }}
-            />
-            <span className="text-[9px] font-mono font-bold text-cyan-100">
-              {nearbyPacketGroups} 紅包群
-            </span>
-          </div>
-          
-          {/* 正在遊戲的人數 */}
-          <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-2 py-1 rounded-full border border-purple-500/20">
-            <motion.div
-              className="w-1.5 h-1.5 rounded-full bg-purple-400"
-              animate={isRadarScanning ? {
-                scale: [1, 1.3, 1],
-                opacity: [0.7, 1, 0.7]
-              } : {}}
-              transition={{ duration: 1.4, repeat: Infinity, delay: 0.6 }}
-            />
-            <span className="text-[9px] font-mono font-bold text-purple-100">
-              {activeGamePlayers} 遊戲中
-            </span>
-          </div>
-        </div>
-
-        {/* 雷達掃描器（全寬） */}
+        {/* 雷達掃描器（全寬，可拉伸） */}
         <motion.div
-          className="relative w-full flex-1 min-h-0 bg-[#1C1C1E] border border-emerald-500/20 rounded-3xl overflow-hidden flex flex-col items-center justify-center shadow-lg group cursor-grab active:cursor-grabbing transition-all duration-500"
+          className="relative w-full flex-1 min-h-0 bg-[#1C1C1E] border border-emerald-500/20 rounded-3xl overflow-hidden flex flex-row items-center shadow-lg group cursor-grab active:cursor-grabbing transition-all duration-500"
             onPan={handleRadarDrag}
             onContextMenu={(e) => e.preventDefault()}
             onPointerDown={startRadarScan}
@@ -498,7 +450,57 @@ export default function WalletPage() {
               </>
             )}
 
-            <div className="relative z-10 w-24 h-24 flex items-center justify-center">
+            {/* 左側統計信息（垂直排列） */}
+            <div className="relative z-10 flex flex-col gap-2 px-3 py-2">
+              {/* 在線用戶 */}
+              <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-2 py-1.5 rounded-full border border-emerald-500/20">
+                <motion.div
+                  className={`w-1.5 h-1.5 rounded-full ${isLocked ? 'bg-white' : 'bg-emerald-500'}`}
+                  animate={isRadarScanning ? {
+                    scale: [1, 1.3, 1],
+                    opacity: [0.7, 1, 0.7]
+                  } : {}}
+                  transition={{ duration: 1, repeat: Infinity }}
+                />
+                <span className="text-[9px] font-mono font-bold text-emerald-100 whitespace-nowrap">
+                  {onlineUsers} 在線
+                </span>
+              </div>
+              
+              {/* 附近的紅包群 */}
+              <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-2 py-1.5 rounded-full border border-cyan-500/20">
+                <motion.div
+                  className="w-1.5 h-1.5 rounded-full bg-cyan-400"
+                  animate={isRadarScanning ? {
+                    scale: [1, 1.3, 1],
+                    opacity: [0.7, 1, 0.7]
+                  } : {}}
+                  transition={{ duration: 1.2, repeat: Infinity, delay: 0.3 }}
+                />
+                <span className="text-[9px] font-mono font-bold text-cyan-100 whitespace-nowrap">
+                  {nearbyPacketGroups} 紅包群
+                </span>
+              </div>
+              
+              {/* 正在遊戲的人數 */}
+              <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-2 py-1.5 rounded-full border border-purple-500/20">
+                <motion.div
+                  className="w-1.5 h-1.5 rounded-full bg-purple-400"
+                  animate={isRadarScanning ? {
+                    scale: [1, 1.3, 1],
+                    opacity: [0.7, 1, 0.7]
+                  } : {}}
+                  transition={{ duration: 1.4, repeat: Infinity, delay: 0.6 }}
+                />
+                <span className="text-[9px] font-mono font-bold text-purple-100 whitespace-nowrap">
+                  {activeGamePlayers} 遊戲中
+                </span>
+              </div>
+            </div>
+
+            {/* 右側雷達圖形 */}
+            <div className="relative z-10 flex-1 flex items-center justify-center">
+              <div className="relative w-24 h-24 flex items-center justify-center">
               {/* 外層光環（科技感） */}
               <motion.div
                 className="absolute inset-0 rounded-full border border-cyan-400/30"
@@ -607,44 +609,45 @@ export default function WalletPage() {
                 </AnimatePresence>
               </div>
 
-              {/* 中心圖標（增強科技感） */}
-              <div className="absolute z-20 pointer-events-none">
-                {isLocked ? (
-                  <motion.div
-                    animate={{
-                      scale: [1, 1.2, 1],
-                      rotate: [0, 180, 360]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <Target size={24} className="text-white drop-shadow-[0_0_10px_white]" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    animate={isRadarScanning ? {
-                      scale: [1, 1.1, 1],
-                      opacity: [0.7, 1, 0.7]
-                    } : {}}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    <Wifi size={24} className={`${isRadarScanning ? 'text-cyan-400' : 'text-emerald-500/50'} drop-shadow-[0_0_8px_currentColor]`} />
-                  </motion.div>
-                )}
+                {/* 中心圖標（增強科技感） */}
+                <div className="absolute z-20 pointer-events-none">
+                  {isLocked ? (
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        rotate: [0, 180, 360]
+                      }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      <Target size={24} className="text-white drop-shadow-[0_0_10px_white]" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      animate={isRadarScanning ? {
+                        scale: [1, 1.1, 1],
+                        opacity: [0.7, 1, 0.7]
+                      } : {}}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      <Wifi size={24} className={`${isRadarScanning ? 'text-cyan-400' : 'text-emerald-500/50'} drop-shadow-[0_0_8px_currentColor]`} />
+                    </motion.div>
+                  )}
+                </div>
               </div>
-            </div>
 
-            {/* 狀態文字 */}
-            <div className="mt-2 text-center z-10 select-none">
-              <span className={`text-[9px] font-bold uppercase tracking-widest block ${
-                isLocked ? 'text-white' : isRadarScanning ? 'text-cyan-400' : 'text-emerald-500/70'
-              }`}>
-                {isLocked ? '目標鎖定' : isRadarScanning ? '主動掃描中...' : '被動掃描'}
-              </span>
+              {/* 狀態文字（在雷達圖形下方） */}
+              <div className="mt-2 text-center z-10 select-none">
+                <span className={`text-[9px] font-bold uppercase tracking-widest block ${
+                  isLocked ? 'text-white' : isRadarScanning ? 'text-cyan-400' : 'text-emerald-500/70'
+                }`}>
+                  {isLocked ? '目標鎖定' : isRadarScanning ? '主動掃描中...' : '被動掃描'}
+                </span>
+              </div>
             </div>
             
             {/* 幫助文字 */}
             {!isRadarScanning && (
-              <div className="absolute bottom-2 text-[7px] text-emerald-500/40 pointer-events-none animate-pulse uppercase tracking-wide">
+              <div className="absolute bottom-2 right-2 text-[7px] text-emerald-500/40 pointer-events-none animate-pulse uppercase tracking-wide">
                 長按掃描
               </div>
             )}
