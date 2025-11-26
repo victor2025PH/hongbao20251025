@@ -814,17 +814,16 @@ export default function WalletPage() {
                 </span>
               </div>
             </div>
-          </div>
             
             {/* 幫助文字 */}
             {!isRadarScanning && (
-              <div className="absolute bottom-2 right-2 text-[10px] text-emerald-500/60 pointer-events-none animate-pulse uppercase tracking-wide">
+              <div className="absolute bottom-2 right-2 text-[10px] text-emerald-500/60 pointer-events-none animate-pulse uppercase tracking-wide z-10">
                 長按掃描
               </div>
             )}
 
             {/* 進度條（增強科技感） */}
-            <div className="absolute bottom-0 left-0 w-full h-1.5 bg-emerald-900/30 overflow-hidden">
+            <div className="absolute bottom-0 left-0 w-full h-1.5 bg-emerald-900/30 overflow-hidden z-10">
               <motion.div
                 className={`h-full shadow-[0_0_15px_currentColor] ${
                   isLocked 
