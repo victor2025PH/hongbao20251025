@@ -413,16 +413,23 @@ export default function LuckyWheelPage() {
             onTouchEnd={handleEnd}
             onTouchCancel={handleEnd}
           >
+            {/* 顶部标签 */}
+            <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-20 h-6 bg-gradient-to-b from-amber-100 to-amber-200 rounded-t-lg border-2 border-amber-300/50 shadow-md z-10">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-xs font-bold text-red-600">抢红包</span>
+              </div>
+            </div>
+
             {/* 红包主体 */}
             <motion.div
-              className="relative w-64 h-80 rounded-3xl shadow-2xl overflow-hidden"
+              className="relative w-72 h-96 rounded-3xl shadow-2xl overflow-hidden"
               style={{
-                background: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 25%, #ff4500 50%, #dc2626 75%, #b91c1c 100%)',
+                background: 'linear-gradient(180deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%)',
                 boxShadow: isHolding
-                  ? '0 0 80px rgba(255, 107, 53, 0.9), 0 0 120px rgba(255, 107, 53, 0.7), inset 0 0 60px rgba(255, 255, 255, 0.3)'
+                  ? '0 0 80px rgba(220, 38, 38, 0.9), 0 0 120px rgba(220, 38, 38, 0.7), inset 0 0 60px rgba(255, 255, 255, 0.2)'
                   : isExploding
-                  ? '0 0 120px rgba(255, 107, 53, 1), 0 0 180px rgba(255, 107, 53, 0.8)'
-                  : '0 0 40px rgba(255, 107, 53, 0.6), inset 0 0 30px rgba(255, 255, 255, 0.1)',
+                  ? '0 0 120px rgba(220, 38, 38, 1), 0 0 180px rgba(220, 38, 38, 0.8)'
+                  : '0 0 40px rgba(220, 38, 38, 0.6), inset 0 0 30px rgba(255, 255, 255, 0.1)',
               }}
               animate={isHolding ? {
                 x: [0, -4, 4, -4, 4, -2, 2, 0],
@@ -446,7 +453,7 @@ export default function LuckyWheelPage() {
               <div
                 className="absolute inset-0"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%)',
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, transparent 40%, rgba(0, 0, 0, 0.15) 100%)',
                   mixBlendMode: 'overlay',
                 }}
               />
@@ -455,10 +462,10 @@ export default function LuckyWheelPage() {
               <motion.div
                 className="absolute top-0 left-0 w-full h-1/3"
                 style={{
-                  background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%)',
+                  background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, transparent 100%)',
                 }}
                 animate={isHolding ? {
-                  opacity: [0.4, 0.7, 0.4],
+                  opacity: [0.35, 0.6, 0.35],
                 } : {}}
                 transition={{
                   duration: 0.5,
@@ -467,14 +474,79 @@ export default function LuckyWheelPage() {
                 }}
               />
 
-              {/* 红包开口（顶部） */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-8 bg-gradient-to-b from-orange-500 to-red-600 rounded-b-full border-2 border-red-800/50">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-red-900/50 rounded-full" />
+              {/* 文字内容区域 */}
+              <div className="absolute top-20 left-0 right-0 flex flex-col items-center gap-2 px-6 z-10">
+                <motion.h2
+                  className="text-3xl font-black text-red-900 drop-shadow-lg"
+                  animate={isHolding ? {
+                    scale: [1, 1.05, 1],
+                  } : {}}
+                  transition={{
+                    duration: 0.5,
+                    repeat: isHolding ? Infinity : 0,
+                    ease: "easeInOut",
+                  }}
+                >
+                  恭喜获得红包
+                </motion.h2>
+                <motion.p
+                  className="text-lg font-semibold text-red-800/90"
+                  animate={isHolding ? {
+                    opacity: [0.9, 1, 0.9],
+                  } : {}}
+                  transition={{
+                    duration: 0.5,
+                    repeat: isHolding ? Infinity : 0,
+                    ease: "easeInOut",
+                  }}
+                >
+                  领取现金奖励
+                </motion.p>
               </div>
+
+              {/* 金色横带 */}
+              <div className="absolute bottom-32 left-0 right-0 h-12 bg-gradient-to-b from-amber-300 via-amber-400 to-amber-500 border-y-2 border-amber-600/30 shadow-inner">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+              </div>
+
+              {/* "开"按钮 */}
+              <motion.div
+                className="absolute bottom-20 left-1/2 -translate-x-1/2 w-24 h-24 z-20"
+                animate={isHolding ? {
+                  scale: [1, 1.1, 1],
+                } : {}}
+                transition={{
+                  duration: 0.5,
+                  repeat: isHolding ? Infinity : 0,
+                  ease: "easeInOut",
+                }}
+              >
+                <div className="relative w-full h-full">
+                  {/* 四叶草形状背景 */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 rounded-full"
+                    style={{
+                      clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+                      boxShadow: '0 0 20px rgba(245, 158, 11, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3)',
+                    }}
+                  />
+                  {/* 按钮文字 */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-4xl font-black text-red-700 drop-shadow-lg">开</span>
+                  </div>
+                  {/* 按钮高光 */}
+                  <div
+                    className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1/2 bg-gradient-to-b from-white/40 to-transparent rounded-full"
+                    style={{
+                      clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 50%, 0% 75%, 0% 25%)',
+                    }}
+                  />
+                </div>
+              </motion.div>
 
               {/* 进度条 */}
               {isHolding && (
-                <div className="absolute bottom-4 left-4 right-4 h-2 bg-white/20 rounded-full overflow-hidden">
+                <div className="absolute bottom-8 left-8 right-8 h-2 bg-white/20 rounded-full overflow-hidden z-30">
                   <motion.div
                     className="h-full bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500 rounded-full"
                     initial={{ width: 0 }}
@@ -489,7 +561,7 @@ export default function LuckyWheelPage() {
                 <motion.div
                   className="absolute inset-0 rounded-full"
                   style={{
-                    background: 'radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, rgba(255, 107, 53, 0.7) 30%, transparent 70%)',
+                    background: 'radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, rgba(220, 38, 38, 0.7) 30%, transparent 70%)',
                   }}
                   initial={{ scale: 0, opacity: 1 }}
                   animate={{ scale: 3, opacity: 0 }}
