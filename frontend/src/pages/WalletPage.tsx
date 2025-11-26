@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Plus, Minus, Gift, Clock, Users, ChevronRight, Send, Gamepad2, TrendingUp, Target, Wifi, Wallet } from 'lucide-react'
+import { CreditCard, ArrowUpRight, Gift, FileText, Users, ChevronRight, Send, Gamepad2, ArrowLeftRight, Target, Wifi, Wallet } from 'lucide-react'
 import { motion, AnimatePresence, useAnimation } from 'framer-motion'
 import { useTranslation } from '../providers/I18nProvider'
 import { getBalance, getUserProfile } from '../utils/api'
@@ -410,10 +410,10 @@ export default function WalletPage() {
         </motion.div>
 
         {/* 操作按鈕行 */}
-        <div className="grid grid-cols-5 gap-2 shrink-0 h-14 items-center relative z-20 mt-2">
+        <div className="grid grid-cols-5 gap-2 shrink-0 relative z-20 mt-2">
           {/* 充值按钮 - 绿色渐变 */}
           <ActionButton 
-            icon={Plus} 
+            icon={CreditCard} 
             label={t('recharge')} 
             color="text-green-300" 
             bgGradient="from-green-500/20 to-emerald-500/20"
@@ -424,7 +424,7 @@ export default function WalletPage() {
           
           {/* 提现按钮 - 蓝色渐变 */}
           <ActionButton 
-            icon={Minus} 
+            icon={ArrowUpRight} 
             label={t('withdraw')} 
             color="text-blue-300" 
             bgGradient="from-blue-500/20 to-cyan-500/20"
@@ -492,7 +492,7 @@ export default function WalletPage() {
 
           {/* 记录按钮 - 橙色渐变 */}
           <ActionButton 
-            icon={Clock} 
+            icon={FileText} 
             label={t('records')} 
             color="text-orange-300" 
             bgGradient="from-orange-500/20 to-amber-500/20"
@@ -503,7 +503,7 @@ export default function WalletPage() {
           
           {/* 兑换按钮 - 紫色渐变 */}
           <ActionButton 
-            icon={TrendingUp} 
+            icon={ArrowLeftRight} 
             label={t('exchange')} 
             color="text-purple-300" 
             bgGradient="from-purple-500/20 to-pink-500/20"
@@ -898,10 +898,13 @@ function ActionButton({
   return (
     <motion.button
       onClick={onClick}
-      className={`flex flex-col items-center gap-1 h-full w-full bg-gradient-to-br ${bgGradient} rounded-xl border ${borderColor} ${glowColor} active:scale-95 transition-all relative overflow-hidden group aspect-square`}
+      className={`flex flex-col items-center justify-center gap-1 w-full bg-gradient-to-br ${bgGradient} rounded-xl border ${borderColor} ${glowColor} active:scale-95 transition-all relative overflow-hidden group`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      style={{ aspectRatio: '1 / 1' }}
+      style={{ 
+        aspectRatio: '1 / 1',
+        padding: '0.5rem'
+      }}
     >
       {/* 悬停光效 */}
       <motion.div
