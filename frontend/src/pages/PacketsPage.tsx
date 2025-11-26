@@ -178,13 +178,6 @@ export default function PacketsPage() {
                   {/* 頂部漸變線 */}
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-red-500 opacity-20" />
 
-                  {/* 遊戲群標籤 */}
-                  {packet.isFromGameGroup && (
-                    <div className="absolute top-2 right-2 flex items-center gap-1.5 bg-purple-500/20 border border-purple-500/30 px-2 py-1 rounded-full">
-                      <Gamepad2 size={12} className="text-purple-400" />
-                      <span className="text-[10px] text-purple-300 font-bold">{packet.chatTitle}</span>
-                    </div>
-                  )}
 
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     {/* 頭像 */}
@@ -213,6 +206,12 @@ export default function PacketsPage() {
                         >
                           Lv.{packet.senderLevel}
                         </span>
+                        {/* 游戏图标 - 移到等级后面 */}
+                        {packet.isFromGameGroup && (
+                          <div className="flex items-center gap-1" title="遊戲群專屬紅包">
+                            <Gamepad2 size={14} className="text-purple-400" />
+                          </div>
+                        )}
                       </span>
 
                       <span className="text-gray-400 text-xs mt-1 truncate">{packet.message}</span>

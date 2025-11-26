@@ -106,25 +106,25 @@ export default function WalletPage() {
   const [onlineUsers, setOnlineUsers] = useState(1204)
   const [isRadarScanning, setIsRadarScanning] = useState(false)
   const [scanCircleScale, setScanCircleScale] = useState(1)
-  const [redPacketIcons, setRedPacketIcons] = useState<Array<{id: string, x: number, y: number, life: number}>>([])
+  const [sparkles, setSparkles] = useState<Array<{id: string, x: number, y: number, life: number, maxLife: number}>>([])
   const [nearbyPacketGroups, setNearbyPacketGroups] = useState(23) // 附近的紅包群數量
   const [activeGamePlayers, setActiveGamePlayers] = useState(156) // 正在遊戲的人數
   const [energy, setEnergy] = useState(100) // 体力值
   const [fortune, setFortune] = useState(100) // 幸运值
   const scanIntervalRef = useRef<number | null>(null)
 
-  // 更新小红包图标动画
+  // 更新闪烁光点动画
   useEffect(() => {
-    if (redPacketIcons.length === 0) return
+    if (sparkles.length === 0) return
 
     const animate = () => {
-      setRedPacketIcons(prev => {
+      setSparkles(prev => {
         const updated = prev
-          .map(icon => ({
-            ...icon,
-            life: icon.life + 1
+          .map(sparkle => ({
+            ...sparkle,
+            life: sparkle.life + 1
           }))
-          .filter(icon => icon.life < 60) // 3秒后消失（60帧 * 50ms）
+          .filter(sparkle => sparkle.life < sparkle.maxLife)
 
         if (updated.length > 0) {
           requestAnimationFrame(animate)
@@ -134,7 +134,7 @@ export default function WalletPage() {
     }
 
     requestAnimationFrame(animate)
-  }, [redPacketIcons.length])
+  }, [sparkles.length])
 
   useEffect(() => {
     const count = Math.floor((signalStrength / 100) * 8) + 2
@@ -195,23 +195,26 @@ export default function WalletPage() {
       }
     }, 100)
 
-    // 生成小红包图标
-    const generateRedPacket = () => {
-      const angle = Math.random() * 360
-      const distance = 20 + Math.random() * 30
-      const x = Math.cos(angle * Math.PI / 180) * distance
-      const y = Math.sin(angle * Math.PI / 180) * distance
-      
-      setRedPacketIcons(prev => [...prev, {
-        id: `packet-${Date.now()}-${Math.random()}`,
-        x,
-        y,
-        life: 0
-      }])
+    // 生成闪烁光点
+    const generateSparkle = () => {
+      const sparkleCount = 20
+      const newSparkles: Array<{id: string, x: number, y: number, life: number, maxLife: number}> = []
+      for (let i = 0; i < sparkleCount; i++) {
+        newSparkles.push({
+          id: `sparkle-${Date.now()}-${i}`,
+          x: Math.random() * 100, // 百分比
+          y: Math.random() * 100, // 百分比
+          life: 0,
+          maxLife: 200 + Math.random() * 100 // 2-3秒后消失
+        })
+      }
+      setSparkles(prev => [...prev, ...newSparkles])
     }
 
-    // 每200ms生成一个红包图标
-    const packetInterval = window.setInterval(generateRedPacket, 200)
+    // 立即生成一批光点
+    generateSparkle()
+    // 每500ms生成一批光点
+    const sparkleInterval = window.setInterval(generateSparkle, 500)
 
     // 数字上升
     const numberInterval = window.setInterval(() => {
@@ -229,7 +232,7 @@ export default function WalletPage() {
       setIsRadarScanning(false)
       setScanCircleScale(1)
       window.clearInterval(scaleInterval)
-      window.clearInterval(packetInterval)
+      window.clearInterval(sparkleInterval)
       window.clearInterval(numberInterval)
       if (scanIntervalRef.current) {
         window.clearInterval(scanIntervalRef.current)
@@ -569,21 +572,22 @@ export default function WalletPage() {
                 <motion.div
                   className={`w-2 h-2 rounded-full ${isLocked ? 'bg-white' : 'bg-emerald-500'}`}
                   animate={isRadarScanning ? {
-                    scale: [1, 1.3, 1],
+                    scale: [1, 1.8, 1],
                     opacity: [0.7, 1, 0.7]
                   } : {}}
-                  transition={{ duration: 1, repeat: Infinity }}
+                  transition={{ duration: 0.8, repeat: Infinity }}
                 />
-                <motion.span 
-                  key={onlineUsers}
-                  className="text-xs font-mono font-bold text-emerald-100 whitespace-nowrap"
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -10, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {onlineUsers} 在線
-                </motion.span>
+                <span className="text-xs font-mono font-bold text-emerald-100 whitespace-nowrap">
+                  <motion.span
+                    key={onlineUsers}
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 0.3 }}
+                    className="inline-block"
+                  >
+                    {onlineUsers}
+                  </motion.span> 在線
+                </span>
               </div>
               
               {/* 附近的紅包群 */}
@@ -591,21 +595,22 @@ export default function WalletPage() {
                 <motion.div
                   className="w-2 h-2 rounded-full bg-cyan-400"
                   animate={isRadarScanning ? {
-                    scale: [1, 1.3, 1],
+                    scale: [1, 2.2, 1],
                     opacity: [0.7, 1, 0.7]
                   } : {}}
-                  transition={{ duration: 1.2, repeat: Infinity, delay: 0.3 }}
+                  transition={{ duration: 1.0, repeat: Infinity, delay: 0.2 }}
                 />
-                <motion.span 
-                  key={nearbyPacketGroups}
-                  className="text-xs font-mono font-bold text-cyan-100 whitespace-nowrap"
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -10, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {nearbyPacketGroups} 紅包群
-                </motion.span>
+                <span className="text-xs font-mono font-bold text-cyan-100 whitespace-nowrap">
+                  <motion.span
+                    key={nearbyPacketGroups}
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 0.3 }}
+                    className="inline-block"
+                  >
+                    {nearbyPacketGroups}
+                  </motion.span> 紅包群
+                </span>
               </div>
               
               {/* 正在遊戲的人數 */}
@@ -613,21 +618,22 @@ export default function WalletPage() {
                 <motion.div
                   className="w-2 h-2 rounded-full bg-purple-400"
                   animate={isRadarScanning ? {
-                    scale: [1, 1.3, 1],
+                    scale: [1, 2.5, 1],
                     opacity: [0.7, 1, 0.7]
                   } : {}}
-                  transition={{ duration: 1.4, repeat: Infinity, delay: 0.6 }}
+                  transition={{ duration: 1.1, repeat: Infinity, delay: 0.4 }}
                 />
-                <motion.span 
-                  key={activeGamePlayers}
-                  className="text-xs font-mono font-bold text-purple-100 whitespace-nowrap"
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -10, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {activeGamePlayers} 遊戲中
-                </motion.span>
+                <span className="text-xs font-mono font-bold text-purple-100 whitespace-nowrap">
+                  <motion.span
+                    key={activeGamePlayers}
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 0.3 }}
+                    className="inline-block"
+                  >
+                    {activeGamePlayers}
+                  </motion.span> 遊戲中
+                </span>
               </div>
             </div>
 
@@ -753,27 +759,31 @@ export default function WalletPage() {
                   ))}
                 </AnimatePresence>
 
-                {/* 小红包图标 - 不断弹出 */}
+                {/* 闪烁光点 - 在背景上 */}
                 <AnimatePresence>
-                  {redPacketIcons.map(packet => (
+                  {sparkles.map(sparkle => (
                     <motion.div
-                      key={packet.id}
-                      className="absolute z-20"
+                      key={sparkle.id}
+                      className="absolute z-5"
                       style={{
-                        left: `calc(50% + ${packet.x}px)`,
-                        top: `calc(50% + ${packet.y}px)`,
+                        left: `${sparkle.x}%`,
+                        top: `${sparkle.y}%`,
                         transform: 'translate(-50%, -50%)'
                       }}
-                      initial={{ opacity: 0, scale: 0, y: 0 }}
+                      initial={{ opacity: 0, scale: 0 }}
                       animate={{ 
                         opacity: [0, 1, 1, 0],
-                        scale: [0, 1.2, 1, 0.8],
-                        y: -20
+                        scale: [0, 1.5, 1, 0],
                       }}
                       exit={{ opacity: 0, scale: 0 }}
-                      transition={{ duration: 3, ease: "easeOut" }}
+                      transition={{ 
+                        duration: sparkle.maxLife / 60,
+                        ease: "easeOut",
+                        repeat: Infinity,
+                        repeatType: "reverse"
+                      }}
                     >
-                      <Gift size={16} className="text-red-500 drop-shadow-[0_0_6px_#ef4444]" />
+                      <div className="w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_8px_#ffffff,0_0_16px_#60a5fa]" />
                     </motion.div>
                   ))}
                 </AnimatePresence>
@@ -888,9 +898,10 @@ function ActionButton({
   return (
     <motion.button
       onClick={onClick}
-      className={`flex flex-col items-center gap-1 h-full w-full bg-gradient-to-br ${bgGradient} rounded-xl border ${borderColor} ${glowColor} active:scale-95 transition-all relative overflow-hidden group`}
+      className={`flex flex-col items-center gap-1 h-full w-full bg-gradient-to-br ${bgGradient} rounded-xl border ${borderColor} ${glowColor} active:scale-95 transition-all relative overflow-hidden group aspect-square`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
+      style={{ aspectRatio: '1 / 1' }}
     >
       {/* 悬停光效 */}
       <motion.div
@@ -900,14 +911,10 @@ function ActionButton({
         transition={{ duration: 0.6 }}
       />
       
-      {/* 图标容器 - 带渐变背景 */}
-      <motion.div 
-        className={`w-9 h-9 rounded-xl bg-gradient-to-br ${bgGradient} border ${borderColor} flex items-center justify-center relative z-10`}
-        whileHover={{ rotate: [0, -10, 10, 0] }}
-        transition={{ duration: 0.5 }}
-      >
+      {/* 图标容器 - 只保留外部方框，去除内部小方框 */}
+      <div className="w-9 h-9 flex items-center justify-center relative z-10">
         <Icon className={color} size={18} strokeWidth={2.5} />
-      </motion.div>
+      </div>
       <span className={`text-xs font-bold text-gray-400 group-hover:${color} transition-colors relative z-10`}>
         {label}
       </span>
