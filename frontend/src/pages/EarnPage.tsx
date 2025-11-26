@@ -54,7 +54,7 @@ export default function EarnPage() {
           <div className="lg:col-span-7 bg-[#1C1C1E] border border-white/5 rounded-2xl p-4 shadow-xl relative overflow-hidden shrink-0 group flex flex-col justify-between">
             <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 blur-[80px] rounded-full pointer-events-none" />
             
-            <h2 className="text-sm font-bold text-white mb-4 relative z-10 pl-1">{t('daily_checkin')}</h2>
+            <h2 className="text-base font-bold text-white mb-4 relative z-10 pl-1">{t('daily_checkin')}</h2>
             
             {/* 時間線容器 */}
             <div className="relative mb-4 px-2 h-24 flex items-center justify-center">
@@ -154,7 +154,7 @@ export default function EarnPage() {
                         )}
                         <div className="absolute top-1.5 left-2 w-2.5 h-1.5 bg-white/30 rounded-full blur-[0.5px] -rotate-45" />
                       </motion.div>
-                      <span className={`text-[9px] font-bold uppercase tracking-wide ${isToday || isChecked ? 'text-white' : 'text-gray-600'}`}>
+                      <span className={`text-xs font-bold uppercase tracking-wide ${isToday || isChecked ? 'text-white' : 'text-gray-600'}`}>
                         Day {day}
                       </span>
                     </div>
@@ -166,7 +166,7 @@ export default function EarnPage() {
             <motion.button
               onClick={() => checkInMutation.mutate()}
               disabled={checkInStatus?.checked_today || checkInMutation.isPending}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold text-xs shadow-lg shadow-orange-500/20 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold text-sm shadow-lg shadow-orange-500/20 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: checkInStatus?.checked_today ? 1 : 1.02 }}
               whileTap={{ scale: checkInStatus?.checked_today ? 1 : 0.98 }}
             >
@@ -187,8 +187,8 @@ export default function EarnPage() {
               <div className="w-12 h-12 bg-[#2C2C2E] rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-lg group-hover:shadow-orange-500/10">
                 <UserPlus className="text-orange-500" size={20} />
               </div>
-              <h3 className="text-white text-xs font-bold mb-1">{t('invite_friends')}</h3>
-              <p className="text-gray-500 text-[10px]">獲得大獎勵</p>
+              <h3 className="text-white text-sm font-bold mb-1.5">{t('invite_friends')}</h3>
+              <p className="text-gray-500 text-xs">獲得大獎勵</p>
             </motion.div>
 
             <motion.div
@@ -200,16 +200,16 @@ export default function EarnPage() {
               <div className="w-12 h-12 bg-[#2C2C2E] rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-lg group-hover:shadow-blue-500/10">
                 <Trophy className="text-blue-500" size={20} />
               </div>
-              <h3 className="text-white text-xs font-bold mb-1">任務</h3>
-              <p className="text-gray-500 text-[10px]">完成獲得 XP</p>
+              <h3 className="text-white text-sm font-bold mb-1.5">任務</h3>
+              <p className="text-gray-500 text-xs">完成獲得 XP</p>
             </motion.div>
           </div>
         </div>
 
         {/* 重置提示 */}
         <div className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-white/5 rounded-xl p-3 flex items-center justify-between shrink-0">
-          <span className="text-[10px] text-gray-400 font-medium">下次重置 12h 30m</span>
-          <span className="text-[10px] text-orange-400 font-bold cursor-pointer hover:underline">查看規則</span>
+          <span className="text-xs text-gray-400 font-medium">下次重置 12h 30m</span>
+          <span className="text-xs text-orange-400 font-bold cursor-pointer hover:underline">查看規則</span>
         </div>
       </div>
     </PageTransition>

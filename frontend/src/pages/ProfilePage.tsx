@@ -35,7 +35,7 @@ export default function ProfilePage() {
             <h2 className="text-xl font-bold text-white">{displayName}</h2>
             {username && <p className="text-gray-400">@{username}</p>}
             <div className="flex items-center gap-2 mt-1">
-              <span className="px-2 py-0.5 bg-brand-red/20 text-brand-red text-xs rounded-full font-bold">
+              <span className="px-2.5 py-1 bg-brand-red/20 text-brand-red text-sm rounded-full font-bold">
                 Lv.{profile?.level || 1}
               </span>
             </div>
@@ -46,7 +46,7 @@ export default function ProfilePage() {
         <div className="grid grid-cols-3 gap-2">
           <div className="bg-white/5 rounded-xl p-3 text-center">
             <div className="text-lg font-bold text-white">{balance?.usdt?.toFixed(2) || '0.00'}</div>
-            <div className="text-xs text-gray-400">USDT</div>
+            <div className="text-sm text-gray-400 font-medium">USDT</div>
           </div>
           <div className="bg-white/5 rounded-xl p-3 text-center">
             <div className="text-lg font-bold text-white">{balance?.ton?.toFixed(2) || '0.00'}</div>
@@ -84,7 +84,7 @@ export default function ProfilePage() {
       </div>
 
       {/* 版本信息 */}
-      <div className="text-center text-gray-500 text-xs mt-8">
+      <div className="text-center text-gray-500 text-sm mt-8">
         <p>Version 1.0.0</p>
         <p className="mt-1">© 2024 {t('app_name')}</p>
       </div>

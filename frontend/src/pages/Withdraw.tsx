@@ -56,7 +56,7 @@ export default function Withdraw() {
       <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
         {/* 幣種選擇 */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">選擇幣種</label>
+          <label className="block text-gray-300 text-base mb-2 font-medium">選擇幣種</label>
           <div className="flex gap-2">
             {['USDT', 'TON'].map((c) => (
               <button
@@ -84,7 +84,7 @@ export default function Withdraw() {
             placeholder="0.00"
             className="w-full p-4 bg-brand-darker rounded-xl border border-white/5 text-white text-xl font-bold text-center focus:outline-none focus:border-brand-red"
           />
-          <p className="text-gray-500 text-xs mt-2 text-right">
+          <p className="text-gray-400 text-sm mt-2 text-right">
             手續費: 1 {currency} | 最低提現: 10 {currency}
           </p>
         </div>
@@ -104,7 +104,7 @@ export default function Withdraw() {
         {/* 提示 */}
         <div className="bg-brand-red/10 border border-brand-red/30 rounded-xl p-4">
           <h4 className="text-brand-red font-bold mb-2">注意事項</h4>
-          <ul className="text-red-200/80 text-sm space-y-1">
+          <ul className="text-red-200/80 text-base space-y-1.5">
             <li>• 請確認地址正確，轉錯無法找回</li>
             <li>• 提現申請需要 1-24 小時審核</li>
             <li>• 大額提現可能需要額外審核</li>

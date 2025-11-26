@@ -41,7 +41,7 @@ export default function Recharge() {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {/* 幣種選擇 */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">選擇幣種</label>
+          <label className="block text-gray-300 text-base mb-2 font-medium">選擇幣種</label>
           <div className="flex gap-2">
             {['USDT', 'TON'].map((c) => (
               <button
@@ -67,7 +67,7 @@ export default function Recharge() {
               <button
                 key={preset}
                 onClick={() => setAmount(preset.toString())}
-                className={`py-2 rounded-lg border text-sm transition-colors ${
+                className={`py-2.5 rounded-lg border text-base transition-colors ${
                   amount === preset.toString()
                     ? 'bg-green-500/20 border-green-500 text-green-400'
                     : 'bg-brand-darker border-white/5 text-gray-400'
@@ -95,7 +95,7 @@ export default function Recharge() {
         <div className="bg-brand-darker rounded-xl p-4">
           <label className="block text-gray-400 text-sm mb-2">收款地址 ({currency})</label>
           <div className="flex items-center gap-2">
-            <code className="flex-1 text-white text-sm bg-white/5 p-3 rounded-lg overflow-hidden text-ellipsis">
+            <code className="flex-1 text-white text-base bg-white/5 p-3 rounded-lg overflow-hidden text-ellipsis">
               {depositAddress}
             </code>
             <button
@@ -114,7 +114,7 @@ export default function Recharge() {
         {/* 提示 */}
         <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">
           <h4 className="text-yellow-500 font-bold mb-2">注意事項</h4>
-          <ul className="text-yellow-200/80 text-sm space-y-1">
+          <ul className="text-yellow-200/80 text-base space-y-1.5">
             <li>• 請確認轉帳網絡為 TRC-20</li>
             <li>• 最低充值金額為 10 USDT</li>
             <li>• 充值到帳後系統自動到帳</li>

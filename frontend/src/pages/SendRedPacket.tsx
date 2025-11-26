@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { ChevronDown, X } from 'lucide-react'
+import { ChevronDown, X, Users, Wallet, Gift, DollarSign, MessageSquare } from 'lucide-react'
 import { useTranslation } from '../providers/I18nProvider'
 import { getUserChats, sendRedPacket, type ChatInfo } from '../utils/api'
 import { haptic, showAlert } from '../utils/telegram'
@@ -81,7 +81,10 @@ export default function SendRedPacket() {
       <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
         {/* 選擇群組 */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">{t('select_group')}</label>
+          <label className="block text-gray-300 text-base mb-2 font-medium flex items-center gap-2">
+            <Users size={16} className="text-gray-400" />
+            {t('select_group')}
+          </label>
           <button
             type="button"
             onClick={() => setShowChatModal(true)}
@@ -96,7 +99,10 @@ export default function SendRedPacket() {
 
         {/* 幣種選擇 */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">幣種</label>
+          <label className="block text-gray-300 text-base mb-2 font-medium flex items-center gap-2">
+            <Wallet size={16} className="text-gray-400" />
+            幣種
+          </label>
           <div className="flex gap-2">
             {['USDT', 'TON', 'Stars'].map((c) => (
               <button
@@ -117,7 +123,10 @@ export default function SendRedPacket() {
 
         {/* 紅包類型 */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">紅包類型</label>
+          <label className="block text-gray-300 text-base mb-2 font-medium flex items-center gap-2">
+            <Gift size={16} className="text-gray-400" />
+            紅包類型
+          </label>
           <div className="flex gap-2">
             <button
               type="button"
@@ -146,7 +155,10 @@ export default function SendRedPacket() {
 
         {/* 金額 */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">{t('amount')}</label>
+          <label className="block text-gray-300 text-base mb-2 font-medium flex items-center gap-2">
+            <DollarSign size={16} className="text-gray-400" />
+            {t('amount')}
+          </label>
           <input
             type="number"
             value={amount}
@@ -158,7 +170,10 @@ export default function SendRedPacket() {
 
         {/* 數量 */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">{t('quantity')}</label>
+          <label className="block text-gray-300 text-base mb-2 font-medium flex items-center gap-2">
+            <Users size={16} className="text-gray-400" />
+            {t('quantity')}
+          </label>
           <input
             type="number"
             value={quantity}
@@ -171,7 +186,10 @@ export default function SendRedPacket() {
 
         {/* 祝福語 */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">{t('message')}</label>
+          <label className="block text-gray-300 text-base mb-2 font-medium flex items-center gap-2">
+            <MessageSquare size={16} className="text-gray-400" />
+            {t('message')}
+          </label>
           <input
             type="text"
             value={message}

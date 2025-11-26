@@ -36,7 +36,7 @@ export default function GamePage() {
             </div>
             <div>
               <h2 className="text-2xl font-black text-white">金福寶局</h2>
-              <p className="text-purple-300 text-sm">Gold Fortune Bureau</p>
+              <p className="text-purple-300 text-base font-medium">Gold Fortune Bureau</p>
             </div>
           </div>
 
@@ -60,7 +60,7 @@ export default function GamePage() {
 
       {/* 提示 */}
       <div className="mt-4 p-4 bg-brand-darker/50 rounded-xl border border-white/5">
-        <p className="text-gray-400 text-sm text-center">
+        <p className="text-gray-400 text-base text-center">
           點擊「開始遊戲」將跳轉到外部遊戲網站
         </p>
       </div>

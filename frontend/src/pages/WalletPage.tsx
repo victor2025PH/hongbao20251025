@@ -209,19 +209,22 @@ export default function WalletPage() {
           <div className="relative flex-1 bg-gradient-to-br from-cyan-900/20 via-[#1C1C1E] to-blue-900/20 border border-cyan-500/20 rounded-2xl overflow-hidden flex flex-col items-center justify-center shadow-lg group active:scale-[0.98] transition-all h-20">
             <div className="absolute top-0 inset-x-0 h-8 bg-gradient-to-b from-cyan-500/10 to-transparent opacity-60" />
             <div className="z-10 flex flex-col items-center gap-0.5">
-              <span className="text-cyan-300/60 text-[8px] font-bold uppercase tracking-[0.15em] flex items-center gap-1">
-                <Wallet size={8} /> {t('total_assets')}
-              </span>
+              <div className="flex items-center gap-1.5 mb-1">
+                <Wallet size={12} className="text-cyan-300/60" />
+                <span className="text-cyan-300/60 text-xs font-bold uppercase tracking-wide">
+                  {t('total_assets')}
+                </span>
+              </div>
               <span className="text-lg font-black text-white tracking-tighter drop-shadow-md">
                 {balance?.usdt?.toFixed(2) ?? '0.00'}
               </span>
-              <div className="bg-[#0f0f11]/60 backdrop-blur-md px-1.5 py-0.5 rounded-full border border-cyan-500/20 flex items-center gap-1 shadow-sm">
+              <div className="bg-[#0f0f11]/60 backdrop-blur-md px-2 py-1 rounded-full border border-cyan-500/20 flex items-center gap-1.5 shadow-sm mt-1">
                 <motion.div
-                  className="w-1 h-1 rounded-full bg-cyan-400"
+                  className="w-1.5 h-1.5 rounded-full bg-cyan-400"
                   animate={{ opacity: [0.5, 1, 0.5] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
-                <span className="text-cyan-200 text-[7px] font-bold">Stars</span>
+                <span className="text-cyan-200 text-xs font-bold">Stars</span>
               </div>
             </div>
             <div className="absolute bottom-0 left-0 w-full h-0.5 bg-cyan-500/20">
@@ -240,13 +243,13 @@ export default function WalletPage() {
             className="relative flex-1 h-20 bg-[#1C1C1E] border border-purple-500/20 rounded-2xl flex items-center justify-between px-3 overflow-hidden group active:scale-[0.98] transition-transform cursor-pointer shadow-lg shadow-purple-900/10"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-purple-900/10 via-[#1C1C1E] to-pink-900/10 opacity-50 group-hover:opacity-100 transition-opacity" />
-            <div className="flex items-center gap-2 relative z-10">
-              <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/20 border border-white/10">
-                <Users size={12} className="text-white drop-shadow" />
+            <div className="flex items-center gap-2.5 relative z-10">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/20 border border-white/10">
+                <Users size={14} className="text-white drop-shadow" />
               </div>
-              <div className="flex flex-col">
-                <span className="text-white font-bold text-[10px]">{t('invite_friends')}</span>
-                <span className="text-[8px] text-purple-300">永久獲得 10% 返佣</span>
+              <div className="flex flex-col gap-0.5">
+                <span className="text-white font-bold text-xs">{t('invite_friends')}</span>
+                <span className="text-[10px] text-purple-300">永久獲得 10% 返佣</span>
               </div>
             </div>
             <button className="w-5 h-5 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 relative z-10">
@@ -313,7 +316,7 @@ export default function WalletPage() {
             <h2 className="text-xl font-black text-white tracking-tight">
               {isHolding ? `充電中 ${Math.floor(chargeLevel)}%` : t('send_red_packet')}
             </h2>
-            <p className="text-orange-300/80 text-[10px] font-bold uppercase tracking-widest mt-0.5">
+            <p className="text-orange-300/80 text-xs font-bold uppercase tracking-widest mt-1">
               {isHolding ? '長按充能' : '長按超級充能'}
             </p>
           </div>
@@ -392,7 +395,7 @@ export default function WalletPage() {
                 <Gamepad2 className="text-white drop-shadow-md" size={20} strokeWidth={2.5} />
               </div>
             </motion.div>
-            <span className="text-[8px] font-bold text-gray-500 group-hover:text-white transition-colors">{t('game')}</span>
+            <span className="text-xs font-bold text-gray-500 group-hover:text-white transition-colors">{t('game')}</span>
           </div>
 
           <ActionButton icon={Clock} label={t('records')} color="text-white" onClick={() => { playSound('click'); navigate('/packets') }} />
@@ -453,46 +456,46 @@ export default function WalletPage() {
             {/* 左側統計信息（垂直排列） */}
             <div className="relative z-10 flex flex-col gap-2 px-3 py-2">
               {/* 在線用戶 */}
-              <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-2 py-1.5 rounded-full border border-emerald-500/20">
+              <div className="flex items-center gap-2 bg-black/30 backdrop-blur-sm px-2.5 py-2 rounded-full border border-emerald-500/20">
                 <motion.div
-                  className={`w-1.5 h-1.5 rounded-full ${isLocked ? 'bg-white' : 'bg-emerald-500'}`}
+                  className={`w-2 h-2 rounded-full ${isLocked ? 'bg-white' : 'bg-emerald-500'}`}
                   animate={isRadarScanning ? {
                     scale: [1, 1.3, 1],
                     opacity: [0.7, 1, 0.7]
                   } : {}}
                   transition={{ duration: 1, repeat: Infinity }}
                 />
-                <span className="text-[9px] font-mono font-bold text-emerald-100 whitespace-nowrap">
+                <span className="text-xs font-mono font-bold text-emerald-100 whitespace-nowrap">
                   {onlineUsers} 在線
                 </span>
               </div>
               
               {/* 附近的紅包群 */}
-              <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-2 py-1.5 rounded-full border border-cyan-500/20">
+              <div className="flex items-center gap-2 bg-black/30 backdrop-blur-sm px-2.5 py-2 rounded-full border border-cyan-500/20">
                 <motion.div
-                  className="w-1.5 h-1.5 rounded-full bg-cyan-400"
+                  className="w-2 h-2 rounded-full bg-cyan-400"
                   animate={isRadarScanning ? {
                     scale: [1, 1.3, 1],
                     opacity: [0.7, 1, 0.7]
                   } : {}}
                   transition={{ duration: 1.2, repeat: Infinity, delay: 0.3 }}
                 />
-                <span className="text-[9px] font-mono font-bold text-cyan-100 whitespace-nowrap">
+                <span className="text-xs font-mono font-bold text-cyan-100 whitespace-nowrap">
                   {nearbyPacketGroups} 紅包群
                 </span>
               </div>
               
               {/* 正在遊戲的人數 */}
-              <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-2 py-1.5 rounded-full border border-purple-500/20">
+              <div className="flex items-center gap-2 bg-black/30 backdrop-blur-sm px-2.5 py-2 rounded-full border border-purple-500/20">
                 <motion.div
-                  className="w-1.5 h-1.5 rounded-full bg-purple-400"
+                  className="w-2 h-2 rounded-full bg-purple-400"
                   animate={isRadarScanning ? {
                     scale: [1, 1.3, 1],
                     opacity: [0.7, 1, 0.7]
                   } : {}}
                   transition={{ duration: 1.4, repeat: Infinity, delay: 0.6 }}
                 />
-                <span className="text-[9px] font-mono font-bold text-purple-100 whitespace-nowrap">
+                <span className="text-xs font-mono font-bold text-purple-100 whitespace-nowrap">
                   {activeGamePlayers} 遊戲中
                 </span>
               </div>
@@ -637,7 +640,7 @@ export default function WalletPage() {
 
               {/* 狀態文字（在雷達圖形下方） */}
               <div className="mt-2 text-center z-10 select-none">
-                <span className={`text-[9px] font-bold uppercase tracking-widest block ${
+                <span className={`text-xs font-bold uppercase tracking-widest block ${
                   isLocked ? 'text-white' : isRadarScanning ? 'text-cyan-400' : 'text-emerald-500/70'
                 }`}>
                   {isLocked ? '目標鎖定' : isRadarScanning ? '主動掃描中...' : '被動掃描'}
@@ -647,7 +650,7 @@ export default function WalletPage() {
             
             {/* 幫助文字 */}
             {!isRadarScanning && (
-              <div className="absolute bottom-2 right-2 text-[7px] text-emerald-500/40 pointer-events-none animate-pulse uppercase tracking-wide">
+              <div className="absolute bottom-2 right-2 text-[10px] text-emerald-500/60 pointer-events-none animate-pulse uppercase tracking-wide">
                 長按掃描
               </div>
             )}
@@ -679,7 +682,7 @@ export default function WalletPage() {
         {profile && (
           <div className="bg-[#1C1C1E] border border-white/5 rounded-2xl p-4 shrink-0">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-400 text-sm">{t('level')}</span>
+              <span className="text-gray-300 text-base font-medium">{t('level')}</span>
               <span className="text-white font-bold">Lv.{profile.level}</span>
             </div>
             <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -714,7 +717,7 @@ function ActionButton({ icon: Icon, label, color, onClick }: {
       <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center">
         <Icon className={color} size={16} strokeWidth={2.5} />
       </div>
-      <span className="text-[8px] text-gray-500 font-bold">{label}</span>
+      <span className="text-xs text-gray-500 font-bold">{label}</span>
     </motion.button>
   )
 }

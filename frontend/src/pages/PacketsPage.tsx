@@ -143,7 +143,7 @@ export default function PacketsPage() {
                 setActiveTab(tab)
                 playSound('click')
               }}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+              className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
                 activeTab === tab
                   ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20'
                   : 'bg-[#1C1C1E] text-gray-400 border border-white/5 hover:bg-[#2C2C2E]'
@@ -180,9 +180,9 @@ export default function PacketsPage() {
 
                   {/* 遊戲群標籤 */}
                   {packet.isFromGameGroup && (
-                    <div className="absolute top-2 right-2 flex items-center gap-1 bg-purple-500/20 border border-purple-500/30 px-2 py-0.5 rounded-full">
-                      <Gamepad2 size={10} className="text-purple-400" />
-                      <span className="text-[8px] text-purple-300 font-bold">{packet.chatTitle}</span>
+                    <div className="absolute top-2 right-2 flex items-center gap-1.5 bg-purple-500/20 border border-purple-500/30 px-2 py-1 rounded-full">
+                      <Gamepad2 size={12} className="text-purple-400" />
+                      <span className="text-[10px] text-purple-300 font-bold">{packet.chatTitle}</span>
                     </div>
                   )}
 
@@ -200,10 +200,10 @@ export default function PacketsPage() {
 
                     {/* 信息 */}
                     <div className="flex flex-col min-w-0 w-full">
-                      <span className="text-white font-bold text-xs truncate flex items-center gap-1">
+                      <span className="text-white font-bold text-sm truncate flex items-center gap-1.5">
                         {packet.senderName}
                         <span
-                          className={`text-[9px] px-1 rounded border font-normal ${
+                          className={`text-xs px-1.5 py-0.5 rounded border font-normal ${
                             packet.senderLevel >= 50
                               ? 'border-yellow-500/50 text-yellow-500'
                               : packet.senderLevel >= 10
@@ -215,7 +215,7 @@ export default function PacketsPage() {
                         </span>
                       </span>
 
-                      <span className="text-gray-400 text-[10px] mt-0.5 truncate">{packet.message}</span>
+                      <span className="text-gray-400 text-xs mt-1 truncate">{packet.message}</span>
 
                       {/* 進度條 */}
                       <div className="w-20 h-1 bg-gray-700 rounded-full mt-1.5 overflow-hidden shrink-0">
@@ -265,9 +265,9 @@ export default function PacketsPage() {
                         </AnimatePresence>
                       </button>
 
-                      <div className="w-[80px] h-6 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center gap-1.5 backdrop-blur-sm shadow-inner">
-                        <TypeIcon size={11} className={style.color} />
-                        <span className={`text-[10px] font-bold ${style.color}`}>{style.label}</span>
+                      <div className="w-[90px] h-7 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center gap-1.5 backdrop-blur-sm shadow-inner px-2">
+                        <TypeIcon size={12} className={style.color} />
+                        <span className={`text-xs font-bold ${style.color}`}>{style.label}</span>
                       </div>
                     </div>
 
@@ -276,7 +276,7 @@ export default function PacketsPage() {
                       onClick={(e) => handleGrab(e, packet)}
                       disabled={loadingId === packet.id || isGrabbed}
                       className={`
-                        text-xs font-bold py-1.5 px-4 rounded-lg shadow-lg transform transition-all flex items-center justify-center w-[80px]
+                        text-sm font-bold py-2 px-4 rounded-lg shadow-lg transform transition-all flex items-center justify-center w-[90px]
                         ${
                           isGrabbed
                             ? 'bg-[#2C2C2E] text-gray-500 cursor-not-allowed border border-white/5'
