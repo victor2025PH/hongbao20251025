@@ -1,30 +1,34 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Gift, Zap, Sparkles, Trophy, Star, Coins } from 'lucide-react'
+import { Gift, Zap, Sparkles, Trophy, TrendingUp, ArrowLeft } from 'lucide-react'
 import { useTranslation } from '../providers/I18nProvider'
 import { useSound } from '../hooks/useSound'
+import { useNavigate } from 'react-router-dom'
 import PageTransition from '../components/PageTransition'
 import confetti from 'canvas-confetti'
 
 interface Prize {
   id: number
   name: string
+  value: number
   icon: React.ElementType
   color: string
+  bgGradient: string
   probability: number // 概率权重
 }
 
 const prizes: Prize[] = [
-  { id: 1, name: '10 USDT', icon: Coins, color: 'text-green-400', probability: 5 },
-  { id: 2, name: '5 USDT', icon: Coins, color: 'text-green-400', probability: 10 },
-  { id: 3, name: '50 能量', icon: Zap, color: 'text-yellow-400', probability: 15 },
-  { id: 4, name: '20 能量', icon: Zap, color: 'text-yellow-400', probability: 20 },
-  { id: 5, name: '100 积分', icon: Star, color: 'text-purple-400', probability: 20 },
-  { id: 6, name: '50 积分', icon: Star, color: 'text-purple-400', probability: 30 },
+  { id: 1, name: '能量', value: 100, icon: Zap, color: 'text-yellow-400', bgGradient: 'from-yellow-500/30 to-orange-500/30', probability: 10 },
+  { id: 2, name: '能量', value: 50, icon: Zap, color: 'text-yellow-400', bgGradient: 'from-yellow-500/30 to-orange-500/30', probability: 20 },
+  { id: 3, name: '能量', value: 30, icon: Zap, color: 'text-yellow-400', bgGradient: 'from-yellow-500/30 to-orange-500/30', probability: 25 },
+  { id: 4, name: '幸运值', value: 20, icon: Sparkles, color: 'text-purple-400', bgGradient: 'from-purple-500/30 to-pink-500/30', probability: 15 },
+  { id: 5, name: '幸运值', value: 10, icon: Sparkles, color: 'text-purple-400', bgGradient: 'from-purple-500/30 to-pink-500/30', probability: 20 },
+  { id: 6, name: '经验值', value: 50, icon: TrendingUp, color: 'text-cyan-400', bgGradient: 'from-cyan-500/30 to-blue-500/30', probability: 10 },
 ]
 
 export default function LuckyWheelPage() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { playSound } = useSound()
   const [isSpinning, setIsSpinning] = useState(false)
   const [selectedPrize, setSelectedPrize] = useState<Prize | null>(null)
@@ -101,18 +105,29 @@ export default function LuckyWheelPage() {
 
   return (
     <PageTransition>
-      <div className="h-full flex flex-col p-4 pb-24 gap-4 overflow-y-auto scrollbar-hide">
-        <h1 className="text-xl font-bold text-white flex items-center gap-2">
-          <Trophy size={24} className="text-yellow-400" />
-          幸运转盘
-        </h1>
+      <div className="h-full flex flex-col overflow-hidden">
+        {/* 顶部标题栏 */}
+        <div className="flex items-center justify-between px-4 py-3 shrink-0 border-b border-white/5">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+          >
+            <ArrowLeft size={20} className="text-white" />
+          </button>
+          <h1 className="text-lg font-bold text-white flex items-center gap-2">
+            <Trophy size={20} className="text-yellow-400" />
+            幸运转盘
+          </h1>
+          <div className="w-10" /> {/* 占位 */}
+        </div>
 
-        {/* 转盘容器 */}
-        <div className="flex-1 flex items-center justify-center min-h-[400px]">
-          <div className="relative w-80 h-80">
+        {/* 主要内容区域 - 不滚动 */}
+        <div className="flex-1 flex flex-col items-center justify-center gap-4 p-4 min-h-0">
+          {/* 转盘容器 */}
+          <div className="relative w-72 h-72 shrink-0">
             {/* 转盘背景 */}
             <motion.div
-              className="w-full h-full rounded-full border-4 border-purple-500/30 relative overflow-hidden bg-gradient-to-br from-purple-900/20 to-pink-900/20"
+              className="w-full h-full rounded-full border-4 border-purple-500/40 relative overflow-hidden bg-gradient-to-br from-purple-900/30 via-pink-900/30 to-purple-900/30 shadow-2xl"
               animate={{ rotate: rotation }}
               transition={{ 
                 duration: isSpinning ? 3 : 0,
@@ -135,28 +150,29 @@ export default function LuckyWheelPage() {
                     }}
                   >
                     <div
-                      className="absolute top-0 left-1/2 w-1/2 h-1/2 origin-bottom"
+                      className={`absolute top-0 left-1/2 w-1/2 h-1/2 origin-bottom bg-gradient-to-br ${prize.bgGradient}`}
                       style={{
                         clipPath: `polygon(0 0, 100% 0, 50% 100%)`,
-                        background: `linear-gradient(135deg, ${
-                          index % 2 === 0 ? 'rgba(139,92,246,0.3)' : 'rgba(236,72,153,0.3)'
-                        }, ${
-                          index % 2 === 0 ? 'rgba(168,85,247,0.2)' : 'rgba(244,114,182,0.2)'
-                        })`,
-                        border: isHighlight ? '2px solid yellow' : 'none',
+                        border: isHighlight ? '3px solid yellow' : 'none',
+                        boxShadow: isHighlight ? '0 0 20px yellow' : 'none',
                       }}
                     />
-                    {/* 奖品文字 */}
+                    {/* 奖品内容 */}
                     <div
-                      className="absolute top-8 left-1/2 transform -translate-x-1/2"
+                      className="absolute top-12 left-1/2"
                       style={{
                         transform: `translateX(-50%) rotate(${prizeAngle / 2}deg)`,
                         transformOrigin: 'center',
                       }}
                     >
-                      <Icon size={20} className={prize.color} />
-                      <div className={`text-[10px] font-bold ${prize.color} mt-1 whitespace-nowrap`}>
-                        {prize.name}
+                      <div className="flex flex-col items-center gap-1">
+                        <Icon size={24} className={prize.color} />
+                        <div className={`text-xs font-black ${prize.color} whitespace-nowrap`}>
+                          {prize.value}
+                        </div>
+                        <div className={`text-[9px] font-bold ${prize.color} opacity-80`}>
+                          {prize.name}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -164,57 +180,68 @@ export default function LuckyWheelPage() {
               })}
 
               {/* 中心圆 */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full border-4 border-white/20 flex items-center justify-center shadow-lg z-10">
-                <Gift size={32} className="text-white" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-gradient-to-br from-purple-600 via-pink-600 to-purple-600 rounded-full border-4 border-white/30 flex items-center justify-center shadow-2xl z-10">
+                <motion.div
+                  animate={isSpinning ? {
+                    rotate: [0, 360],
+                  } : {}}
+                  transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
+                >
+                  <Gift size={28} className="text-white drop-shadow-lg" />
+                </motion.div>
               </div>
             </motion.div>
 
             {/* 指针 */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 z-20">
-              <div className="w-0 h-0 border-l-[15px] border-r-[15px] border-t-[30px] border-l-transparent border-r-transparent border-t-yellow-400 drop-shadow-lg" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 z-30">
+              <div className="w-0 h-0 border-l-[18px] border-r-[18px] border-t-[35px] border-l-transparent border-r-transparent border-t-yellow-400 drop-shadow-2xl" />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-8 bg-yellow-400 rounded-full border-4 border-white/50 shadow-lg" />
             </div>
           </div>
-        </div>
 
-        {/* 剩余次数 */}
-        <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles size={20} className="text-purple-400" />
-            <span className="text-sm text-gray-300">今日剩余次数</span>
+          {/* 剩余次数和抽奖按钮 */}
+          <div className="w-full max-w-sm space-y-3 shrink-0">
+            {/* 剩余次数 */}
+            <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Sparkles size={18} className="text-purple-400" />
+                <span className="text-sm text-gray-300">今日剩余次数</span>
+              </div>
+              <span className="text-2xl font-bold text-purple-400">{spinsLeft}</span>
+            </div>
+
+            {/* 抽奖按钮 */}
+            <motion.button
+              onClick={spinWheel}
+              disabled={isSpinning || spinsLeft <= 0}
+              className={`w-full py-4 rounded-xl font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2 ${
+                isSpinning || spinsLeft <= 0
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white active:scale-[0.98]'
+              }`}
+              whileHover={!isSpinning && spinsLeft > 0 ? { scale: 1.02 } : {}}
+              whileTap={!isSpinning && spinsLeft > 0 ? { scale: 0.98 } : {}}
+            >
+              {isSpinning ? (
+                <>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+                  />
+                  转盘中...
+                </>
+              ) : spinsLeft <= 0 ? (
+                '今日次数已用完'
+              ) : (
+                <>
+                  <Trophy size={20} />
+                  开始抽奖
+                </>
+              )}
+            </motion.button>
           </div>
-          <span className="text-2xl font-bold text-purple-400">{spinsLeft}</span>
         </div>
-
-        {/* 抽奖按钮 */}
-        <motion.button
-          onClick={spinWheel}
-          disabled={isSpinning || spinsLeft <= 0}
-          className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition-all flex items-center justify-center gap-2 ${
-            isSpinning || spinsLeft <= 0
-              ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-              : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white active:scale-[0.98]'
-          }`}
-          whileHover={!isSpinning && spinsLeft > 0 ? { scale: 1.02 } : {}}
-          whileTap={!isSpinning && spinsLeft > 0 ? { scale: 0.98 } : {}}
-        >
-          {isSpinning ? (
-            <>
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
-              />
-              转盘中...
-            </>
-          ) : spinsLeft <= 0 ? (
-            '今日次数已用完'
-          ) : (
-            <>
-              <Trophy size={20} />
-              开始抽奖
-            </>
-          )}
-        </motion.button>
 
         {/* 结果弹窗 */}
         <AnimatePresence>
@@ -236,12 +263,15 @@ export default function LuckyWheelPage() {
                 <motion.div
                   animate={{ rotate: [0, 360] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center"
+                  className={`w-20 h-20 mx-auto mb-4 bg-gradient-to-br ${selectedPrize.bgGradient} rounded-full flex items-center justify-center border-4 border-white/20`}
                 >
-                  {selectedPrize && <selectedPrize.icon size={40} className={selectedPrize.color} />}
+                  <selectedPrize.icon size={40} className={selectedPrize.color} />
                 </motion.div>
                 <h2 className="text-2xl font-bold text-white mb-2">恭喜获得！</h2>
-                <p className={`text-3xl font-black ${selectedPrize.color} mb-6`}>
+                <p className={`text-4xl font-black ${selectedPrize.color} mb-1`}>
+                  +{selectedPrize.value}
+                </p>
+                <p className={`text-lg font-bold ${selectedPrize.color} mb-6`}>
                   {selectedPrize.name}
                 </p>
                 <motion.button
@@ -260,4 +290,3 @@ export default function LuckyWheelPage() {
     </PageTransition>
   )
 }
-

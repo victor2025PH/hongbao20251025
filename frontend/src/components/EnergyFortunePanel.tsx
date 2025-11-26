@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Zap, Sparkles, TrendingUp } from 'lucide-react'
 import { useTranslation } from '../providers/I18nProvider'
+import { useSound } from '../hooks/useSound'
 
 interface EnergyFortunePanelProps {
   energy?: number
@@ -40,9 +42,16 @@ export default function EnergyFortunePanel({
   onEnergyUpdate 
 }: EnergyFortunePanelProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { playSound } = useSound()
   const [currentEnergy, setCurrentEnergy] = useState(energy)
   const [recoveryTime, setRecoveryTime] = useState(0)
   const [fortune] = useState(() => calculateDailyFortune())
+
+  const handleClick = () => {
+    playSound('click')
+    navigate('/lucky-wheel')
+  }
 
   // 能量恢复逻辑
   useEffect(() => {
@@ -82,7 +91,10 @@ export default function EnergyFortunePanel({
   const energyPercent = (currentEnergy / maxEnergy) * 100
 
   return (
-    <div className="relative flex-1 bg-gradient-to-br from-purple-900/20 via-[#1C1C1E] to-cyan-900/20 border border-purple-500/20 rounded-2xl overflow-hidden flex flex-col items-center justify-center shadow-lg group active:scale-[0.98] transition-all h-20 cursor-pointer">
+    <div 
+      onClick={handleClick}
+      className="relative flex-1 bg-gradient-to-br from-purple-900/20 via-[#1C1C1E] to-cyan-900/20 border border-purple-500/20 rounded-2xl overflow-hidden flex flex-col items-center justify-center shadow-lg group active:scale-[0.98] transition-all h-20 cursor-pointer hover:border-purple-500/40"
+    >
       {/* 背景光晕 */}
       <div className="absolute top-0 inset-x-0 h-8 bg-gradient-to-b from-purple-500/10 via-cyan-500/10 to-transparent opacity-60" />
       

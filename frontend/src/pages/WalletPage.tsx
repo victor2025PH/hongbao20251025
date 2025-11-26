@@ -233,31 +233,6 @@ export default function WalletPage() {
           </button>
         </div>
 
-        {/* 幸运转盘入口 */}
-        <button
-          onClick={() => { playSound('pop'); navigate('/lucky-wheel') }}
-          className="h-16 shrink-0 bg-gradient-to-r from-purple-900/20 via-pink-900/20 to-purple-900/20 border border-purple-500/30 rounded-2xl flex items-center justify-between px-4 overflow-hidden group active:scale-[0.99] transition-transform cursor-pointer shadow-lg shadow-purple-900/10 relative"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-purple-500/10 opacity-50 group-hover:opacity-100 transition-opacity" />
-          <div className="flex items-center gap-3 relative z-10">
-            <motion.div
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center shadow-lg shadow-yellow-500/20 border border-white/10"
-            >
-              <Trophy size={18} className="text-white drop-shadow" />
-            </motion.div>
-            <div className="flex flex-col">
-              <span className="text-white font-bold text-sm">幸运转盘</span>
-              <span className="text-[10px] text-purple-300">每日免费抽奖，赢取大奖！</span>
-            </div>
-          </div>
-          <div className="relative z-10 flex items-center gap-2">
-            <Sparkles size={16} className="text-yellow-400 animate-pulse" />
-            <ChevronRight size={12} className="text-gray-400" />
-          </div>
-        </button>
-
         {/* 發紅包按鈕（長按充電效果，可拉伸） */}
         <motion.div
           animate={controls}
