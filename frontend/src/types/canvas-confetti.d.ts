@@ -8,7 +8,7 @@ declare module 'canvas-confetti' {
     gravity?: number
     drift?: number
     ticks?: number
-    origin?: { x: number; y: number }
+    origin?: { x: number; y?: number }
     colors?: string[]
     shapes?: ('square' | 'circle')[]
     scalar?: number
